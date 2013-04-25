@@ -7,28 +7,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/junit-4.10.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/../../../MasterProsjekt/carrot2-java-api-3.6.2" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="file://$MODULE_DIR$/../../../MasterProsjekt/carrot2-java-api-3.6.2/javadoc" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/../../../MasterProsjekt/carrot2-java-api-3.6.2/out/production/Carrot2-java-api-3.6.2" />
-        </SOURCES>
-      </library>
-    </orderEntry>
   </component>
 </module>
 
