@@ -19,4 +19,6 @@ public interface IndexTraverser {
     public boolean hasAvailableSuggestions();
 
     public ArrayList<ISuggestionWrapper> getAvailableSuggestions(int numberOfSuggestion);
+
+    public int numberOfRetrievedSuggestions();
 }

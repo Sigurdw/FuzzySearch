@@ -69,6 +69,11 @@ public final class PriorityTrieTraverser implements IndexTraverser{
         return suggestions;
     }
 
+    @Override
+    public int numberOfRetrievedSuggestions() {
+        return suggestions.size();
+    }
+
     private float getNextSuggestionRank() {
         float nextSuggestionRank = -3;
         SuggestionTraverser nextSuggestionTraverser = suggestionQueue.peek();

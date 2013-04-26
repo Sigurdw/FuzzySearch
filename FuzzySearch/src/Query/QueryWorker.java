@@ -86,12 +86,13 @@ public class QueryWorker implements Runnable{
 
         query.initiateFromExhaustedNodes();
 
-        int numberOfRetrievedSuggestion = query.getAvailableSuggestions().size();
+        int numberOfRetrievedSuggestion = query.numberOfRetrievedSuggestions();
         while (!query.isQueryExhausted() && numberOfRetrievedSuggestion < queryContext.NeededSuggestions){
 
             query.exploreNextNode();
             if(query.hasAvailableSuggestions()){
-                ArrayList<ISuggestionWrapper> retrievedSuggestions = query.getAvailableSuggestions();
+                ArrayList<ISuggestionWrapper> retrievedSuggestions = query.getAvailableSuggestions(
+                        queryContext.NeededSuggestions - numberOfRetrievedSuggestion);
                 if(numberOfRetrievedSuggestion < retrievedSuggestions.size()){
                     updateSuggestionUi(retrievedSuggestions);
 
