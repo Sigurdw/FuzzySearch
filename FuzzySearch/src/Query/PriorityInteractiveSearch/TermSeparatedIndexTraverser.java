@@ -12,9 +12,11 @@ import java.util.ArrayList;
 
 public class TermSeparatedIndexTraverser implements IndexTraverser {
     public final char separator = ' ';
-    public final ArrayList<PriorityTrieTraverser> traversers = new ArrayList<PriorityTrieTraverser>();
+    private final ArrayList<PriorityTrieTraverser> traversers = new ArrayList<PriorityTrieTraverser>();
+    private final QueryContext queryContext;
 
     public TermSeparatedIndexTraverser(QueryContext queryContext){
+        this.queryContext = queryContext;
         traversers.add(new PriorityTrieTraverser(queryContext));
     }
 
@@ -30,12 +32,26 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
 
     @Override
     public void exploreNextNode() {
-        getCurrentTraverser().exploreNextNode();
+        if(queryContext.QueryString.GetLastCharacter() == separator){
+            traversers.add(new PriorityTrieTraverser(queryContext));
+        }
+        else{
+            getCurrentTraverser().exploreNextNode();
+        }
     }
 
     @Override
-    public ArrayList<ISuggestionWrapper> getAvailableSuggestions() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public boolean hasAvailableSuggestions() {
+    }
+
+    @Override
+    public ArrayList<ISuggestionWrapper> getAvailableSuggestions(int numberOfSuggestion) {
+
+    }
+
+    @Override
+    public int numberOfRetrievedSuggestions() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     private PriorityTrieTraverser getCurrentTraverser(){

@@ -10,6 +10,7 @@
     <file path="$PROJECT_DIR$/src/GUI/SearchFrame.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1366946878603" ignored="false" />
     <file path="$PROJECT_DIR$/src/GUI/SearchPanel.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1366946878370" ignored="false" />
     <file path="$PROJECT_DIR$/src/GUI/SettingsPanel.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1366946878603" ignored="false" />
+    <file path="/TermSeparatedIndexTraverser.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1366947626330" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,10 +78,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IConfigListener.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="IConfigListener.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Config/IConfigListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="17" selection-start="98" selection-end="98" vertical-scroll-proportion="0.17196532">
+            <state line="7" column="17" selection-start="98" selection-end="98" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -95,10 +96,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TermSeparatedIndexTraverser.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="TermSeparatedIndexTraverser.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Query/PriorityInteractiveSearch/TermSeparatedIndexTraverser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="13" selection-start="794" selection-end="794" vertical-scroll-proportion="0.0">
+            <state line="48" column="8" selection-start="1325" selection-end="1325" vertical-scroll-proportion="0.65606934">
               <folding />
             </state>
           </provider>
@@ -123,13 +124,13 @@
         <option value="$PROJECT_DIR$/src/Clustering/TermDocumentVector.java" />
         <option value="$PROJECT_DIR$/src/Query/DirectQueryWorker.java" />
         <option value="$PROJECT_DIR$/src/Query/TermSeparatedIndexTraverser.java" />
-        <option value="$PROJECT_DIR$/src/Query/PriorityInteractiveSearch/TermSeparatedIndexTraverser.java" />
         <option value="$PROJECT_DIR$/src/Query/PriorityInteractiveSearch/PriorityActiveNode.java" />
         <option value="$PROJECT_DIR$/src/Query/PriorityInteractiveSearch/SuggestionTraverser.java" />
         <option value="$PROJECT_DIR$/src/Query/PriorityInteractiveSearch/IndexTraverser.java" />
         <option value="$PROJECT_DIR$/src/Query/QueryWorker.java" />
         <option value="$PROJECT_DIR$/src/Query/PriorityInteractiveSearch/PriorityTrieTraverser.java" />
         <option value="$PROJECT_DIR$/src/Config/IConfigListener.java" />
+        <option value="$PROJECT_DIR$/src/Query/PriorityInteractiveSearch/TermSeparatedIndexTraverser.java" />
       </list>
     </option>
   </component>
@@ -772,13 +773,6 @@
         <state line="36" column="31" selection-start="1326" selection-end="1326" vertical-scroll-proportion="0.340935" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Query/PriorityInteractiveSearch/TermSeparatedIndexTraverser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="13" selection-start="794" selection-end="794" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Query/PriorityInteractiveSearch/IndexTraverser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="14" column="46" selection-start="286" selection-end="286" vertical-scroll-proportion="0.0">
@@ -851,7 +845,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Config/IConfigListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="17" selection-start="98" selection-end="98" vertical-scroll-proportion="0.17196532">
+        <state line="7" column="17" selection-start="98" selection-end="98" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Query/PriorityInteractiveSearch/TermSeparatedIndexTraverser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="8" selection-start="1325" selection-end="1325" vertical-scroll-proportion="0.65606934">
           <folding />
         </state>
       </provider>
