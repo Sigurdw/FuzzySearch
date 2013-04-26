@@ -42,12 +42,17 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
 
     @Override
     public boolean hasAvailableSuggestions() {
+    	
     }
 
     @Override
     public ArrayList<ISuggestionWrapper> getAvailableSuggestions(int numberOfSuggestion) {
-
+		for(PriorityTrieTraverser traverser : traversers){
+			
+		}
     }
+    
+    
 
     @Override
     public int numberOfRetrievedSuggestions() {
@@ -56,5 +61,33 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
 
     private PriorityTrieTraverser getCurrentTraverser(){
         return traversers.get(traversers.size() - 1);
+    }
+    
+    private final class SuggestionSet implements Comparable<SuggestionSet>
+    {
+    	private float rankEstimate;
+    	
+    	private final ISuggestionWrapper[] suggestionSet;
+    	
+    	public SuggestionSet(int numberOfTerms){
+    		suggestionSet = new SuggestionSet[numberOfTerms];
+    	}
+    	
+    	public void addTerm(ISuggestionWrapper term, int index){
+    		suggestionSet[index] = term;
+    	}
+    	
+    	public void calculateRankEstimate(){
+    		rankEstimate = 0;
+    		for(ISuggestionWrapper suggestionWrapper : suggestionSet){
+    			rankEstimate += suggestionWrapper.getRank() / suggestionSet.length;
+    		}
+    	}
+    	
+    
+    
+    	public int compareTo(SuggestionSet otherSuggestionSet){
+    	
+    	}	
     }
 }
