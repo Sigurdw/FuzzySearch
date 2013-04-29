@@ -1,7 +1,7 @@
 package Query.NaiveInteractiveSearch;
 
-import Query.ISuggestionWrapper;
 import Query.ITrieTraverser;
+import Query.SuggestionWrapper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,14 +19,14 @@ public class NaiveTrieTraverser implements ITrieTraverser {
     }
 
     @Override
-    public ArrayList<ISuggestionWrapper> addCharacter() {
+    public ArrayList<SuggestionWrapper> addCharacter() {
         //System.out.println("Iteration on " + activeQueries.size() + " active nodes.");
         ArrayList<ActiveQuery> nextActiveQueries = new ArrayList<ActiveQuery>();
         for(ActiveQuery activeQuery : activeQueries){
            numberOfNodesInLastIteration += activeQuery.addCharacter(nextActiveQueries);
         }
 
-        ArrayList<ISuggestionWrapper> suggestions = new ArrayList<ISuggestionWrapper>();
+        ArrayList<SuggestionWrapper> suggestions = new ArrayList<SuggestionWrapper>();
         for(ActiveQuery activeQuery : nextActiveQueries){
             activeQuery.getSuggestions(suggestions);
         }
