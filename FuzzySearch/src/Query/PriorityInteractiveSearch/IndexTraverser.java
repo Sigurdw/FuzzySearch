@@ -1,6 +1,6 @@
 package Query.PriorityInteractiveSearch;
 
-import Query.ISuggestionWrapper;
+import Query.SuggestionWrapper;
 
 import java.util.ArrayList;
 
@@ -18,7 +18,7 @@ public interface IndexTraverser {
 
     public boolean hasAvailableSuggestions();
 
-    public ArrayList<ISuggestionWrapper> getAvailableSuggestions(int numberOfSuggestion);
+    public ArrayList<SuggestionWrapper> getAvailableSuggestions(int numberOfSuggestion);
 
     public int numberOfRetrievedSuggestions();
 }

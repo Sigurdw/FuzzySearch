@@ -2,6 +2,8 @@ package Query.PriorityInteractiveSearch;
 
 import Query.ISuggestionWrapper;
 import Query.QueryContext;
+import Query.SuggestionWrapper;
+
 import java.util.ArrayList;
 
 /**
@@ -46,7 +48,7 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
     }
 
     @Override
-    public ArrayList<ISuggestionWrapper> getAvailableSuggestions(int numberOfSuggestion) {
+    public ArrayList<SuggestionWrapper> getAvailableSuggestions(int numberOfSuggestion) {
 		for(PriorityTrieTraverser traverser : traversers){
 			
 		}
@@ -67,7 +69,7 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
     {
     	private float rankEstimate;
     	
-    	private final ISuggestionWrapper[] suggestionSet;
+    	private final SuggestionWrapper[] suggestionSet;
     	
     	public SuggestionSet(int numberOfTerms){
     		suggestionSet = new SuggestionSet[numberOfTerms];

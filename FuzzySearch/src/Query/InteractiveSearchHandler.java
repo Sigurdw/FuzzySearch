@@ -21,7 +21,7 @@ public class InteractiveSearchHandler{
     private int allowedEditDistance;
     private final IUpdateInterfaceControl interfaceControl;
     private ITrieTraverser query;
-    private ArrayList<ISuggestionWrapper> suggestions = new ArrayList<ISuggestionWrapper>();
+    private ArrayList<SuggestionWrapper> suggestions = new ArrayList<SuggestionWrapper>();
     private QueryContext queryContext;
     private TrieNode rootNode;
     private static final String indexPath = "C:/Index/clusteredIndex.dat";
@@ -42,7 +42,7 @@ public class InteractiveSearchHandler{
         try{
             rootNode = TrieNode.read(new DataInputStream(new FileInputStream(new File(indexPath))));
             System.out.println("index loaded");
-            ArrayList<ISuggestionWrapper> terms = rootNode.getAllTerms();
+            ArrayList<SuggestionWrapper> terms = rootNode.getAllTerms();
             System.out.println("number of terms: " + terms.size());
         }
         catch (Exception e){
@@ -99,7 +99,7 @@ public class InteractiveSearchHandler{
             //System.out.println(suggestions);
         }
         else{
-            suggestions = new ArrayList<ISuggestionWrapper>();
+            suggestions = new ArrayList<SuggestionWrapper>();
         }
     }
 

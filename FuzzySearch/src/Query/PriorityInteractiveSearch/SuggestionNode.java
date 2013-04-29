@@ -19,7 +19,6 @@ package Query.PriorityInteractiveSearch;
 
 import DataStructure.LeafTrieNode;
 import DataStructure.TrieNode;
-import Query.ISuggestionWrapper;
 import Query.SuggestionWrapper;
 
 public class SuggestionNode implements Comparable<SuggestionNode> {
@@ -42,14 +41,8 @@ public class SuggestionNode implements Comparable<SuggestionNode> {
         return null;
     }
 
-    public ISuggestionWrapper getSuggestion(float rankDiscount, final TrieNode[] previousTerms){
-        StringBuilder stringBuilder = new StringBuilder();
-        for(TrieNode term : previousTerms){
-            stringBuilder.append(term.toString() + " ");
-        }
-
-        stringBuilder.append(suggestionPosition.toString());
-        return new SuggestionWrapper(stringBuilder.toString(), rankDiscount * getRank());
+    public SuggestionWrapper getSuggestion(float rankDiscount, final TrieNode[] previousTerms){
+        return new SuggestionWrapper(suggestionPosition, previousTerms, rankDiscount);
     }
 
     protected float getRank(){
@@ -63,7 +56,6 @@ public class SuggestionNode implements Comparable<SuggestionNode> {
 
         return suggestionPosition.getSortedChild(currentChildIndex).getRank();
     }
-
 
     public boolean isLeaf() {
         return suggestionPosition instanceof LeafTrieNode;

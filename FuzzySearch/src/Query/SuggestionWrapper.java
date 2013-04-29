@@ -1,29 +1,43 @@
 package Query;
 
-public class SuggestionWrapper implements ISuggestionWrapper{
+import DataStructure.TrieNode;
 
-    private String suggestion;
-    private double rank;
+public class SuggestionWrapper implements Comparable<SuggestionWrapper>{
+    private final TrieNode suggestionPosition;
+    private final TrieNode[] previousTerms;
+    private final float rankDiscount;
 
-    public SuggestionWrapper(String suggestion, double rank){
-
-        this.suggestion = suggestion;
-        this.rank = rank;
+    public SuggestionWrapper(TrieNode suggestionPosition, TrieNode[] previousTerms, float rankDiscount){
+        this.suggestionPosition = suggestionPosition;
+        this.previousTerms = previousTerms;
+        this.rankDiscount = rankDiscount;
     }
 
-    @Override
     public String getSuggestion() {
-        return suggestion;
+        StringBuilder stringBuilder = new StringBuilder();
+        for(TrieNode term : previousTerms){
+            stringBuilder.append(term.toString());
+            stringBuilder.append(" ");
+        }
+
+        stringBuilder.append(suggestionPosition.toString());
+        return stringBuilder.toString();
     }
 
-    @Override
     public double getRank() {
-        return rank;
+        return suggestionPosition.getRank() * rankDiscount;
     }
 
-    @Override
-    public int compareTo(ISuggestionWrapper o) {
-        double difference = o.getRank()- rank;
+    public TrieNode getSuggestionPosition() {
+        return suggestionPosition;
+    }
+
+    public float getRankDiscount() {
+        return rankDiscount;
+    }
+
+    public int compareTo(SuggestionWrapper o) {
+        double difference = o.getRank()- getRank();
         if(difference > 0){
             return 1;
         }
@@ -36,6 +50,6 @@ public class SuggestionWrapper implements ISuggestionWrapper{
     }
 
     public String toString(){
-        return suggestion + ", " + rank;
+        return getSuggestion() + ", " + getRank();
     }
 }

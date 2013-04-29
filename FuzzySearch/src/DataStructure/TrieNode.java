@@ -19,8 +19,7 @@ package DataStructure;
 
 import Clustering.ClusteringVector;
 import Clustering.TermDocumentVector;
-import Query.ISuggestionWrapper;
-import org.apache.lucene.util.BytesRef;
+import Query.SuggestionWrapper;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -92,13 +91,13 @@ public abstract class TrieNode {
         return trieNode;
     }
 
-    public ArrayList<ISuggestionWrapper> getAllTerms(){
-        ArrayList<ISuggestionWrapper> terms = new ArrayList<ISuggestionWrapper>();
+    public ArrayList<SuggestionWrapper> getAllTerms(){
+        ArrayList<SuggestionWrapper> terms = new ArrayList<SuggestionWrapper>();
         getAllTerms(terms);
         return terms;
     }
 
-    protected abstract void getAllTerms(ArrayList<ISuggestionWrapper> suggestionList);
+    protected abstract void getAllTerms(ArrayList<SuggestionWrapper> suggestionList);
 
     @Override
     public String toString(){
