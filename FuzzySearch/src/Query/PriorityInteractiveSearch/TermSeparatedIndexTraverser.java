@@ -1,10 +1,11 @@
 package Query.PriorityInteractiveSearch;
 
-import Query.ISuggestionWrapper;
+import Query.IndexTraverser;
 import Query.QueryContext;
 import Query.SuggestionWrapper;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 /**
  * User: Sigurd Wien
@@ -16,6 +17,8 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
     public final char separator = ' ';
     private final ArrayList<PriorityTrieTraverser> traversers = new ArrayList<PriorityTrieTraverser>();
     private final QueryContext queryContext;
+
+    private final PriorityQueue<SuggestionSet> suggestionSets = new PriorityQueue<SuggestionSet>();
 
     public TermSeparatedIndexTraverser(QueryContext queryContext){
         this.queryContext = queryContext;
@@ -50,8 +53,16 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
     @Override
     public ArrayList<SuggestionWrapper> getAvailableSuggestions(int numberOfSuggestion) {
 		for(PriorityTrieTraverser traverser : traversers){
-			
+		    traverser.getAvailableSuggestions()
 		}
+    }
+
+    private SuggestionSet makeNextSet(){
+
+    }
+
+    private float getNextSetRank(){
+
     }
     
     
@@ -72,24 +83,33 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
     	private final SuggestionWrapper[] suggestionSet;
     	
     	public SuggestionSet(int numberOfTerms){
-    		suggestionSet = new SuggestionSet[numberOfTerms];
+    		suggestionSet = new SuggestionWrapper[numberOfTerms];
     	}
     	
-    	public void addTerm(ISuggestionWrapper term, int index){
+    	public void addTerm(SuggestionWrapper term, int index){
     		suggestionSet[index] = term;
     	}
     	
     	public void calculateRankEstimate(){
     		rankEstimate = 0;
-    		for(ISuggestionWrapper suggestionWrapper : suggestionSet){
-    			rankEstimate += suggestionWrapper.getRank() / suggestionSet.length;
+    		for(SuggestionWrapper suggestionWrapper : suggestionSet){
+    			rankEstimate += suggestionWrapper.getRank();
     		}
+
+            rankEstimate /= suggestionSet.length;
     	}
-    	
-    
-    
+
     	public int compareTo(SuggestionSet otherSuggestionSet){
-    	
+            float difference = otherSuggestionSet.rankEstimate - this.rankEstimate;
+            if(difference > 0){
+                return 1;
+            }
+            else if(difference < 0){
+                return -1;
+            }
+            else{
+                return 0;
+            }
     	}	
     }
 }

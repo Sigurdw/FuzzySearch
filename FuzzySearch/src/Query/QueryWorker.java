@@ -20,7 +20,6 @@ package Query;
 import DataStructure.Index;
 import Interface.IUpdateInterfaceControl;
 import Interface.WorkingStatus;
-import Query.PriorityInteractiveSearch.IndexTraverser;
 import Query.PriorityInteractiveSearch.PriorityTrieTraverser;
 
 import java.io.DataInputStream;

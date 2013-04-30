@@ -1,12 +1,12 @@
-package Query.NaiveInteractiveSearch;
+package Query.SimpleInteractiveSearch;
 
-import Query.ITrieTraverser;
+import Query.IndexTraverser;
 import Query.SuggestionWrapper;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class NaiveTrieTraverser implements ITrieTraverser {
+public class NaiveTrieTraverser implements IndexTraverser {
 
     private ArrayList<ActiveQuery> activeQueries = new ArrayList<ActiveQuery>();
     private final int numberOfSuggestions;
@@ -47,5 +47,35 @@ public class NaiveTrieTraverser implements ITrieTraverser {
     @Override
     public int getTotalNodes() {
         return totalNumberOfNodes;
+    }
+
+    @Override
+    public boolean isQueryExhausted() {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void initiateFromExhaustedNodes() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void exploreNextNode() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public boolean hasAvailableSuggestions() {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public ArrayList<SuggestionWrapper> getAvailableSuggestions(int numberOfSuggestion) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public int numberOfRetrievedSuggestions() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

@@ -1,4 +1,4 @@
-package Query.NaiveInteractiveSearch;
+package Query.SimpleInteractiveSearch;
 
 import DataStructure.QueryString;
 import DataStructure.SuggestionCacheWrapper;

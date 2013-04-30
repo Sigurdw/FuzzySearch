@@ -18,7 +18,7 @@ package Query.PriorityInteractiveSearch;
  */
 
 import DataStructure.TrieNode;
-import Query.ISuggestionWrapper;
+import Query.SuggestionWrapper;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
@@ -46,19 +46,13 @@ public final class SuggestionTraverser {
     }
 
     public void getSuggestions(
-        final ArrayList<ISuggestionWrapper> suggestions,
+        final ArrayList<SuggestionWrapper> suggestions,
         int numberOfSuggestions,
         final float lowerRankLimit)
     {
-        SuggestionNode suggestionNode = suggestionNodeQueue.poll();
-
-        if(suggestionNode == null){
-            return;
-        }
-        while(
-            needMoreSuggestions(numberOfSuggestions) &&
-            hasGoodEnoughSuggestions(lowerRankLimit, suggestionNode))
+        while(needMoreSuggestions(numberOfSuggestions) && hasGoodEnoughSuggestions(lowerRankLimit))
         {
+            SuggestionNode suggestionNode = suggestionNodeQueue.poll();
             if(suggestionNode.isLeaf()){
                 suggestions.add(suggestionNode.getSuggestion(editDiscount, previousTerms));
                 numberOfSuggestions--;
@@ -78,13 +72,11 @@ public final class SuggestionTraverser {
             if(suggestionNode.hasMoreChildren()){
                 suggestionNodeQueue.add(suggestionNode);
             }
-
-            suggestionNode = suggestionNodeQueue.poll();
         }
+    }
 
-        if(suggestionNode != null && suggestionNode.hasMoreChildren()){
-            suggestionNodeQueue.add(suggestionNode);
-        }
+    public SuggestionWrapper getNextSuggestion(float lowerRankThreshold){
+
     }
 
     public float getNextRank(){
@@ -96,7 +88,8 @@ public final class SuggestionTraverser {
         return -2;
     }
 
-    private boolean hasGoodEnoughSuggestions(double lowerRankLimit, SuggestionNode suggestionNode) {
+    private boolean hasGoodEnoughSuggestions(double lowerRankLimit) {
+        SuggestionNode suggestionNode = suggestionNodeQueue.peek();
         return suggestionNode != null && suggestionNode.getNextRank() >= lowerRankLimit;
     }
 

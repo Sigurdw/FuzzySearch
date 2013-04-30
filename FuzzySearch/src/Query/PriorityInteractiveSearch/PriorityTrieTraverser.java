@@ -1,19 +1,20 @@
 package Query.PriorityInteractiveSearch;
 
-import Query.ISuggestionWrapper;
+import Query.IndexTraverser;
 import Query.PriorityInteractiveSearch.Links.Link;
 import Query.QueryContext;
+import Query.SuggestionWrapper;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
-public final class PriorityTrieTraverser implements IndexTraverser{
+public final class PriorityTrieTraverser implements IndexTraverser {
     private final QueryContext queryContext;
     private final PriorityQueue<Link> linkQueue = new PriorityQueue<Link>();
     private final PriorityQueue<SuggestionTraverser> suggestionQueue
             = new PriorityQueue<SuggestionTraverser>();
     private final ArrayList<PriorityActiveNode> exhaustedNodes = new ArrayList<PriorityActiveNode>();
-    private final ArrayList<ISuggestionWrapper> suggestions = new ArrayList<ISuggestionWrapper>();
+    private final ArrayList<SuggestionWrapper> suggestions = new ArrayList<SuggestionWrapper>();
 
     public PriorityTrieTraverser(QueryContext queryContext){
         this.queryContext = queryContext;
@@ -43,7 +44,17 @@ public final class PriorityTrieTraverser implements IndexTraverser{
     }
 
     @Override
-    public ArrayList<ISuggestionWrapper> getAvailableSuggestions(int numberOfSuggestionRequired) {
+    public SuggestionWrapper getNextAvailableSuggestion() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public float peekNextAvailableSuggestionRank() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public ArrayList<SuggestionWrapper> getAvailableSuggestions(int numberOfSuggestionRequired) {
         float thresholdRank = 0;
         Link thresholdLink = linkQueue.peek();
         if(thresholdLink != null){

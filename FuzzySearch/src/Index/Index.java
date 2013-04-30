@@ -6,8 +6,8 @@ import DocumentModel.IDocument;
 import Query.*;
 import Query.FastInteractiveSearch.FastActiveNode;
 import Query.FastInteractiveSearch.FastTrieTraverser;
-import Query.NaiveInteractiveSearch.ActiveQuery;
-import Query.NaiveInteractiveSearch.NaiveTrieTraverser;
+import Query.SimpleInteractiveSearch.ActiveQuery;
+import Query.SimpleInteractiveSearch.NaiveTrieTraverser;
 
 import java.util.ArrayList;
 import java.util.HashSet;
