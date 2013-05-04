@@ -1,15 +1,6 @@
 package Interface;
 
-import DocumentModel.IDocument;
-import Index.Index;
-import Index.Indexer;
-import Index.Crawler;
-import Query.InteractiveSearchHandler;
-
 import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class MainFrame extends JFrame {
 

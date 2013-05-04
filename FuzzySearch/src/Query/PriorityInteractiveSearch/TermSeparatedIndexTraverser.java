@@ -6,18 +6,12 @@ import Query.QueryContext;
 
 import java.util.PriorityQueue;
 
-/**
- * User: Sigurd Wien
- * Date: 24.04.13
- * Time: 21:29
- */
-
 public class TermSeparatedIndexTraverser implements IndexTraverser {
     public final char separator = ' ';
-    private final IndexTraverser[] termTraversers;
     private final QueryContext queryContext;
     private final PriorityQueue<SuggestionSet> suggestionSets = new PriorityQueue<SuggestionSet>();
 
+    private IndexTraverser[] termTraversers;
     private SuggestionSet lastProducedSuggestionSet = null;
 
     public TermSeparatedIndexTraverser(QueryContext queryContext){
@@ -41,16 +35,15 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
             indexTraverser.initiateFromExhaustedNodes();
         }
 
-
+        suggestionSets.clear();
+        lastProducedSuggestionSet = null;
     }
 
     private void addNewTerm() {
         IndexTraverser[] newTraversers = new PriorityTrieTraverser[termTraversers.length + 1];
-        for(int i = 0; i < termTraversers.length; i++){
-            newTraversers[i] = termTraversers[i];
-        }
-
+        System.arraycopy(termTraversers, 0, newTraversers, 0, termTraversers.length);
         newTraversers[termTraversers.length] = new PriorityTrieTraverser(queryContext);
+        termTraversers = newTraversers;
     }
 
     @Override
@@ -73,8 +66,22 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
 
     @Override
     public boolean hasAvailableSuggestions() {
+        if(lastProducedSuggestionSet == null){
+            SuggestionSet firstSuggestionSet = new SuggestionSet(termTraversers.length);
+            if(firstSuggestionSet.initializeAsFirstSuggestionSet(termTraversers)){
+                lastProducedSuggestionSet = firstSuggestionSet;
+                suggestionSets.add(firstSuggestionSet);
+            }
+            else{
+                return false;
+            }
+        }
 
-        return suggestionSets.peek().getRankEstimate() >= lastProducedSuggestionSet.peekNextSetRank(termTraversers);
+        float bestAvailableSuggestionRank = Math.max(
+                suggestionSets.peek().getRankEstimate(),
+                lastProducedSuggestionSet.peekNextSetRank(termTraversers));
+
+        return bestAvailableSuggestionRank >= lastProducedSuggestionSet.peekNextSetRank(termTraversers);
     }
 
     @Override

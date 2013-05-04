@@ -36,6 +36,7 @@ public class QueryWorker implements Runnable{
     private String activeQueryString = "";
     private IndexTraverser query;
     private static final String indexPath = "C:/Index/clusteredIndex.dat";
+    private int numberOfRetrievedSuggestion;
 
 
     public QueryWorker(IUpdateInterfaceControl interfaceControl) throws Exception{
@@ -79,34 +80,31 @@ public class QueryWorker implements Runnable{
     private void doWork(){
         checkForQueryStringUpdate();
         char lastCharacter = queryContext.QueryString.GetLastCharacter();
-        if(lastCharacter == 0){
-            return;
-        }
-
-        query.initiateFromExhaustedNodes();
-
-        int numberOfRetrievedSuggestion = query.numberOfRetrievedSuggestions();
-        while (!query.isQueryExhausted() && numberOfRetrievedSuggestion < queryContext.NeededSuggestions){
-
-            query.exploreNextNode();
-            if(query.hasAvailableSuggestions()){
-                ArrayList<ISuggestionWrapper> retrievedSuggestions = query.getAvailableSuggestions(
-                        queryContext.NeededSuggestions - numberOfRetrievedSuggestion);
-                if(numberOfRetrievedSuggestion < retrievedSuggestions.size()){
-                    updateSuggestionUi(retrievedSuggestions);
-
-                    if(retrievedSuggestions.size() == queryContext.NeededSuggestions){
-                        interfaceControl.updateWorkingStatus(WorkingStatus.CalculatingMoreActiveNodes);
-                    }
-                    else{
-                        interfaceControl.updateWorkingStatus(WorkingStatus.LookingForMoreSuggestions);
-                    }
+        if(lastCharacter != 0){
+            query.initiateFromExhaustedNodes();
+            while (!query.isQueryExhausted() && needMoreSuggestion()){
+                query.exploreNextNode();
+                while(needMoreSuggestion() && query.hasAvailableSuggestions()){
+                    getNextAvailableSuggestion();
                 }
-
-                numberOfRetrievedSuggestion = retrievedSuggestions.size();
             }
-
         }
+    }
+
+    private void getNextAvailableSuggestion() {
+        ISuggestionWrapper retrievedSuggestion = query.getNextAvailableSuggestion();
+        if(retrievedSuggestion != null){
+            interfaceControl.addSuggestion(retrievedSuggestion.toString());
+            numberOfRetrievedSuggestion++;
+
+            if(!needMoreSuggestion()){
+                interfaceControl.updateWorkingStatus(WorkingStatus.CalculatingMoreActiveNodes);
+            }
+        }
+    }
+
+    private boolean needMoreSuggestion() {
+        return numberOfRetrievedSuggestion < queryContext.NeededSuggestions;
     }
 
     private void checkForQueryStringUpdate(){
@@ -114,7 +112,8 @@ public class QueryWorker implements Runnable{
         if(updatedQueryString != null){
             if(!updatedQueryString.equals(activeQueryString)){
                 interfaceControl.updateWorkingStatus(WorkingStatus.LookingForFirstSuggestions);
-                clearSuggestionUi();
+                interfaceControl.clearSuggestions();
+                numberOfRetrievedSuggestion = 0;
 
                 if(!updatedQueryString.startsWith(activeQueryString)){
                     initInteractiveSearch();
@@ -124,18 +123,5 @@ public class QueryWorker implements Runnable{
                 activeQueryString = updatedQueryString;
             }
         }
-    }
-
-    private void updateSuggestionUi(ArrayList<ISuggestionWrapper> suggestions){
-        ArrayList<String> processedSuggestions = new ArrayList<String>(suggestions.size());
-        for(SuggestionWrapper suggestionWrapper : suggestions){
-            processedSuggestions.add(suggestionWrapper.toString());
-        }
-
-        interfaceControl.updateSuggestionList(processedSuggestions);
-    }
-
-    private void clearSuggestionUi(){
-        interfaceControl.updateSuggestionList(new ArrayList<String>(0));
     }
 }

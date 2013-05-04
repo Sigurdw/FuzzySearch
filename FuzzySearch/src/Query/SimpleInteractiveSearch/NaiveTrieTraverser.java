@@ -6,7 +6,7 @@ import Query.IndexTraverser;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class NaiveTrieTraverser implements IndexTraverser {
+/*public class NaiveTrieTraverser implements IndexTraverser {
 
     private ArrayList<ActiveQuery> activeQueries = new ArrayList<ActiveQuery>();
     private final int numberOfSuggestions;
@@ -78,4 +78,4 @@ public class NaiveTrieTraverser implements IndexTraverser {
     public int numberOfRetrievedSuggestions() {
         return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
-}
+}*/

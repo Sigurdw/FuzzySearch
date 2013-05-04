@@ -132,7 +132,7 @@ public class ActiveQuery {
     }
 
     public void getSuggestions(ArrayList<ISuggestionWrapper> suggestions) {
-        ArrayList<SuggestionCacheWrapper<IDocument>> cachedSuggestions = queryPosition.getCachedSuggestions();
+        /*ArrayList<SuggestionCacheWrapper<IDocument>> cachedSuggestions = queryPosition.getCachedSuggestions();
         for (SuggestionCacheWrapper<IDocument> suggestion : cachedSuggestions){
             double suggestionRank = suggestion.getRank() * EditOperation.getRankDiscount(previousEdits);
             boolean hasSuggestion = false;
@@ -150,6 +150,6 @@ public class ActiveQuery {
             if(!hasSuggestion){
                 suggestions.add(new SuggestionWrapper(suggestion.getSuggestion().getLabel(), suggestionRank));
             }
-        }
+        }*/
     }
 }

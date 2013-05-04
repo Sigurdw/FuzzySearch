@@ -30,11 +30,8 @@ public class SuggestionCacheWrapper<T> implements Comparable<SuggestionCacheWrap
     }
 
     public boolean equals(Object o){
-        if(o instanceof SuggestionCacheWrapper){
-            return ((SuggestionCacheWrapper<T>)o).getSuggestion() == getSuggestion();
-        }
+        return (o instanceof SuggestionCacheWrapper) && (((SuggestionCacheWrapper<T>) o).getSuggestion() == getSuggestion());
 
-        return false;
     }
 
     public String toString(){

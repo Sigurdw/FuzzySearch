@@ -5,7 +5,6 @@ import Query.QueryWorker;
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
-import java.util.ArrayList;
 
 public class SearchPanel extends JPanel implements IUpdateInterfaceControl {
 
@@ -39,14 +38,21 @@ public class SearchPanel extends JPanel implements IUpdateInterfaceControl {
     }
 
     @Override
-    public void updateSuggestionList(final ArrayList<String> suggestionList) {
+    public void addSuggestion(final String suggestion) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                resultArea.append(suggestion);
+            }
+        });
+    }
+
+    @Override
+    public void clearSuggestions() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 resultArea.setText("");
-                for(String suggestion : suggestionList){
-                    resultArea.append(suggestion + "\n");
-                }
             }
         });
     }

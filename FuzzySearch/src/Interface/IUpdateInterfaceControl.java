@@ -23,7 +23,9 @@ import java.util.ArrayList;
 
 public interface IUpdateInterfaceControl {
 
-    public void updateSuggestionList(ArrayList<String> suggestionList);
+    public void addSuggestion(String suggestion);
+
+    public void clearSuggestions();
 
     public void updateWorkingStatus(WorkingStatus workingStatus);
 }

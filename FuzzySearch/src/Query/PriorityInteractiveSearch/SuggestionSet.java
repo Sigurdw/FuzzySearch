@@ -11,15 +11,6 @@ import Query.RecursiveSuggestionWrapper;
  */
 public final class SuggestionSet implements Comparable<SuggestionSet>
 {
-    public static SuggestionSet makeDefaultSuggestionSet(int numberOfTerms){
-        SuggestionSet suggestionSet = new SuggestionSet(numberOfTerms);
-        for(int i = 0; i < numberOfTerms; i++){
-            suggestionSet.addTerm(null, i);
-        }
-
-        return suggestionSet;
-    }
-
     private float rankEstimate;
 
     private final ISuggestionWrapper[] suggestionSet;
@@ -28,8 +19,19 @@ public final class SuggestionSet implements Comparable<SuggestionSet>
         suggestionSet = new ISuggestionWrapper[numberOfTerms];
     }
 
-    public void addTerm(ISuggestionWrapper term, int index){
-        suggestionSet[index] = term;
+    public boolean initializeAsFirstSuggestionSet(IndexTraverser[] suggestionSources){
+        for (IndexTraverser suggestionSource : suggestionSources) {
+            if (!suggestionSource.hasAvailableSuggestions()) {
+                return false;
+            }
+        }
+
+        for(int i = 0; i < suggestionSources.length; i++){
+            suggestionSet[i] = suggestionSources[i].getNextAvailableSuggestion();
+        }
+
+        calculateRankEstimate();
+        return true;
     }
 
     public float getRankEstimate(){
@@ -37,40 +39,32 @@ public final class SuggestionSet implements Comparable<SuggestionSet>
     }
 
     public SuggestionSet getNextSuggestionSet(IndexTraverser[] suggestionSources){
-        SuggestionSet nextSuggestionSet = new SuggestionSet(suggestionSet.length);
-        float minDifference = suggestionSet[0].getRank() - suggestionSources[0].peekNextAvailableSuggestionRank();
-        int minIndex = 0;
-        for(int i = 1; i < suggestionSet.length; i++){
-            if(suggestionSet[i].getRank() - suggestionSources[i].peekNextAvailableSuggestionRank() < minDifference){
-                nextSuggestionSet.addTerm(suggestionSet[minIndex], minIndex);
-                minIndex = i;
-            }
-            else{
-                nextSuggestionSet.addTerm(suggestionSet[i], i);
-            }
+        SuggestionSet nextSuggestionSet = null;
+        int minIndex = getMinDifferenceIndex(suggestionSources);
+        if(suggestionSources[minIndex].hasAvailableSuggestions()){
+            nextSuggestionSet = new SuggestionSet(suggestionSet.length);
+            System.arraycopy(suggestionSet, 0, nextSuggestionSet.suggestionSet, 0, suggestionSet.length);
+            nextSuggestionSet.suggestionSet[minIndex] = suggestionSources[minIndex].getNextAvailableSuggestion();
         }
 
-        ISuggestionWrapper nextSuggestionWrapper = suggestionSources[minIndex].getNextAvailableSuggestion();
-        nextSuggestionSet.addTerm(nextSuggestionWrapper, minIndex);
         return nextSuggestionSet;
     }
 
     public float peekNextSetRank(IndexTraverser[] suggestionSources) {
-        float minDifference = suggestionSet[0].getRank() - suggestionSources[0].peekNextAvailableSuggestionRank();
-        float rankEstimate = 0;
-        int minIndex = 0;
-        for(int i = 1; i < suggestionSet.length; i++){
-            if(suggestionSet[i].getRank() - suggestionSources[i].peekNextAvailableSuggestionRank() < minDifference){
-                rankEstimate += suggestionSet[minIndex].getRank();
-                minIndex = i;
+        float nextSetRank = -2;
+        int minIndex = getMinDifferenceIndex(suggestionSources);
+        if(suggestionSources[minIndex].hasAvailableSuggestions()){
+            nextSetRank = 0;
+            for(ISuggestionWrapper suggestionWrapper : suggestionSet){
+                nextSetRank += suggestionWrapper.getRank();
             }
-            else{
-                rankEstimate += suggestionSet[i].getRank();
-            }
+
+            nextSetRank +=
+                    suggestionSources[minIndex].peekNextAvailableSuggestionRank() - suggestionSet[minIndex].getRank();
+            nextSetRank /= suggestionSet.length;
         }
 
-        rankEstimate += suggestionSources[minIndex].peekNextAvailableSuggestionRank();
-        return rankEstimate / suggestionSources.length;
+        return nextSetRank;
     }
 
     public float peekNextNodeRank(IndexTraverser[] suggestionSources){
@@ -78,9 +72,11 @@ public final class SuggestionSet implements Comparable<SuggestionSet>
         float rankEstimate = 0;
         int minIndex = 0;
         for(int i = 1; i < suggestionSet.length; i++){
-            if(suggestionSet[i].getRank() - suggestionSources[i].peekNextNodeRank() < minDifference){
+            float difference = suggestionSet[i].getRank() - suggestionSources[i].peekNextNodeRank();
+            if(difference < minDifference){
                 rankEstimate += suggestionSet[minIndex].getRank();
                 minIndex = i;
+                minDifference = difference;
             }
             else{
                 rankEstimate += suggestionSet[i].getRank();
@@ -89,6 +85,35 @@ public final class SuggestionSet implements Comparable<SuggestionSet>
 
         rankEstimate += suggestionSources[minIndex].peekNextNodeRank();
         return rankEstimate / suggestionSources.length;
+    }
+
+    private int getMinDifferenceIndex(final IndexTraverser[] suggestionSources){
+        float minDifference;
+        int minIndex = 0;
+        minDifference = getDifference(suggestionSet[0], suggestionSources[0]);
+
+        for(int i = 1; i < suggestionSet.length; i++){
+            float difference = getDifference(suggestionSet[i], suggestionSources[i]);
+            if(difference < minDifference){
+                minIndex = i;
+                minDifference = difference;
+            }
+        }
+
+        return minIndex;
+    }
+
+    private float getDifference(ISuggestionWrapper suggestionWrapper, IndexTraverser suggestionSource) {
+        float difference;
+        if(suggestionSource.hasAvailableSuggestions()){
+            difference =
+                    suggestionWrapper.getRank() - suggestionSource.peekNextAvailableSuggestionRank();
+        }
+        else{
+            difference = suggestionWrapper.getRank() - suggestionSource.peekNextNodeRank();
+        }
+
+        return difference;
     }
 
     public void calculateRankEstimate(){

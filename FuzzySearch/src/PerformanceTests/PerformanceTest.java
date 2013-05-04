@@ -4,7 +4,6 @@ import Index.Index;
 import Index.Indexer;
 import Interface.IUpdateInterfaceControl;
 import Interface.WorkingStatus;
-import Query.InteractiveSearchHandler;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -286,7 +285,7 @@ public class PerformanceTest {
     private final class DummyInterface implements IUpdateInterfaceControl{
 
         @Override
-        public void updateSuggestionList(ArrayList<String> suggestionList) {
+        public void addSuggestion(ArrayList<String> suggestionList) {
             //Empty
         }
 
