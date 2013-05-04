@@ -67,16 +67,41 @@ public final class SuggestionTraverser {
                 if(nextSuggestionNodeChild != null){
                     suggestionNodeQueue.add(nextSuggestionNodeChild);
                 }
-            }
 
-            if(suggestionNode.hasMoreChildren()){
-                suggestionNodeQueue.add(suggestionNode);
+                if(suggestionNode.hasMoreChildren()){
+                    suggestionNodeQueue.add(suggestionNode);
+                }
             }
         }
     }
 
     public SuggestionWrapper getNextSuggestion(float lowerRankThreshold){
+        SuggestionWrapper suggestionWrapper = null;
+        while(hasGoodEnoughSuggestions(lowerRankThreshold))
+        {
+            SuggestionNode suggestionNode = suggestionNodeQueue.poll();
+            if(suggestionNode.isLeaf()){
+                suggestionWrapper = suggestionNode.getSuggestion(editDiscount, previousTerms);
+                break;
+            }
+            else{
+                SuggestionNode nextSuggestionNodeChild = null;
+                while(nextSuggestionNodeChild == null && suggestionNode.hasMoreChildren()){
+                    TrieNode nextChild = suggestionNode.getNextChild();
+                    nextSuggestionNodeChild = suggestionNodeRegister.getSuggestionNode(previousTerms, nextChild);
+                }
 
+                if(nextSuggestionNodeChild != null){
+                    suggestionNodeQueue.add(nextSuggestionNodeChild);
+                }
+
+                if(suggestionNode.hasMoreChildren()){
+                    suggestionNodeQueue.add(suggestionNode);
+                }
+            }
+        }
+
+        return suggestionWrapper;
     }
 
     public float getNextRank(){

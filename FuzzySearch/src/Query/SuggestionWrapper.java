@@ -24,7 +24,7 @@ public class SuggestionWrapper implements Comparable<SuggestionWrapper>{
         return stringBuilder.toString();
     }
 
-    public double getRank() {
+    public float getRank() {
         return suggestionPosition.getRank() * rankDiscount;
     }
 

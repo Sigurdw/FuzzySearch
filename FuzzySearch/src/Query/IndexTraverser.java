@@ -20,7 +20,5 @@ public interface IndexTraverser {
 
     public float peekNextAvailableSuggestionRank();
 
-    public ArrayList<SuggestionWrapper> getAvailableSuggestions(int numberOfSuggestion);
-
-    public int numberOfRetrievedSuggestions();
+    public float peekNextNodeRank();
 }

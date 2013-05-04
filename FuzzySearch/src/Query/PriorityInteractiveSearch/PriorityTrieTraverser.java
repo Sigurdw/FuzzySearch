@@ -14,7 +14,6 @@ public final class PriorityTrieTraverser implements IndexTraverser {
     private final PriorityQueue<SuggestionTraverser> suggestionQueue
             = new PriorityQueue<SuggestionTraverser>();
     private final ArrayList<PriorityActiveNode> exhaustedNodes = new ArrayList<PriorityActiveNode>();
-    private final ArrayList<SuggestionWrapper> suggestions = new ArrayList<SuggestionWrapper>();
 
     public PriorityTrieTraverser(QueryContext queryContext){
         this.queryContext = queryContext;
@@ -23,6 +22,7 @@ public final class PriorityTrieTraverser implements IndexTraverser {
         }
     }
 
+    @Override
     public void exploreNextNode() {
         Link nextLink = linkQueue.poll();
         if(nextLink != null){
@@ -45,44 +45,39 @@ public final class PriorityTrieTraverser implements IndexTraverser {
 
     @Override
     public SuggestionWrapper getNextAvailableSuggestion() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        SuggestionWrapper suggestionWrapper = null;
+
+        float thresholdRank = peekNextNodeRank();
+
+        if (getNextSuggestionRank() >= thresholdRank){
+            SuggestionTraverser suggestionTraverser = suggestionQueue.poll();
+            suggestionWrapper = suggestionTraverser.getNextSuggestion(thresholdRank);
+            suggestionQueue.add(suggestionTraverser);
+        }
+
+        return suggestionWrapper;
     }
 
     @Override
-    public float peekNextAvailableSuggestionRank() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public ArrayList<SuggestionWrapper> getAvailableSuggestions(int numberOfSuggestionRequired) {
+    public float peekNextNodeRank() {
         float thresholdRank = 0;
         Link thresholdLink = linkQueue.peek();
         if(thresholdLink != null){
             thresholdRank = thresholdLink.getRank();
         }
 
-        float nextSuggestionRank = getNextSuggestionRank();
-
-        while (nextSuggestionRank >= thresholdRank && 0 < numberOfSuggestionRequired){
-            SuggestionTraverser suggestionTraverser = suggestionQueue.poll();
-            nextSuggestionRank = getNextSuggestionRank();
-
-            int numberOfSuggestionsBefore = suggestions.size();
-            suggestionTraverser.getSuggestions(
-                    suggestions,
-                    numberOfSuggestionRequired,
-                    Math.max(thresholdRank, nextSuggestionRank));
-
-            numberOfSuggestionRequired -= suggestions.size() - numberOfSuggestionsBefore;
-            suggestionQueue.add(suggestionTraverser);
-        }
-
-        return suggestions;
+        return thresholdRank;
     }
 
     @Override
-    public int numberOfRetrievedSuggestions() {
-        return suggestions.size();
+    public float peekNextAvailableSuggestionRank() {
+        float thresholdRank = peekNextNodeRank();
+        float nextSuggestionRank = getNextSuggestionRank();
+        if(nextSuggestionRank >= thresholdRank){
+            return nextSuggestionRank;
+        }
+
+        return -2;
     }
 
     private float getNextSuggestionRank() {
@@ -100,7 +95,6 @@ public final class PriorityTrieTraverser implements IndexTraverser {
         }
 
         exhaustedNodes.clear();
-        suggestions.clear();
         suggestionQueue.clear();
         queryContext.SuggestionNodeRegister.clearRegister();
     }

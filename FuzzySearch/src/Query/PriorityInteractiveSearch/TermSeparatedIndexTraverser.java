@@ -1,10 +1,10 @@
 package Query.PriorityInteractiveSearch;
 
+import DataStructure.IQueryStringListener;
 import Query.IndexTraverser;
 import Query.QueryContext;
 import Query.SuggestionWrapper;
 
-import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 /**
@@ -15,14 +15,16 @@ import java.util.PriorityQueue;
 
 public class TermSeparatedIndexTraverser implements IndexTraverser {
     public final char separator = ' ';
-    private final ArrayList<PriorityTrieTraverser> traversers = new ArrayList<PriorityTrieTraverser>();
+    private final IndexTraverser[] termTraversers;
     private final QueryContext queryContext;
-
     private final PriorityQueue<SuggestionSet> suggestionSets = new PriorityQueue<SuggestionSet>();
+
+    private SuggestionSet lastProducedSuggestionSet = null;
 
     public TermSeparatedIndexTraverser(QueryContext queryContext){
         this.queryContext = queryContext;
-        traversers.add(new PriorityTrieTraverser(queryContext));
+        termTraversers = new PriorityTrieTraverser[1];
+        termTraversers[0] = new PriorityTrieTraverser(queryContext);
     }
 
     @Override
@@ -32,84 +34,64 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
 
     @Override
     public void initiateFromExhaustedNodes() {
-        getCurrentTraverser().isQueryExhausted();
+        if(queryContext.QueryString.GetLastCharacter() == separator){
+            addNewTerm();
+        }
+
+        for(IndexTraverser indexTraverser : termTraversers){
+            indexTraverser.initiateFromExhaustedNodes();
+        }
+
+
+    }
+
+    private void addNewTerm() {
+        IndexTraverser[] newTraversers = new PriorityTrieTraverser[termTraversers.length + 1];
+        for(int i = 0; i < termTraversers.length; i++){
+            newTraversers[i] = termTraversers[i];
+        }
+
+        newTraversers[termTraversers.length] = new PriorityTrieTraverser(queryContext);
     }
 
     @Override
     public void exploreNextNode() {
-        if(queryContext.QueryString.GetLastCharacter() == separator){
-            traversers.add(new PriorityTrieTraverser(queryContext));
+        int traverserToExplore = getTraverserToExplore();
+        termTraversers[traverserToExplore].exploreNextNode();
+    }
+
+    private int getTraverserToExplore(){
+        int index = termTraversers.length - 1;
+        for(int i = 0; i < termTraversers.length; i++){
+            if(termTraversers[i].peekNextAvailableSuggestionRank() < 0){
+                index = i;
+                break;
+            }
         }
-        else{
-            getCurrentTraverser().exploreNextNode();
-        }
+
+        return index;
     }
 
     @Override
     public boolean hasAvailableSuggestions() {
-    	
+        return suggestionSets.peek().getRankEstimate() >= lastProducedSuggestionSet.peekNextSetRank(termTraversers);
     }
 
     @Override
-    public ArrayList<SuggestionWrapper> getAvailableSuggestions(int numberOfSuggestion) {
-		for(PriorityTrieTraverser traverser : traversers){
-		    traverser.getAvailableSuggestions()
-		}
+    public SuggestionWrapper getNextAvailableSuggestion() {
+        //todo;
     }
-
-    private SuggestionSet makeNextSet(){
-
-    }
-
-    private float getNextSetRank(){
-
-    }
-    
-    
 
     @Override
-    public int numberOfRetrievedSuggestions() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    private PriorityTrieTraverser getCurrentTraverser(){
-        return traversers.get(traversers.size() - 1);
+    public float peekNextAvailableSuggestionRank() {
+        return lastProducedSuggestionSet.peekNextSetRank(termTraversers);
     }
     
-    private final class SuggestionSet implements Comparable<SuggestionSet>
-    {
-    	private float rankEstimate;
-    	
-    	private final SuggestionWrapper[] suggestionSet;
-    	
-    	public SuggestionSet(int numberOfTerms){
-    		suggestionSet = new SuggestionWrapper[numberOfTerms];
-    	}
-    	
-    	public void addTerm(SuggestionWrapper term, int index){
-    		suggestionSet[index] = term;
-    	}
-    	
-    	public void calculateRankEstimate(){
-    		rankEstimate = 0;
-    		for(SuggestionWrapper suggestionWrapper : suggestionSet){
-    			rankEstimate += suggestionWrapper.getRank();
-    		}
+    public float peekNextNodeRank(){
+        return lastProducedSuggestionSet.peekNextNodeRank(termTraversers);
+    }
 
-            rankEstimate /= suggestionSet.length;
-    	}
-
-    	public int compareTo(SuggestionSet otherSuggestionSet){
-            float difference = otherSuggestionSet.rankEstimate - this.rankEstimate;
-            if(difference > 0){
-                return 1;
-            }
-            else if(difference < 0){
-                return -1;
-            }
-            else{
-                return 0;
-            }
-    	}	
+    private IndexTraverser getCurrentTraverser(){
+        return termTraversers[termTraversers.length - 1];
     }
 }
