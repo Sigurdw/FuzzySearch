@@ -19,6 +19,7 @@ package Query.PriorityInteractiveSearch;
 
 import DataStructure.LeafTrieNode;
 import DataStructure.TrieNode;
+import Query.ISuggestionWrapper;
 import Query.SuggestionWrapper;
 
 public class SuggestionNode implements Comparable<SuggestionNode> {
@@ -41,7 +42,7 @@ public class SuggestionNode implements Comparable<SuggestionNode> {
         return null;
     }
 
-    public SuggestionWrapper getSuggestion(float rankDiscount, final TrieNode[] previousTerms){
+    public ISuggestionWrapper getSuggestion(float rankDiscount, final TrieNode[] previousTerms){
         return new SuggestionWrapper(suggestionPosition, previousTerms, rankDiscount);
     }
 

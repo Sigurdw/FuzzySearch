@@ -19,7 +19,7 @@ package DataStructure;
 
 import Clustering.ClusteringVector;
 import Clustering.TermDocumentVector;
-import Query.SuggestionWrapper;
+import Query.ISuggestionWrapper;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -190,7 +190,7 @@ public class InternalTrieNode extends TrieNode {
     }
 
     @Override
-    protected void getAllTerms(ArrayList<SuggestionWrapper> suggestionList) {
+    protected void getAllTerms(ArrayList<ISuggestionWrapper> suggestionList) {
         for(TrieNode trieNode : childrenSortedByRank){
             trieNode.getAllTerms(suggestionList);
         }

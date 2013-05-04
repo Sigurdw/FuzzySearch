@@ -1,7 +1,7 @@
 package Query.SimpleInteractiveSearch;
 
+import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
-import Query.SuggestionWrapper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,14 +19,14 @@ public class NaiveTrieTraverser implements IndexTraverser {
     }
 
     @Override
-    public ArrayList<SuggestionWrapper> addCharacter() {
+    public ArrayList<ISuggestionWrapper> addCharacter() {
         //System.out.println("Iteration on " + activeQueries.size() + " active nodes.");
         ArrayList<ActiveQuery> nextActiveQueries = new ArrayList<ActiveQuery>();
         for(ActiveQuery activeQuery : activeQueries){
            numberOfNodesInLastIteration += activeQuery.addCharacter(nextActiveQueries);
         }
 
-        ArrayList<SuggestionWrapper> suggestions = new ArrayList<SuggestionWrapper>();
+        ArrayList<ISuggestionWrapper> suggestions = new ArrayList<ISuggestionWrapper>();
         for(ActiveQuery activeQuery : nextActiveQueries){
             activeQuery.getSuggestions(suggestions);
         }
@@ -70,7 +70,7 @@ public class NaiveTrieTraverser implements IndexTraverser {
     }
 
     @Override
-    public ArrayList<SuggestionWrapper> getAvailableSuggestions(int numberOfSuggestion) {
+    public ArrayList<ISuggestionWrapper> getAvailableSuggestions(int numberOfSuggestion) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

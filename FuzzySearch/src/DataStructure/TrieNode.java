@@ -19,7 +19,7 @@ package DataStructure;
 
 import Clustering.ClusteringVector;
 import Clustering.TermDocumentVector;
-import Query.SuggestionWrapper;
+import Query.ISuggestionWrapper;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -91,13 +91,13 @@ public abstract class TrieNode {
         return trieNode;
     }
 
-    public ArrayList<SuggestionWrapper> getAllTerms(){
-        ArrayList<SuggestionWrapper> terms = new ArrayList<SuggestionWrapper>();
+    public ArrayList<ISuggestionWrapper> getAllTerms(){
+        ArrayList<ISuggestionWrapper> terms = new ArrayList<ISuggestionWrapper>();
         getAllTerms(terms);
         return terms;
     }
 
-    protected abstract void getAllTerms(ArrayList<SuggestionWrapper> suggestionList);
+    protected abstract void getAllTerms(ArrayList<ISuggestionWrapper> suggestionList);
 
     @Override
     public String toString(){

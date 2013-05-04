@@ -2,7 +2,7 @@ package DataStructure;
 
 import Clustering.ClusteringVector;
 import Clustering.TermDocumentVector;
-import Query.SuggestionWrapper;
+import Query.ISuggestionWrapper;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -68,8 +68,8 @@ public final class Index {
         return new Index(indexHeader, clusteredIndexes);
     }
 
-    public ArrayList<SuggestionWrapper> getAllTerms() {
-        ArrayList<SuggestionWrapper> terms = new ArrayList<SuggestionWrapper>();
+    public ArrayList<ISuggestionWrapper> getAllTerms() {
+        ArrayList<ISuggestionWrapper> terms = new ArrayList<ISuggestionWrapper>();
         for(TrieNode clusterIndex : clusteredIndexes){
             terms.addAll(clusterIndex.getAllTerms());
         }

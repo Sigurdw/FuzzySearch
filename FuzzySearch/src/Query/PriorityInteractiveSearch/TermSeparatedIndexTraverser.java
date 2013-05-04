@@ -1,9 +1,8 @@
 package Query.PriorityInteractiveSearch;
 
-import DataStructure.IQueryStringListener;
+import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
 import Query.QueryContext;
-import Query.SuggestionWrapper;
 
 import java.util.PriorityQueue;
 
@@ -74,17 +73,34 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
 
     @Override
     public boolean hasAvailableSuggestions() {
+
         return suggestionSets.peek().getRankEstimate() >= lastProducedSuggestionSet.peekNextSetRank(termTraversers);
     }
 
     @Override
-    public SuggestionWrapper getNextAvailableSuggestion() {
-        //todo;
+    public ISuggestionWrapper getNextAvailableSuggestion() {
+        ISuggestionWrapper suggestion = null;
+        while(peekNextAvailableSuggestionRank() > peekNextNodeRank()){
+            if(lastProducedSuggestionSet.peekNextSetRank(termTraversers) > suggestionSets.peek().getRankEstimate()){
+                lastProducedSuggestionSet = lastProducedSuggestionSet.getNextSuggestionSet(termTraversers);
+                lastProducedSuggestionSet.calculateRankEstimate();
+                suggestionSets.add(lastProducedSuggestionSet);
+            }
+            else{
+                SuggestionSet bestSuggestion = suggestionSets.poll();
+                suggestion = bestSuggestion.extractSuggestion();
+            }
+        }
+
+        return suggestion;
     }
 
     @Override
     public float peekNextAvailableSuggestionRank() {
-        return lastProducedSuggestionSet.peekNextSetRank(termTraversers);
+        float nextSetRank = lastProducedSuggestionSet.peekNextSetRank(termTraversers);
+        float currentBestSetRank = suggestionSets.peek().getRankEstimate();
+
+        return Math.max(nextSetRank, currentBestSetRank);
     }
     
     public float peekNextNodeRank(){

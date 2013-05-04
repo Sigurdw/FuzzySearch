@@ -44,7 +44,7 @@ public class QueryWorker implements Runnable{
 
         index = Index.read(new DataInputStream(new FileInputStream(new File(indexPath))));
         System.out.println("index loaded");
-        ArrayList<SuggestionWrapper> terms = index.getAllTerms();
+        ArrayList<ISuggestionWrapper> terms = index.getAllTerms();
         System.out.println("number of terms: " + terms.size());
 
         initInteractiveSearch();
@@ -90,7 +90,7 @@ public class QueryWorker implements Runnable{
 
             query.exploreNextNode();
             if(query.hasAvailableSuggestions()){
-                ArrayList<SuggestionWrapper> retrievedSuggestions = query.getAvailableSuggestions(
+                ArrayList<ISuggestionWrapper> retrievedSuggestions = query.getAvailableSuggestions(
                         queryContext.NeededSuggestions - numberOfRetrievedSuggestion);
                 if(numberOfRetrievedSuggestion < retrievedSuggestions.size()){
                     updateSuggestionUi(retrievedSuggestions);
@@ -126,7 +126,7 @@ public class QueryWorker implements Runnable{
         }
     }
 
-    private void updateSuggestionUi(ArrayList<SuggestionWrapper> suggestions){
+    private void updateSuggestionUi(ArrayList<ISuggestionWrapper> suggestions){
         ArrayList<String> processedSuggestions = new ArrayList<String>(suggestions.size());
         for(SuggestionWrapper suggestionWrapper : suggestions){
             processedSuggestions.add(suggestionWrapper.toString());

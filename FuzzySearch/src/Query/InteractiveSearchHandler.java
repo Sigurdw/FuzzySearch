@@ -1,11 +1,9 @@
 package Query;
 
-import DataStructure.QueryString;
 import DataStructure.TrieNode;
 import Index.Index;
 import Interface.IUpdateInterfaceControl;
 import Interface.WorkingStatus;
-import Query.PriorityInteractiveSearch.PriorityTrieTraverser;
 
 import java.io.DataInputStream;
 import java.io.File;
@@ -21,7 +19,7 @@ public class InteractiveSearchHandler{
     private int allowedEditDistance;
     private final IUpdateInterfaceControl interfaceControl;
     private ITrieTraverser query;
-    private ArrayList<SuggestionWrapper> suggestions = new ArrayList<SuggestionWrapper>();
+    private ArrayList<ISuggestionWrapper> suggestions = new ArrayList<ISuggestionWrapper>();
     private QueryContext queryContext;
     private TrieNode rootNode;
     private static final String indexPath = "C:/Index/clusteredIndex.dat";
@@ -42,7 +40,7 @@ public class InteractiveSearchHandler{
         try{
             rootNode = TrieNode.read(new DataInputStream(new FileInputStream(new File(indexPath))));
             System.out.println("index loaded");
-            ArrayList<SuggestionWrapper> terms = rootNode.getAllTerms();
+            ArrayList<ISuggestionWrapper> terms = rootNode.getAllTerms();
             System.out.println("number of terms: " + terms.size());
         }
         catch (Exception e){

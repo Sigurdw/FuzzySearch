@@ -1,9 +1,9 @@
 package Query.PriorityInteractiveSearch;
 
+import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
 import Query.PriorityInteractiveSearch.Links.Link;
 import Query.QueryContext;
-import Query.SuggestionWrapper;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
@@ -44,8 +44,8 @@ public final class PriorityTrieTraverser implements IndexTraverser {
     }
 
     @Override
-    public SuggestionWrapper getNextAvailableSuggestion() {
-        SuggestionWrapper suggestionWrapper = null;
+    public ISuggestionWrapper getNextAvailableSuggestion() {
+        ISuggestionWrapper suggestionWrapper = null;
 
         float thresholdRank = peekNextNodeRank();
 

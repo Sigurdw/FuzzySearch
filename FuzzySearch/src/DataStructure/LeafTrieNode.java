@@ -19,6 +19,7 @@ package DataStructure;
 
 import Clustering.ClusteringVector;
 import Clustering.TermDocumentVector;
+import Query.ISuggestionWrapper;
 import Query.SuggestionWrapper;
 
 import java.io.DataInputStream;
@@ -84,7 +85,7 @@ public class LeafTrieNode extends TrieNode {
     }
 
     @Override
-    protected void getAllTerms(ArrayList<SuggestionWrapper> suggestionList) {
+    protected void getAllTerms(ArrayList<ISuggestionWrapper> suggestionList) {
         suggestionList.add(new SuggestionWrapper(this, new TrieNode[0], rank));
     }
 

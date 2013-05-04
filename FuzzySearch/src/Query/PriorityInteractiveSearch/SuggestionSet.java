@@ -1,7 +1,8 @@
 package Query.PriorityInteractiveSearch;
 
+import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
-import Query.SuggestionWrapper;
+import Query.RecursiveSuggestionWrapper;
 
 /**
  * User: Sigurd Wien
@@ -21,13 +22,13 @@ public final class SuggestionSet implements Comparable<SuggestionSet>
 
     private float rankEstimate;
 
-    private final SuggestionWrapper[] suggestionSet;
+    private final ISuggestionWrapper[] suggestionSet;
 
     public SuggestionSet(int numberOfTerms){
-        suggestionSet = new SuggestionWrapper[numberOfTerms];
+        suggestionSet = new ISuggestionWrapper[numberOfTerms];
     }
 
-    public void addTerm(SuggestionWrapper term, int index){
+    public void addTerm(ISuggestionWrapper term, int index){
         suggestionSet[index] = term;
     }
 
@@ -49,7 +50,7 @@ public final class SuggestionSet implements Comparable<SuggestionSet>
             }
         }
 
-        SuggestionWrapper nextSuggestionWrapper = suggestionSources[minIndex].getNextAvailableSuggestion();
+        ISuggestionWrapper nextSuggestionWrapper = suggestionSources[minIndex].getNextAvailableSuggestion();
         nextSuggestionSet.addTerm(nextSuggestionWrapper, minIndex);
         return nextSuggestionSet;
     }
@@ -92,11 +93,15 @@ public final class SuggestionSet implements Comparable<SuggestionSet>
 
     public void calculateRankEstimate(){
         rankEstimate = 0;
-        for(SuggestionWrapper suggestionWrapper : suggestionSet){
+        for(ISuggestionWrapper suggestionWrapper : suggestionSet){
             rankEstimate += suggestionWrapper.getRank();
         }
 
         rankEstimate /= suggestionSet.length;
+    }
+
+    public ISuggestionWrapper extractSuggestion(){
+        return new RecursiveSuggestionWrapper(suggestionSet, rankEstimate);
     }
 
     public int compareTo(SuggestionSet otherSuggestionSet){

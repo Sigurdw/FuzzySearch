@@ -1,7 +1,5 @@
 package Query;
 
-import java.util.ArrayList;
-
 /**
  * User: Sigurd Wien
  * Date: 24.04.13
@@ -16,7 +14,7 @@ public interface IndexTraverser {
 
     public boolean hasAvailableSuggestions();
 
-    public SuggestionWrapper getNextAvailableSuggestion();
+    public ISuggestionWrapper getNextAvailableSuggestion();
 
     public float peekNextAvailableSuggestionRank();
 

@@ -18,7 +18,7 @@ package Query.PriorityInteractiveSearch;
  */
 
 import DataStructure.TrieNode;
-import Query.SuggestionWrapper;
+import Query.ISuggestionWrapper;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
@@ -46,7 +46,7 @@ public final class SuggestionTraverser {
     }
 
     public void getSuggestions(
-        final ArrayList<SuggestionWrapper> suggestions,
+        final ArrayList<ISuggestionWrapper> suggestions,
         int numberOfSuggestions,
         final float lowerRankLimit)
     {
@@ -75,8 +75,8 @@ public final class SuggestionTraverser {
         }
     }
 
-    public SuggestionWrapper getNextSuggestion(float lowerRankThreshold){
-        SuggestionWrapper suggestionWrapper = null;
+    public ISuggestionWrapper getNextSuggestion(float lowerRankThreshold){
+        ISuggestionWrapper suggestionWrapper = null;
         while(hasGoodEnoughSuggestions(lowerRankThreshold))
         {
             SuggestionNode suggestionNode = suggestionNodeQueue.poll();

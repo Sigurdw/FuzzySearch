@@ -3,7 +3,7 @@ package Query;
 import java.util.ArrayList;
 
 public interface ITrieTraverser {
-    public ArrayList<SuggestionWrapper> addCharacter();
+    public ArrayList<ISuggestionWrapper> addCharacter();
 
     public int getNumberOfNodesInLastIteration();
 
