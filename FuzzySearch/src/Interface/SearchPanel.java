@@ -14,7 +14,6 @@ public class SearchPanel extends JPanel implements IUpdateInterfaceControl, ICon
     private final JTextField searchField = new JTextField(30);
     private final JButton searchButton = new JButton("Search");
     private final JTextArea searchResultArea = new JTextArea();
-
     private final QueryWorker queryWorker;
 
     public SearchPanel() throws Exception{
@@ -34,7 +33,6 @@ public class SearchPanel extends JPanel implements IUpdateInterfaceControl, ICon
         add(searchResultArea, BorderLayout.SOUTH);
 
         queryWorker = new QueryWorker(this);
-
 
         searchButton.setForeground(WorkingStatus.getStatusColor(WorkingStatus.IterationExhausted));
 

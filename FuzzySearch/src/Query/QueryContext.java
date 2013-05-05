@@ -1,5 +1,6 @@
 package Query;
 
+import Config.SearchConfig;
 import DataStructure.QueryString;
 import DataStructure.TrieNode;
 import Query.PriorityInteractiveSearch.SuggestionNodeRegister;
@@ -16,12 +17,12 @@ public final class QueryContext {
 
     public final int NeededSuggestions;
 
-    public QueryContext(Index index, int maxEdits, int neededSuggestions) {
+    public QueryContext(Index index, SearchConfig searchConfig) {
         Index = index;
         QueryString = new QueryString();
         SuggestionNodeRegister = new SuggestionNodeRegister();
-        MaxEdits = maxEdits;
-        NeededSuggestions = neededSuggestions;
+        MaxEdits = searchConfig.getAllowedEdits();
+        NeededSuggestions = searchConfig.getNeededSuggestion();
     }
 
     public float getMaxRank(){

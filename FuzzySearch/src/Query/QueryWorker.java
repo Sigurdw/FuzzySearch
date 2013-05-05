@@ -33,10 +33,8 @@ public class QueryWorker implements Runnable{
     private final IUpdateInterfaceControl interfaceControl;
     private final QueryUpdateQueue queryUpdateQueue = new QueryUpdateQueue();
     private QueryContext queryContext;
-    private Index index;
     private String activeQueryString = "";
     private IndexTraverser query;
-    private static final String indexPath = "C:/Index/clusteredIndex.dat";
     private int numberOfRetrievedSuggestion;
     private SearchConfig searchConfig;
 
@@ -110,6 +108,14 @@ public class QueryWorker implements Runnable{
     }
 
     private void checkForQueryStringUpdate(){
+        boolean needToRestart = false;
+
+        SearchConfig newConfig = queryUpdateQueue.getSearchConfigUpdate();
+        if(newConfig != null){
+            needToRestart = true;
+            searchConfig = newConfig;
+        }
+
         String updatedQueryString = queryUpdateQueue.getQueryStringUpdate();
         if(updatedQueryString != null){
             if(!updatedQueryString.equals(activeQueryString)){
@@ -117,7 +123,8 @@ public class QueryWorker implements Runnable{
                 interfaceControl.clearSuggestions();
                 numberOfRetrievedSuggestion = 0;
 
-                if(!updatedQueryString.startsWith(activeQueryString)){
+                needToRestart = needToRestart || !updatedQueryString.startsWith(activeQueryString);
+                if(needToRestart){
                     initInteractiveSearch();
                 }
 
