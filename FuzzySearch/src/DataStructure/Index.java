@@ -55,7 +55,7 @@ public final class Index {
         }
     }
 
-    public static Index read(DataInputStream dataInputStream) throws IOException{
+    public static Index read(DataInputStream dataInputStream, IIndexProgressListener progressListener) throws IOException{
         IndexHeader indexHeader = IndexHeader.read(dataInputStream);
         System.out.println(indexHeader.version);
         System.out.println(indexHeader.numberOfClusters);
@@ -63,6 +63,7 @@ public final class Index {
         for(int i = 0; i < indexHeader.numberOfClusters; i++){
             TrieNode index = TrieNode.read(dataInputStream);
             clusteredIndexes.add(index);
+            progressListener.setReadProgress(i * 100 / indexHeader.numberOfClusters);
         }
 
         return new Index(indexHeader, clusteredIndexes);

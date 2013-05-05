@@ -4,23 +4,23 @@
     <list default="true" id="c485b3fe-6558-4abf-bd6b-7e256889670a" name="Default" comment="" />
     <ignored path="FuzzySearch.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/SuggestionSet.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367669421541" ignored="false" />
-    <file path="/SuggestionWrapper.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367668718852" ignored="false" />
-    <file path="/ISuggestionWrapper.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367668685065" ignored="false" />
-    <file path="/RecursiveSuggestionWrapper.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367669449726" ignored="false" />
-    <file path="/TermSeparatedIndexTraverser.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367669465762" ignored="false" />
-    <file path="/PriorityTrieTraverser.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367332678781" ignored="false" />
-    <file path="/QueryWorker.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367748253509" ignored="false" />
-    <file path="/IndexTraverser.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367334290246" ignored="false" />
-    <file path="/NaiveTrieTraverser.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367328300297" ignored="false" />
-    <file path="/fragment.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367668410772" ignored="false" />
-    <file path="/SingleTermTraverser.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367333032772" ignored="false" />
-    <file path="/SuggestionTraverser.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367335398167" ignored="false" />
-    <file path="/SearchPanel.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367687225430" ignored="false" />
-    <file path="/QueryUpdateQueue.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367688212720" ignored="false" />
-    <file path="/QueryContext.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367749155548" ignored="false" />
-    <file path="/SearchConfig.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367748402537" ignored="false" />
     <file path="/SettingsPanel.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367750913854" ignored="false" />
+    <file path="/SearchConfig.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367748402537" ignored="false" />
+    <file path="/QueryContext.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367749155548" ignored="false" />
+    <file path="/QueryUpdateQueue.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367688212720" ignored="false" />
+    <file path="/SearchPanel.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367687225430" ignored="false" />
+    <file path="/SuggestionTraverser.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367335398167" ignored="false" />
+    <file path="/SingleTermTraverser.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367333032772" ignored="false" />
+    <file path="/fragment.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367668410772" ignored="false" />
+    <file path="/NaiveTrieTraverser.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367328300297" ignored="false" />
+    <file path="/IndexTraverser.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367334290246" ignored="false" />
+    <file path="/QueryWorker.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367748253509" ignored="false" />
+    <file path="/PriorityTrieTraverser.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367332678781" ignored="false" />
+    <file path="/TermSeparatedIndexTraverser.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367669465762" ignored="false" />
+    <file path="/RecursiveSuggestionWrapper.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367669449726" ignored="false" />
+    <file path="/ISuggestionWrapper.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367668685065" ignored="false" />
+    <file path="/SuggestionWrapper.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367668718852" ignored="false" />
+    <file path="/SuggestionSet.java" changelist="c485b3fe-6558-4abf-bd6b-7e256889670a" time="1367669421541" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,17 +35,14 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
-    <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
+    <breakpoint_any default_suspend_policy="SuspendAll">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
         <option name="NOTIFY_UNCAUGHT" value="true" />
         <option name="ENABLED" value="false" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="REMOVE_AFTER_HIT" value="false" />
         <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
         <option name="COUNT_FILTER_ENABLED" value="false" />
         <option name="COUNT_FILTER" value="0" />
         <option name="CONDITION_ENABLED" value="false" />
@@ -60,9 +57,7 @@
         <option name="ENABLED" value="false" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="REMOVE_AFTER_HIT" value="false" />
         <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
         <option name="COUNT_FILTER_ENABLED" value="false" />
         <option name="COUNT_FILTER" value="0" />
         <option name="CONDITION_ENABLED" value="false" />
@@ -72,8 +67,33 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
+    <ui_properties default_suspend_policy="SuspendAll" />
     <breakpoint_rules />
     <ui_properties />
+  </component>
+  <component name="DockManager">
+    <window id="1">
+      <content type="file-editors">
+        <state>
+          <leaf>
+            <file leaf-file-name="SettingsPanel.java" pinned="false" current="true" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/src/Interface/SettingsPanel.java">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state line="186" column="71" selection-start="5958" selection-end="5958" vertical-scroll-proportion="0.30462864">
+                    <folding>
+                      <element signature="e#1261#1424#0" expanded="true" />
+                      <element signature="e#1413#1414#0" expanded="true" />
+                      <element signature="e#6078#6238#0" expanded="true" />
+                      <element signature="e#6223#6224#0" expanded="true" />
+                    </folding>
+                  </state>
+                </provider>
+              </entry>
+            </file>
+          </leaf>
+        </state>
+      </content>
+    </window>
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
@@ -84,16 +104,27 @@
       <file leaf-file-name="QueryWorker.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Query/QueryWorker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="55" column="31" selection-start="2099" selection-end="2099" vertical-scroll-proportion="0.0">
+            <state line="45" column="88" selection-start="1753" selection-end="1814" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="QueryContext.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Query/QueryContext.java">
+      <file leaf-file-name="Index.java" pinned="false" current="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/DataStructure/Index.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="22" selection-start="567" selection-end="567" vertical-scroll-proportion="0.0">
+            <state line="65" column="84" selection-start="2502" selection-end="2502" vertical-scroll-proportion="0.572327">
+              <folding>
+                <element signature="e#2211#2221#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IIndexProgressListener.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/DataStructure/IIndexProgressListener.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="8" column="31" selection-start="159" selection-end="159" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -102,7 +133,7 @@
       <file leaf-file-name="SearchConfig.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Config/SearchConfig.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="5" selection-start="1095" selection-end="1095" vertical-scroll-proportion="0.0">
+            <state line="20" column="34" selection-start="613" selection-end="613" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -139,9 +170,7 @@
         <entry file="file://$PROJECT_DIR$/src/Query/PriorityInteractiveSearch/TermSeparatedIndexTraverser.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="83" column="77" selection-start="2859" selection-end="2859" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -150,23 +179,6 @@
         <entry file="file://$PROJECT_DIR$/src/Interface/SearchPanel.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="78" column="5" selection-start="2511" selection-end="2511" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1675#1822#0" expanded="true" />
-                <element signature="e#1811#1812#0" expanded="true" />
-                <element signature="e#1918#2058#0" expanded="true" />
-                <element signature="e#2047#2048#0" expanded="true" />
-                <element signature="e#2190#2373#0" expanded="true" />
-                <element signature="e#2362#2363#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SettingsPanel.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Interface/SettingsPanel.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="129" column="8" selection-start="4039" selection-end="4039" vertical-scroll-proportion="0.42231077">
               <folding />
             </state>
           </provider>
@@ -191,8 +203,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/Query/ISuggestionWrapper.java" />
-        <option value="$PROJECT_DIR$/src/Query/SuggestionWrapper.java" />
         <option value="$PROJECT_DIR$/src/Query/RecursiveSuggestionWrapper.java" />
         <option value="$PROJECT_DIR$/src/Interface/IUpdateInterfaceControl.java" />
         <option value="$PROJECT_DIR$/src/Query/SimpleInteractiveSearch/ActiveQuery.java" />
@@ -203,16 +213,18 @@
         <option value="$PROJECT_DIR$/src/GUI/SearchPanel.java" />
         <option value="$PROJECT_DIR$/src/Query/QueryUpdateQueue.java" />
         <option value="$PROJECT_DIR$/src/Query/QueryWorker.java" />
-        <option value="$PROJECT_DIR$/src/Config/SearchConfig.java" />
         <option value="$PROJECT_DIR$/src/Query/QueryContext.java" />
         <option value="$PROJECT_DIR$/src/Interface/SearchPanel.java" />
+        <option value="$PROJECT_DIR$/src/Config/SearchConfig.java" />
+        <option value="$PROJECT_DIR$/src/DataStructure/IIndexProgressListener.java" />
+        <option value="$PROJECT_DIR$/src/DataStructure/Index.java" />
         <option value="$PROJECT_DIR$/src/Interface/SettingsPanel.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="width" value="1440" />
-    <option name="height" value="900" />
+    <option name="width" value="960" />
+    <option name="height" value="1040" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -262,20 +274,6 @@
             <PATH_ELEMENT USER_OBJECT="Root">
               <option name="myItemId" value="" />
               <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FuzzySearch" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FuzzySearch" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -422,6 +420,20 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FuzzySearch" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FuzzySearch" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -437,11 +449,11 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="FullScreen" value="true" />
     <property name="MemberChooser.showClasses" value="true" />
+    <property name="FullScreen" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -548,7 +560,12 @@
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
       <option name="PROGRAM_PARAMETERS" />
-      <method />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
     </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
@@ -556,20 +573,11 @@
       <option name="SHMEM_ADDRESS" value="javadebug" />
       <option name="HOST" value="localhost" />
       <option name="PORT" value="5005" />
-      <method />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <module name="" />
@@ -596,7 +604,30 @@
       <envs />
       <properties />
       <listeners />
-      <method />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" />
@@ -610,7 +641,12 @@
       <option name="PASS_PARENT_ENVS" value="true" />
       <module name="" />
       <envs />
-      <method />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <module name="" />
@@ -630,7 +666,12 @@
       </option>
       <envs />
       <patterns />
-      <method />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Application.Main" />
@@ -672,7 +713,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <frame x="0" y="0" width="960" height="1040" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -687,7 +728,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22812052" sideWeight="0.64581007" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33519554" sideWeight="0.64581007" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6960894" sideWeight="0.49786323" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -719,24 +760,19 @@
     <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
     <option name="PERFORM_ROLLBACK_IN_BACKGROUND" value="false" />
     <option name="CHECK_LOCALLY_CHANGED_CONFLICTS_IN_BACKGROUND" value="false" />
+    <option name="ENABLE_BACKGROUND_PROCESSES" value="false" />
     <option name="CHANGED_ON_SERVER_INTERVAL" value="60" />
     <option name="SHOW_ONLY_CHANGED_IN_SELECTION_DIFF" value="true" />
     <option name="CHECK_COMMIT_MESSAGE_SPELLING" value="true" />
     <option name="DEFAULT_PATCH_EXTENSION" value="patch" />
-    <option name="SHORT_DIFF_HORIZONTALLY" value="true" />
+    <option name="SHORT_DIFF_HORISONTALLY" value="true" />
     <option name="SHORT_DIFF_EXTRA_LINES" value="2" />
     <option name="SOFT_WRAPS_IN_SHORT_DIFF" value="true" />
     <option name="INCLUDE_TEXT_INTO_PATCH" value="false" />
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
+    <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="false" />
-    <option name="SHOW_DIRTY_RECURSIVELY" value="false" />
-    <option name="LIMIT_HISTORY" value="true" />
-    <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
-    <option name="UPDATE_FILTER_SCOPE_NAME" />
-    <option name="USE_COMMIT_MESSAGE_MARGIN" value="false" />
-    <option name="COMMIT_MESSAGE_MARGIN_SIZE" value="72" />
-    <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
     <option name="LAST_COMMIT_MESSAGE" />
@@ -750,7 +786,6 @@
     <option name="ACTIVE_VCS_NAME" />
     <option name="UPDATE_GROUP_BY_PACKAGES" value="false" />
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
-    <option name="UPDATE_FILTER_BY_SCOPE" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
   </component>
@@ -762,127 +797,102 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/Query/SimpleInteractiveSearch/NaiveTrieTraverser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="80" column="3" selection-start="2700" selection-end="2700" vertical-scroll-proportion="1.4884793">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Query/SimpleInteractiveSearch/ActiveQuery.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="126" column="68" selection-start="4316" selection-end="4316" vertical-scroll-proportion="0.30409357">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DataStructure/SuggestionCacheWrapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="83" selection-start="885" selection-end="885" vertical-scroll-proportion="1.0395683">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Query/PriorityInteractiveSearch/PriorityActiveNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="83" column="71" selection-start="3081" selection-end="3081" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Query/IndexTraverser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="17" selection-start="360" selection-end="360" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="18" column="17" selection-start="360" selection-end="360" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Index/Index.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="18" selection-start="687" selection-end="687" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
+        <state line="22" column="18" selection-start="687" selection-end="687" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Interface/IUpdateInterfaceControl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="53" selection-start="18" selection-end="18" vertical-scroll-proportion="0.0">
+        <state line="0" column="53" selection-start="18" selection-end="18" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Query/QueryUpdateQueue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="79" column="22" selection-start="1819" selection-end="1819" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Query/QueryContext.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="22" selection-start="567" selection-end="567" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DataStructure/QueryString.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="13" selection-start="37" selection-end="37" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Query/PriorityInteractiveSearch/PriorityActiveNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="83" column="71" selection-start="3081" selection-end="3081" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Query/PriorityInteractiveSearch/PriorityTrieTraverser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="38" selection-start="396" selection-end="396" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Query/PriorityInteractiveSearch/TermSeparatedIndexTraverser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="83" column="77" selection-start="2859" selection-end="2859" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
+        <state line="83" column="77" selection-start="2859" selection-end="2859" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Interface/SearchPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="78" column="5" selection-start="2511" selection-end="2511" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Query/PriorityInteractiveSearch/SuggestionSet.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="143" column="13" selection-start="4837" selection-end="4837" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="143" column="13" selection-start="4837" selection-end="4837" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Query/QueryUpdateQueue.java">
+    <entry file="file://$PROJECT_DIR$/src/Config/SearchConfig.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="79" column="22" selection-start="1819" selection-end="1819" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DataStructure/QueryString.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="13" selection-start="37" selection-end="37" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Query/QueryContext.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="22" selection-start="567" selection-end="567" vertical-scroll-proportion="0.0">
+        <state line="20" column="34" selection-start="613" selection-end="613" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Query/QueryWorker.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="31" selection-start="2099" selection-end="2099" vertical-scroll-proportion="0.0">
+        <state line="45" column="88" selection-start="1753" selection-end="1814" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Config/SearchConfig.java">
+    <entry file="file://$PROJECT_DIR$/src/DataStructure/IIndexProgressListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="5" selection-start="1095" selection-end="1095" vertical-scroll-proportion="0.0">
+        <state line="8" column="31" selection-start="159" selection-end="159" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Interface/SearchPanel.java">
+    <entry file="file://$PROJECT_DIR$/src/DataStructure/Index.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="5" selection-start="2511" selection-end="2511" vertical-scroll-proportion="0.0">
+        <state line="65" column="84" selection-start="2502" selection-end="2502" vertical-scroll-proportion="0.572327">
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1675#1822#0" expanded="true" />
-            <element signature="e#1811#1812#0" expanded="true" />
-            <element signature="e#1918#2058#0" expanded="true" />
-            <element signature="e#2047#2048#0" expanded="true" />
-            <element signature="e#2190#2373#0" expanded="true" />
-            <element signature="e#2362#2363#0" expanded="true" />
+            <element signature="e#2211#2221#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Interface/SettingsPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="129" column="8" selection-start="4039" selection-end="4039" vertical-scroll-proportion="0.42231077">
-          <folding />
+        <state line="186" column="71" selection-start="5958" selection-end="5958" vertical-scroll-proportion="0.30462864">
+          <folding>
+            <element signature="e#1261#1424#0" expanded="true" />
+            <element signature="e#1413#1414#0" expanded="true" />
+            <element signature="e#6078#6238#0" expanded="true" />
+            <element signature="e#6223#6224#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
