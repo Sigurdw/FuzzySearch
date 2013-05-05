@@ -127,6 +127,7 @@ public class SettingsPanel extends JPanel {
 
     private void displayFileChooser(){
         fileChooser.showOpenDialog(this);
+
         currentConfig = currentConfig.updateConfig(fileChooser.getSelectedFile());
         configListener.configUpdated(currentConfig);
         updateView();
