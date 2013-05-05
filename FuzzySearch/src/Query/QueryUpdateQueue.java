@@ -1,5 +1,7 @@
 package Query;
 
+import Config.SearchConfig;
+
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -13,6 +15,7 @@ public final class QueryUpdateQueue {
     private final Lock lock = new ReentrantLock();
     private final Condition queryUpdated = lock.newCondition();
     private String queryString = null;
+    private SearchConfig searchConfig = null;
 
     public void updateQueryString(String queryString){
         try{
@@ -51,5 +54,29 @@ public final class QueryUpdateQueue {
         finally{
             lock.unlock();
         }
+    }
+
+    public void updateSearchConfig(SearchConfig searchConfig){
+        try{
+            lock.lock();
+            this.searchConfig = searchConfig;
+        }
+        finally {
+            lock.unlock();
+        }
+    }
+
+    public SearchConfig getSearchConfigUpdate(){
+        SearchConfig config;
+        try {
+            lock.lock();
+            config = searchConfig;
+            searchConfig = null;
+        }
+        finally {
+            lock.unlock();
+        }
+
+        return config;
     }
 }

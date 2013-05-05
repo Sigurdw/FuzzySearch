@@ -1,21 +1,25 @@
 package Interface;
 
+import Config.IConfigListener;
+import Config.SearchConfig;
 import Query.QueryWorker;
 
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import java.awt.*;
 
-public class SearchPanel extends JPanel implements IUpdateInterfaceControl {
-
-    private final JTextField searchField = new JTextField(50);
-    private final JTextArea resultArea = new JTextArea(10, 50);
-    private final JButton dummyButton = new JButton("Search");
+public class SearchPanel extends JPanel implements IUpdateInterfaceControl, IConfigListener {
+    private final JLabel searchLabel = new JLabel("Write your query in the search box.");
+    private final JTextField searchField = new JTextField(30);
+    private final JButton searchButton = new JButton("Search");
+    private final JTextArea searchResultArea = new JTextArea();
 
     private final QueryWorker queryWorker;
 
     public SearchPanel() throws Exception{
-        queryWorker = new QueryWorker(this);
+        setLayout(new BorderLayout());
+        add(searchLabel, BorderLayout.NORTH);
         searchField.setEditable(true);
         searchField.addCaretListener( new CaretListener() {
             public void caretUpdate(CaretEvent e) {
@@ -23,12 +27,16 @@ public class SearchPanel extends JPanel implements IUpdateInterfaceControl {
                 handleUserInput(queryString);
             }
         });
+        add(searchField, BorderLayout.EAST);
+        searchResultArea.setPreferredSize(new Dimension(200, 520));
 
-        add(searchField);
-        resultArea.setEditable(false);
-        add(resultArea);
-        dummyButton.setForeground(WorkingStatus.getStatusColor(WorkingStatus.IterationExhausted));
-        add(dummyButton);
+        add(searchButton, BorderLayout.WEST);
+        add(searchResultArea, BorderLayout.SOUTH);
+
+        queryWorker = new QueryWorker(this);
+
+
+        searchButton.setForeground(WorkingStatus.getStatusColor(WorkingStatus.IterationExhausted));
 
         queryWorker.startWorker();
     }
@@ -42,7 +50,7 @@ public class SearchPanel extends JPanel implements IUpdateInterfaceControl {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                resultArea.append(suggestion);
+                searchResultArea.append(suggestion);
             }
         });
     }
@@ -52,7 +60,7 @@ public class SearchPanel extends JPanel implements IUpdateInterfaceControl {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                resultArea.setText("");
+                searchResultArea.setText("");
             }
         });
     }
@@ -62,8 +70,13 @@ public class SearchPanel extends JPanel implements IUpdateInterfaceControl {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                dummyButton.setForeground(WorkingStatus.getStatusColor(workingStatus));
+                searchButton.setForeground(WorkingStatus.getStatusColor(workingStatus));
             }
         });
+    }
+
+    @Override
+    public void configUpdated(SearchConfig newConfig) {
+        queryWorker.initiateConfigUpdate(newConfig);
     }
 }

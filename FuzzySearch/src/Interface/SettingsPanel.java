@@ -1,4 +1,4 @@
-package GUI;
+package Interface;
 
 import Config.IConfigListener;
 import Config.SearchConfig;

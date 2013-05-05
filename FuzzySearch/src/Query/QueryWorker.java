@@ -17,6 +17,7 @@ package Query;
  * limitations under the License.
  */
 
+import Config.SearchConfig;
 import DataStructure.Index;
 import Interface.IUpdateInterfaceControl;
 import Interface.WorkingStatus;
@@ -37,6 +38,7 @@ public class QueryWorker implements Runnable{
     private IndexTraverser query;
     private static final String indexPath = "C:/Index/clusteredIndex.dat";
     private int numberOfRetrievedSuggestion;
+    private SearchConfig searchConfig;
 
 
     public QueryWorker(IUpdateInterfaceControl interfaceControl) throws Exception{
@@ -123,5 +125,9 @@ public class QueryWorker implements Runnable{
                 activeQueryString = updatedQueryString;
             }
         }
+    }
+
+    public void initiateConfigUpdate(SearchConfig newConfig) {
+        queryUpdateQueue.updateSearchConfig(newConfig);
     }
 }

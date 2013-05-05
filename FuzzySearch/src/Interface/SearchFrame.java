@@ -1,4 +1,4 @@
-package GUI;
+package Interface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +11,7 @@ import java.awt.*;
 public class SearchFrame extends JFrame {
 
     public SearchFrame(){
-        SearchPanel searchPanel = new SearchPanel();
+        GUI.SearchPanel searchPanel = new GUI.SearchPanel();
         add(searchPanel, BorderLayout.EAST);
         add(new SettingsPanel(searchPanel), BorderLayout.WEST);
         setSize(800, 600);
