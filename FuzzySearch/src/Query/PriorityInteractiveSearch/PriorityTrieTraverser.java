@@ -1,5 +1,6 @@
 package Query.PriorityInteractiveSearch;
 
+import Config.SearchConfig;
 import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
 import Query.PriorityInteractiveSearch.Links.Link;
@@ -15,8 +16,8 @@ public final class PriorityTrieTraverser implements IndexTraverser {
             = new PriorityQueue<SuggestionTraverser>();
     private final ArrayList<PriorityActiveNode> exhaustedNodes = new ArrayList<PriorityActiveNode>();
 
-    public PriorityTrieTraverser(QueryContext queryContext){
-        this.queryContext = queryContext;
+    public PriorityTrieTraverser(SearchConfig searchConfig){
+        this.queryContext = new QueryContext(searchConfig);
         for(int i = 0; i < queryContext.getNumberOfClusters(); i++){
             exhaustedNodes.add(new PriorityActiveNode(queryContext, i));
         }
@@ -67,6 +68,11 @@ public final class PriorityTrieTraverser implements IndexTraverser {
         }
 
         return thresholdRank;
+    }
+
+    @Override
+    public void updateQueryString(String queryString) {
+        queryContext.QueryString.SetQueryString(queryString);
     }
 
     @Override

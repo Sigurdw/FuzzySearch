@@ -75,6 +75,9 @@ public class SearchPanel extends JPanel implements IUpdateInterfaceControl, ICon
 
     @Override
     public void configUpdated(SearchConfig newConfig) {
+        if(newConfig.getCurrentIndex() != null){
+
+        }
         queryWorker.initiateConfigUpdate(newConfig);
     }
 }

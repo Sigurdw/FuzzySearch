@@ -1,23 +1,24 @@
 package Query.PriorityInteractiveSearch;
 
+import Config.SearchConfig;
 import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
-import Query.QueryContext;
 
 import java.util.PriorityQueue;
 
 public class TermSeparatedIndexTraverser implements IndexTraverser {
     public final char separator = ' ';
-    private final QueryContext queryContext;
+    private final SearchConfig searchConfig;
     private final PriorityQueue<SuggestionSet> suggestionSets = new PriorityQueue<SuggestionSet>();
 
     private IndexTraverser[] termTraversers;
     private SuggestionSet lastProducedSuggestionSet = null;
+    private int currentTermStart = 0;
 
-    public TermSeparatedIndexTraverser(QueryContext queryContext){
-        this.queryContext = queryContext;
+    public TermSeparatedIndexTraverser(SearchConfig searchConfig){
+        this.searchConfig = searchConfig;
         termTraversers = new PriorityTrieTraverser[1];
-        termTraversers[0] = new PriorityTrieTraverser(queryContext);
+        termTraversers[0] = new PriorityTrieTraverser(searchConfig);
     }
 
     @Override
@@ -27,10 +28,6 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
 
     @Override
     public void initiateFromExhaustedNodes() {
-        if(queryContext.QueryString.GetLastCharacter() == separator){
-            addNewTerm();
-        }
-
         for(IndexTraverser indexTraverser : termTraversers){
             indexTraverser.initiateFromExhaustedNodes();
         }
@@ -42,7 +39,7 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
     private void addNewTerm() {
         IndexTraverser[] newTraversers = new PriorityTrieTraverser[termTraversers.length + 1];
         System.arraycopy(termTraversers, 0, newTraversers, 0, termTraversers.length);
-        newTraversers[termTraversers.length] = new PriorityTrieTraverser(queryContext);
+        newTraversers[termTraversers.length] = new PriorityTrieTraverser(searchConfig);
         termTraversers = newTraversers;
     }
 
@@ -112,6 +109,18 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
     
     public float peekNextNodeRank(){
         return lastProducedSuggestionSet.peekNextNodeRank(termTraversers);
+    }
+
+    @Override
+    public void updateQueryString(String queryString) {
+        if(queryString.charAt(queryString.length() - 1) == separator){
+            addNewTerm();
+            currentTermStart = queryString.length();
+        }
+        else{
+            String currentTerm = queryString.substring(currentTermStart);
+            getCurrentTraverser().updateQueryString(currentTerm);
+        }
     }
 
     private IndexTraverser getCurrentTraverser(){

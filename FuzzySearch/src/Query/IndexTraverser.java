@@ -19,4 +19,6 @@ public interface IndexTraverser {
     public float peekNextAvailableSuggestionRank();
 
     public float peekNextNodeRank();
+
+    public void updateQueryString(String queryString);
 }

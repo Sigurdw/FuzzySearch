@@ -2,12 +2,6 @@ package Config;
 
 import DataStructure.Index;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Sigurd
- * Date: 30.03.13
- * Time: 15:05
- */
 public class SearchConfig {
     private final Index currentIndex;
     private final int neededSuggestion;

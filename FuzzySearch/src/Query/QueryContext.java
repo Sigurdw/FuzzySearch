@@ -17,8 +17,8 @@ public final class QueryContext {
 
     public final int NeededSuggestions;
 
-    public QueryContext(Index index, SearchConfig searchConfig) {
-        Index = index;
+    public QueryContext(SearchConfig searchConfig) {
+        Index = searchConfig.getCurrentIndex();
         QueryString = new QueryString();
         SuggestionNodeRegister = new SuggestionNodeRegister();
         MaxEdits = searchConfig.getAllowedEdits();

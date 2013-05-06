@@ -10,8 +10,8 @@ import java.awt.*;
  */
 public class SearchFrame extends JFrame {
 
-    public SearchFrame(){
-        GUI.SearchPanel searchPanel = new GUI.SearchPanel();
+    public SearchFrame() throws Exception{
+        SearchPanel searchPanel = new SearchPanel();
         add(searchPanel, BorderLayout.EAST);
         add(new SettingsPanel(searchPanel), BorderLayout.WEST);
         setSize(800, 600);
@@ -22,8 +22,13 @@ public class SearchFrame extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                JFrame mainFrame = new SearchFrame();
-                mainFrame.setVisible(true);
+                try{
+                    JFrame mainFrame = new SearchFrame();
+                    mainFrame.setVisible(true);
+                }
+                catch (Exception e){
+                    System.exit(1);
+                }
             }
         });
     }

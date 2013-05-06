@@ -11,6 +11,10 @@ public class QueryString {
         this.queryString = queryString;
     }
 
+    public void appendCharacter(char character){
+        queryString = queryString + character;
+    }
+
     public char GetCharacter(int queryStringIndex){
         char character = 0;
         if(!IsExhausted(queryStringIndex)){

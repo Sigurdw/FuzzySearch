@@ -77,4 +77,24 @@ public final class Index {
 
         return terms;
     }
+
+    public ArrayList<String> getRandomIndexTerms(int maxNumberOfTerms){
+        ArrayList<ISuggestionWrapper> suggestionWrappers = new ArrayList<ISuggestionWrapper>();
+        for(TrieNode trieNode : clusteredIndexes){
+            trieNode.getAllTerms(suggestionWrappers);
+        }
+
+        int actualNumberOfTerms = Math.min(maxNumberOfTerms, suggestionWrappers.size());
+        ArrayList<String> randomTerms = new ArrayList<String>(actualNumberOfTerms);
+        for(int i = 0; i < actualNumberOfTerms; i++){
+            randomTerms.add(getRandomIndexTerm(suggestionWrappers));
+        }
+
+        return randomTerms;
+    }
+
+    private String getRandomIndexTerm(ArrayList<ISuggestionWrapper> indexTerms){
+        int index = (int)(Math.random() * indexTerms.size());
+        return indexTerms.get(index).getSuggestion();
+    }
 }

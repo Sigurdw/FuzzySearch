@@ -18,21 +18,14 @@ package Query;
  */
 
 import Config.SearchConfig;
-import DataStructure.Index;
 import Interface.IUpdateInterfaceControl;
 import Interface.WorkingStatus;
 import Query.PriorityInteractiveSearch.PriorityTrieTraverser;
-
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
 
 public class QueryWorker implements Runnable{
     private final Thread workerThread;
     private final IUpdateInterfaceControl interfaceControl;
     private final QueryUpdateQueue queryUpdateQueue = new QueryUpdateQueue();
-    private QueryContext queryContext;
     private String activeQueryString = "";
     private IndexTraverser query;
     private int numberOfRetrievedSuggestion;
@@ -42,12 +35,6 @@ public class QueryWorker implements Runnable{
     public QueryWorker(IUpdateInterfaceControl interfaceControl) throws Exception{
         this.interfaceControl = interfaceControl;
         workerThread = new Thread(this);
-
-        index = Index.read(new DataInputStream(new FileInputStream(new File(indexPath))));
-        System.out.println("index loaded");
-        ArrayList<ISuggestionWrapper> terms = index.getAllTerms();
-        System.out.println("number of terms: " + terms.size());
-
         initInteractiveSearch();
     }
 
@@ -73,14 +60,12 @@ public class QueryWorker implements Runnable{
     }
 
     private void initInteractiveSearch() {
-        queryContext = new QueryContext(index, 3, 10);
-        query = new PriorityTrieTraverser(queryContext);
+        query = new PriorityTrieTraverser(searchConfig);
     }
 
     private void doWork(){
         checkForQueryStringUpdate();
-        char lastCharacter = queryContext.QueryString.GetLastCharacter();
-        if(lastCharacter != 0){
+        if(activeQueryString.length() > 0){
             query.initiateFromExhaustedNodes();
             while (!query.isQueryExhausted() && needMoreSuggestion()){
                 query.exploreNextNode();
@@ -104,7 +89,7 @@ public class QueryWorker implements Runnable{
     }
 
     private boolean needMoreSuggestion() {
-        return numberOfRetrievedSuggestion < queryContext.NeededSuggestions;
+        return numberOfRetrievedSuggestion < searchConfig.getNeededSuggestion();
     }
 
     private void checkForQueryStringUpdate(){
@@ -128,7 +113,7 @@ public class QueryWorker implements Runnable{
                     initInteractiveSearch();
                 }
 
-                queryContext.QueryString.SetQueryString(updatedQueryString);
+                query.updateQueryString(updatedQueryString);
                 activeQueryString = updatedQueryString;
             }
         }

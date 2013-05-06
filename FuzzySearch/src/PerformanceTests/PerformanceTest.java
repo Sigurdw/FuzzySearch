@@ -1,7 +1,5 @@
 package PerformanceTests;
 
-import Index.Index;
-import Index.Indexer;
 import Interface.IUpdateInterfaceControl;
 import Interface.WorkingStatus;
 
@@ -12,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class PerformanceTest {
-    private static final String directoryPath = "C:/TextCollection";
+    /*private static final String directoryPath = "C:/TextCollection";
     private static final int numberOfSuggestionsRequired = 20;
     private static final int allowedEditDistance = 2;
     private Index index;
@@ -293,5 +291,5 @@ public class PerformanceTest {
         public void updateWorkingStatus(WorkingStatus workingStatus) {
             //Empty
         }
-    }
+    }*/
 }
