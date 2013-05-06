@@ -9,14 +9,17 @@ public class SearchConfig {
     private final double editDiscount;
     private final boolean semanticEnabled;
 
-    public static SearchConfig DummyConfig = new SearchConfig(null, 5, 1, 0.5, false);
+    private final boolean separateTermEvaluation;
 
-    private SearchConfig(Index currentIndex, int neededSuggestion, int allowedEdits, double editDiscount, boolean semanticEnabled){
+    public static SearchConfig DummyConfig = new SearchConfig(null, 5, 1, 0.5, false, false);
+
+    private SearchConfig(Index currentIndex, int neededSuggestion, int allowedEdits, double editDiscount, boolean semanticEnabled, boolean separateTermEvaluation){
         this.currentIndex = currentIndex;
         this.neededSuggestion = neededSuggestion;
         this.allowedEdits = allowedEdits;
         this.editDiscount = editDiscount;
         this.semanticEnabled = semanticEnabled;
+        this.separateTermEvaluation = separateTermEvaluation;
     }
 
     public Index getCurrentIndex() {
@@ -39,20 +42,32 @@ public class SearchConfig {
         return semanticEnabled;
     }
 
+    public boolean isSeparateTermEvaluation() {
+        return separateTermEvaluation;
+    }
+
     public SearchConfig updateConfig(Index newIndex){
-        return new SearchConfig(newIndex, neededSuggestion, allowedEdits, editDiscount, semanticEnabled);
+        return new SearchConfig(newIndex, neededSuggestion, allowedEdits, editDiscount, semanticEnabled, separateTermEvaluation);
+    }
+
+    public SearchConfig updateNeededSuggestionConfig(int neededSuggestion){
+        return new SearchConfig(currentIndex, neededSuggestion, allowedEdits, editDiscount, semanticEnabled, separateTermEvaluation);
     }
 
     public SearchConfig updateConfig(int newAllowedEdits){
-        return new SearchConfig(currentIndex, neededSuggestion, newAllowedEdits, editDiscount, semanticEnabled);
+        return new SearchConfig(currentIndex, neededSuggestion, newAllowedEdits, editDiscount, semanticEnabled, separateTermEvaluation);
     }
 
     public SearchConfig updateConfig(double newEditDiscount){
-        return new SearchConfig(currentIndex, neededSuggestion, allowedEdits, newEditDiscount, semanticEnabled);
+        return new SearchConfig(currentIndex, neededSuggestion, allowedEdits, newEditDiscount, semanticEnabled, separateTermEvaluation);
     }
 
     public SearchConfig updateConfig(boolean newSemanticEnabled){
-        return new SearchConfig(currentIndex, neededSuggestion, allowedEdits, editDiscount, newSemanticEnabled);
+        return new SearchConfig(currentIndex, neededSuggestion, allowedEdits, editDiscount, newSemanticEnabled, separateTermEvaluation);
+    }
+
+    public SearchConfig updateSeparateTermEvaluation(boolean separateTermEvaluation){
+        return new SearchConfig(currentIndex, neededSuggestion, allowedEdits, editDiscount, semanticEnabled, separateTermEvaluation);
     }
 
     @Override

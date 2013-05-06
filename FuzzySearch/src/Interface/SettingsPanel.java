@@ -22,9 +22,11 @@ public class SettingsPanel extends JPanel {
     private final JFileChooser fileChooser = new JFileChooser();
     private final JProgressBar progressBar = new JProgressBar();
     private final JTextField currentIndexLabel = new JTextField(32);
+    private final JTextField neededSuggestionsField = new JTextField(32);
     private final JTextField allowedEditsField = new JTextField(32);
     private final JTextField editDiscountField = new JTextField(32);
     private final JTextField semanticActivatedField = new JTextField();
+    private final JTextField separateTermsField = new JTextField();
     private final IConfigListener configListener;
 
     private SearchConfig currentConfig = SearchConfig.DummyConfig;
@@ -43,6 +45,16 @@ public class SettingsPanel extends JPanel {
         add(loadIndexButton);
         add(progressBar);
         add(currentIndexLabel);
+        JLabel neededSuggestionsLabel = new JLabel("Needed Suggestions");
+        add(neededSuggestionsLabel);
+        neededSuggestionsField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateNeededSuggestions();
+            }
+        });
+        add(neededSuggestionsField);
+
         JLabel allowedEditsLabel = new JLabel("Allowed Edits");
         add(allowedEditsLabel);
         allowedEditsField.addActionListener(new ActionListener() {
@@ -51,7 +63,6 @@ public class SettingsPanel extends JPanel {
                 updateAllowedEdits();
             }
         });
-
         add(allowedEditsField);
 
         editDiscountField.addActionListener(new ActionListener() {
@@ -74,8 +85,26 @@ public class SettingsPanel extends JPanel {
         add(toggleSemanticMultiTermsButton);
         add(semanticActivatedField);
 
+        JButton toggleSeparateTermsButton = new JButton("Separate terms");
+        toggleSeparateTermsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateSeparateTermsEnabled();
+            }
+        });
+
+        add(toggleSeparateTermsButton);
+        add(separateTermsField);
+
         updateView();
         configListener.configUpdated(currentConfig);
+    }
+
+    private void updateSeparateTermsEnabled() {
+        boolean separateTerms = !currentConfig.isSeparateTermEvaluation();
+        currentConfig = currentConfig.updateSeparateTermEvaluation(separateTerms);
+        configListener.configUpdated(currentConfig);
+        updateView();
     }
 
     private void updateSemanticsEnabled() {
@@ -103,6 +132,30 @@ public class SettingsPanel extends JPanel {
 
         if(inputAccepted){
             currentConfig = currentConfig.updateConfig(editDiscount);
+            configListener.configUpdated(currentConfig);
+        }
+
+        updateView();
+    }
+
+    private void updateNeededSuggestions() {
+        String neededSuggestionsString = neededSuggestionsField.getText();
+        int neededSuggestions = -1;
+
+        boolean inputAccepted = true;
+        try{
+            neededSuggestions = Integer.parseInt(neededSuggestionsString);
+
+            if(neededSuggestions < 0){
+                inputAccepted = false;
+            }
+        }
+        catch (NumberFormatException nfe){
+            inputAccepted = false;
+        }
+
+        if(inputAccepted){
+            currentConfig = currentConfig.updateNeededSuggestionConfig(neededSuggestions);
             configListener.configUpdated(currentConfig);
         }
 
@@ -147,9 +200,11 @@ public class SettingsPanel extends JPanel {
                 ? "Index loaded."
                 : "No index loaded.";
         currentIndexLabel.setText(currentFilePath);
+        neededSuggestionsField.setText(String.valueOf(currentConfig.getNeededSuggestion()));
         allowedEditsField.setText(String.valueOf(currentConfig.getAllowedEdits()));
         editDiscountField.setText(String.valueOf(currentConfig.getEditDiscount()));
         semanticActivatedField.setText(String.valueOf(currentConfig.isSemanticEnabled()));
+        separateTermsField.setText(String.valueOf(currentConfig.isSeparateTermEvaluation()));
     }
 
     private void updateProgress(int progress){
@@ -180,7 +235,9 @@ public class SettingsPanel extends JPanel {
         @Override
         protected Index doInBackground() throws Exception {
             publish(0);
-            return Index.read(new DataInputStream(new FileInputStream(fileToRead)), this);
+            Index index = Index.read(new DataInputStream(new FileInputStream(fileToRead)), this);
+            publish(100);
+            return index;
         }
 
         @Override

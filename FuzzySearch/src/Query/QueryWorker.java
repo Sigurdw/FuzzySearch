@@ -31,15 +31,19 @@ public class QueryWorker implements Runnable{
     private int numberOfRetrievedSuggestion;
     private SearchConfig searchConfig;
 
+    private boolean started = false;
+
 
     public QueryWorker(IUpdateInterfaceControl interfaceControl) throws Exception{
         this.interfaceControl = interfaceControl;
         workerThread = new Thread(this);
-        initInteractiveSearch();
     }
 
-    public void startWorker(){
+    public void startWorker(SearchConfig searchConfig){
+        this.searchConfig = searchConfig;
+        initInteractiveSearch();
         workerThread.start();
+        started = true;
     }
 
     @Override
@@ -121,5 +125,9 @@ public class QueryWorker implements Runnable{
 
     public void initiateConfigUpdate(SearchConfig newConfig) {
         queryUpdateQueue.updateSearchConfig(newConfig);
+    }
+
+    public boolean isStarted() {
+        return started;
     }
 }

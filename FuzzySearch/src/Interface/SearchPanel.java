@@ -10,7 +10,6 @@ import javax.swing.event.CaretListener;
 import java.awt.*;
 
 public class SearchPanel extends JPanel implements IUpdateInterfaceControl, IConfigListener {
-    private final JLabel searchLabel = new JLabel("Write your query in the search box.");
     private final JTextField searchField = new JTextField(30);
     private final JButton searchButton = new JButton("Search");
     private final JTextArea searchResultArea = new JTextArea();
@@ -18,6 +17,7 @@ public class SearchPanel extends JPanel implements IUpdateInterfaceControl, ICon
 
     public SearchPanel() throws Exception{
         setLayout(new BorderLayout());
+        JLabel searchLabel = new JLabel("Write your query in the search box.");
         add(searchLabel, BorderLayout.NORTH);
         searchField.setEditable(true);
         searchField.addCaretListener( new CaretListener() {
@@ -26,6 +26,7 @@ public class SearchPanel extends JPanel implements IUpdateInterfaceControl, ICon
                 handleUserInput(queryString);
             }
         });
+
         add(searchField, BorderLayout.EAST);
         searchResultArea.setPreferredSize(new Dimension(200, 520));
 
@@ -35,8 +36,6 @@ public class SearchPanel extends JPanel implements IUpdateInterfaceControl, ICon
         queryWorker = new QueryWorker(this);
 
         searchButton.setForeground(WorkingStatus.getStatusColor(WorkingStatus.IterationExhausted));
-
-        queryWorker.startWorker();
     }
 
     private void handleUserInput(String queryString){
@@ -48,7 +47,7 @@ public class SearchPanel extends JPanel implements IUpdateInterfaceControl, ICon
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                searchResultArea.append(suggestion);
+                searchResultArea.append(suggestion + "\n");
             }
         });
     }
@@ -76,8 +75,13 @@ public class SearchPanel extends JPanel implements IUpdateInterfaceControl, ICon
     @Override
     public void configUpdated(SearchConfig newConfig) {
         if(newConfig.getCurrentIndex() != null){
+            if(!queryWorker.isStarted()){
+                queryWorker.startWorker(newConfig);
 
+            }
+            else{
+                queryWorker.initiateConfigUpdate(newConfig);
+            }
         }
-        queryWorker.initiateConfigUpdate(newConfig);
     }
 }
