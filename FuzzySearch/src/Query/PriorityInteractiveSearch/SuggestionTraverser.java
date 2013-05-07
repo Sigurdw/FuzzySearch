@@ -23,7 +23,7 @@ import Query.ISuggestionWrapper;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
-public final class SuggestionTraverser {
+public final class SuggestionTraverser implements Comparable<SuggestionTraverser>{
     private final PriorityQueue<SuggestionNode> suggestionNodeQueue = new PriorityQueue<SuggestionNode>();
     private final TrieNode[] previousTerms;
     private final SuggestionNodeRegister suggestionNodeRegister;
@@ -120,5 +120,19 @@ public final class SuggestionTraverser {
 
     private boolean needMoreSuggestions(int numberOfSuggestions) {
         return numberOfSuggestions > 0;
+    }
+
+    @Override
+    public int compareTo(SuggestionTraverser o) {
+        float difference = o.getNextRank() - this.getNextRank();
+        if(difference > 0){
+            return 1;
+        }
+        else if(difference < 0){
+            return -1;
+        }
+        else{
+            return 0;
+        }
     }
 }

@@ -41,7 +41,12 @@ public final class PriorityTrieTraverser implements IndexTraverser {
 
     @Override
     public boolean hasAvailableSuggestions() {
-        return suggestionQueue.size() > 0;
+        SuggestionTraverser bestTraverser = suggestionQueue.peek();
+            if(bestTraverser != null){
+                return bestTraverser.getNextRank() >= peekNextNodeRank();
+            }
+
+        return false;
     }
 
     @Override

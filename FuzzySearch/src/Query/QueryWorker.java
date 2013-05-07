@@ -68,8 +68,8 @@ public class QueryWorker implements Runnable{
     }
 
     private void doWork(){
-        checkForQueryStringUpdate();
-        if(activeQueryString.length() > 0){
+        boolean gotUpdate = checkForQueryStringUpdate();
+        if(activeQueryString.length() > 0 && gotUpdate){
             query.initiateFromExhaustedNodes();
             while (!query.isQueryExhausted() && needMoreSuggestion()){
                 query.exploreNextNode();
@@ -96,7 +96,7 @@ public class QueryWorker implements Runnable{
         return numberOfRetrievedSuggestion < searchConfig.getNeededSuggestion();
     }
 
-    private void checkForQueryStringUpdate(){
+    private boolean checkForQueryStringUpdate(){
         boolean needToRestart = false;
 
         SearchConfig newConfig = queryUpdateQueue.getSearchConfigUpdate();
@@ -119,8 +119,11 @@ public class QueryWorker implements Runnable{
 
                 query.updateQueryString(updatedQueryString);
                 activeQueryString = updatedQueryString;
+                return true;
             }
         }
+
+        return false;
     }
 
     public void initiateConfigUpdate(SearchConfig newConfig) {

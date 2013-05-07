@@ -87,16 +87,16 @@ public enum EditOperation {
         float discount = 1;
         switch (editOperation){
             case Insert:
-                discount = 0f;
+                discount = 0.25f;
                 break;
             case Delete:
-                discount = 0f;
+                discount = 0.25f;
                 break;
             case Match:
                 discount = 1;
                 break;
             case Substitution:
-                discount = 0f;
+                discount = 0.25f;
                 break;
         }
 
