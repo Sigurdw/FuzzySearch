@@ -49,13 +49,13 @@ public class MultiTermWithDocumentCorrelationTest {
 
         queryContext = new QueryContext(root, NumberOfAllowedEdits, NumberOfNeededSuggestions);
 
-        priorityTrieTraverser = new PriorityTrieTraverser(queryContext);*/
+        query = new PriorityTrieTraverser(queryContext);*/
     }
 
     @Test
     public void orderSwitchTest(){
         /*queryContext.QueryString.SetQueryString("aa ab");
-        suggestions = priorityTrieTraverser.addCharacter();
+        suggestions = query.addCharacter();
         System.out.println(suggestions);
         Assert.assertEquals(4, suggestions.size());
         Assert.assertEquals("aa ab", suggestions.get(0).getSuggestion());

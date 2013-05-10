@@ -78,7 +78,7 @@ public class PriorityTrieTraverserTest {
         SearchConfig searchConfig = SearchConfig.DummyConfig;
         searchConfig = searchConfig.updateConfig(index);
 
-        priorityTrieTraverser = new PriorityTrieTraverser(searchConfig);*/
+        query = new PriorityTrieTraverser(searchConfig);*/
 
         index = new Index(1, 1);
         TermDocumentVector vector = new TermDocumentVector(2);

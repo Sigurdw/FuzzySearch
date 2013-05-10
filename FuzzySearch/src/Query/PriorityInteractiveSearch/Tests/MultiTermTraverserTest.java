@@ -46,13 +46,13 @@ public class MultiTermTraverserTest {
 
         queryContext = new QueryContext(root, NumberOfAllowedEdits, NumberOfNeededSuggestions);
 
-        priorityTrieTraverser = new PriorityTrieTraverser(queryContext);*/
+        query = new PriorityTrieTraverser(queryContext);*/
     }
     /*
     @Test
     public void multiTermTest(){
         queryContext.QueryString.SetQueryString("aa ab");
-        suggestions = priorityTrieTraverser.addCharacter();
+        suggestions = query.addCharacter();
         System.out.println(suggestions);
         Assert.assertEquals(4, suggestions.size());
         Assert.assertEquals("aa ab", suggestions.get(0).getSuggestion());
@@ -64,7 +64,7 @@ public class MultiTermTraverserTest {
     @Test
     public void multiTermForWorstTest(){
         queryContext.QueryString.SetQueryString("ba aa");
-        suggestions = priorityTrieTraverser.addCharacter();
+        suggestions = query.addCharacter();
         System.out.println(suggestions);
         Assert.assertEquals(4, suggestions.size());
         Assert.assertEquals("aa aa", suggestions.get(0).getSuggestion());
@@ -73,7 +73,7 @@ public class MultiTermTraverserTest {
     @Test
     public void stepwiseMultiTermTest(){
         queryContext.QueryString.SetQueryString("a");
-        suggestions = priorityTrieTraverser.addCharacter();
+        suggestions = query.addCharacter();
 
         Assert.assertEquals(4, suggestions.size());
         Assert.assertEquals("aa", suggestions.get(0).getSuggestion());
@@ -82,7 +82,7 @@ public class MultiTermTraverserTest {
         Assert.assertEquals("ba", suggestions.get(3).getSuggestion());
 
         queryContext.QueryString.SetQueryString("aa");
-        suggestions = priorityTrieTraverser.addCharacter();
+        suggestions = query.addCharacter();
 
         Assert.assertEquals(3, suggestions.size());
         Assert.assertEquals("aa", suggestions.get(0).getSuggestion());
@@ -90,7 +90,7 @@ public class MultiTermTraverserTest {
         Assert.assertEquals("ba", suggestions.get(2).getSuggestion());
 
         queryContext.QueryString.SetQueryString("aa ");
-        suggestions = priorityTrieTraverser.addCharacter();
+        suggestions = query.addCharacter();
 
         System.out.println(suggestions);
         Assert.assertEquals(4, suggestions.size());
@@ -103,7 +103,7 @@ public class MultiTermTraverserTest {
     @Test
     public void tripleTermTest(){
         queryContext.QueryString.SetQueryString("bb aa ab");
-        suggestions = priorityTrieTraverser.addCharacter();
+        suggestions = query.addCharacter();
 
         System.out.println(suggestions);
         Assert.assertEquals(4, suggestions.size());
