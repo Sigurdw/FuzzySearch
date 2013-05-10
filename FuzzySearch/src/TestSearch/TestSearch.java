@@ -30,7 +30,7 @@ public class TestSearch {
             config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
             Directory indexDirectory = FSDirectory.open(new File(indexPath));
             IndexWriter indexWriter = new IndexWriter(indexDirectory, config);
-            for(int i = 0; i < 50000; i++){
+            for(int i = 0; i < 10000; i++){
                 File document = new File(textCollextion + "/medline" + i + ".txt");
                 FileInputStream fileInputStream = new FileInputStream(document);
                 Scanner scanner = new Scanner(fileInputStream);

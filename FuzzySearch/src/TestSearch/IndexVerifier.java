@@ -29,6 +29,7 @@ public class IndexVerifier {
         IndexReader indexReader = IndexReader.open(indexDirectory);
         IndexSearcher indexSearcher = new IndexSearcher(indexReader);
         Map<String, TermDocumentVector> freqMap = new HashMap<String, TermDocumentVector>();
+        int numberOfDocs = indexReader.numDocs();
 
         TermEnum terms = indexReader.terms();
         while (terms.next()){
@@ -51,7 +52,7 @@ public class IndexVerifier {
         }
 
         long startTime = System.nanoTime();
-        Cluster[] clusters = KMeansClustering.performClustering(128, 50000, freqMap);
+        Cluster[] clusters = KMeansClustering.performClustering(128, numberOfDocs, freqMap);
         long endTime = System.nanoTime();
         System.out.println("Time used: " + ((endTime - startTime) / 1000));
 
@@ -60,6 +61,8 @@ public class IndexVerifier {
         }
 
         Map<String, ClusteringVector> clusterMap = new HashMap<String, ClusteringVector>(freqMap.size());
+
+        float dimenstionalityNormalizer = (float)Math.sqrt(numberOfDocs);
         for (Cluster cluster : clusters){
             for(int i = 0; i < cluster.termList.size(); i++){
                 String term = cluster.termList.get(i);
@@ -67,7 +70,8 @@ public class IndexVerifier {
                 ClusteringVector clusteringVector = new ClusteringVector(clusters.length, cluster.clusterId);
                 for (int j = 0; j < clusters.length; j++){
                     float distanceToCluster = clusters[j].getDistance(termVector);
-                    float clusterScore = (float)Math.pow(Math.E, -Math.sqrt(distanceToCluster));
+                    float clusterScore = (float)Math.pow(Math.E, -(Math.sqrt(distanceToCluster)/ dimenstionalityNormalizer));
+                    System.out.println("Distance to cluter " + j + ": " + distanceToCluster + ", cluster score: " + clusterScore);
                     clusteringVector.Vector[j] = clusterScore;
                 }
 

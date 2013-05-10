@@ -17,6 +17,10 @@ package Query.PriorityInteractiveSearch.Tests;
  * limitations under the License.
  */
 
+import Clustering.ClusteringVector;
+import Clustering.TermDocumentVector;
+import Config.SearchConfig;
+import DataStructure.Index;
 import DataStructure.InternalTrieNode;
 import DataStructure.QueryString;
 import DataStructure.TrieNode;
@@ -33,43 +37,136 @@ import java.util.ArrayList;
 public class PriorityTrieTraverserTest {
 
     private PriorityTrieTraverser priorityTrieTraverser;
-    private QueryContext queryContext;
-    private ArrayList<ISuggestionWrapper> suggestions;
-
-    private static final int NumberOfAllowedEdits = 1;
-    private static final int NumberOfNeededSuggestions = 4;
+    private Index index;
 
     @Before
     public void setUp(){
-        /*TrieNode root = new InternalTrieNode();
-        root.addNewTerm("aa", 3, 0);
-        root.addNewTerm("ab", 4, 0);
-        root.addNewTerm("bb", 3, 0);
-        root.addNewTerm("ba", 3, 0);
+        /*index = new Index(2, 2);
+        TermDocumentVector vector = new TermDocumentVector(2);
+        vector.setDocument(0, 1.0f, 0);
+        vector.setDocument(1, 0.5f, 0);
+        ClusteringVector clusteringVector = new ClusteringVector(2, 1);
+        clusteringVector.Vector[0] = 1.0f;
+        clusteringVector.Vector[1] = 0.5f;
 
-        queryContext = new QueryContext(root, NumberOfAllowedEdits, NumberOfNeededSuggestions);
+        index.addTerm("protein", vector, clusteringVector);
+        vector = new TermDocumentVector(2);
+        vector.setDocument(0, 0, 0);
+        vector.setDocument(1, 1.1f, 0);
+        clusteringVector = new ClusteringVector(2, 0);
+        clusteringVector.Vector[0] = 0.1f;
+        clusteringVector.Vector[1] = 0.9f;
 
-        priorityTrieTraverser = new PriorityTrieTraverser(queryContext);*/
+        index.addTerm("test", vector, clusteringVector);
+
+        vector.setDocument(0, 0, 0);
+        vector.setDocument(1, 1.1f, 0);
+        clusteringVector = new ClusteringVector(2, 0);
+        clusteringVector.Vector[0] = 0.1f;
+        clusteringVector.Vector[1] = 0.9f;
+
+        index.addTerm("rotein", vector, clusteringVector);
+
+        vector.setDocument(0, 0, 0);
+        vector.setDocument(1, 1.1f, 0);
+        clusteringVector = new ClusteringVector(2, 0);
+        clusteringVector.Vector[0] = 0.1f;
+        clusteringVector.Vector[1] = 0.9f;
+
+        index.addTerm("pro", vector, clusteringVector);
+
+        SearchConfig searchConfig = SearchConfig.DummyConfig;
+        searchConfig = searchConfig.updateConfig(index);
+
+        priorityTrieTraverser = new PriorityTrieTraverser(searchConfig);*/
+
+        index = new Index(1, 1);
+        TermDocumentVector vector = new TermDocumentVector(2);
+        vector.setDocument(0, 1.1f, 0);
+        ClusteringVector clusteringVector = new ClusteringVector(1, 0);
+        clusteringVector.Vector[0] = 0.1f;
+
+        index.addTerm("pro", vector, clusteringVector);
+
+        SearchConfig searchConfig = SearchConfig.DummyConfig;
+        searchConfig = searchConfig.updateConfig(index);
+
+        priorityTrieTraverser = new PriorityTrieTraverser(searchConfig);
     }
-    /*
+
     @Test
     public void getSuggestionsOnEmptyQueryStringTest(){
-        suggestions = priorityTrieTraverser.addCharacter();
-        Assert.assertEquals(0, suggestions.size());
+        priorityTrieTraverser.updateQueryString("p");
+        priorityTrieTraverser.initiateFromExhaustedNodes();
+        ArrayList<ISuggestionWrapper> suggestionWrappers = getSuggestions();
+        Assert.assertEquals(1, suggestionWrappers.size());
+
+        priorityTrieTraverser.updateQueryString("p ");
+        priorityTrieTraverser.initiateFromExhaustedNodes();
+        suggestionWrappers = getSuggestions();
+        Assert.assertEquals(1, suggestionWrappers.size());
+
+        priorityTrieTraverser.updateQueryString("p r");
+        priorityTrieTraverser.initiateFromExhaustedNodes();
+        suggestionWrappers = getSuggestions();
+        Assert.assertEquals(1, suggestionWrappers.size());
     }
 
     @Test
-    public void addCharacterTest(){
-        queryContext.QueryString.SetQueryString("a");
-        suggestions = priorityTrieTraverser.addCharacter();
-        Assert.assertEquals(NumberOfNeededSuggestions, suggestions.size());
+    public void termCorrelationTest(){
+        index = new Index(1, 2);
+        TermDocumentVector vector = new TermDocumentVector(1);
+        vector.setDocument(0, 1.0f, 0);
+        ClusteringVector clusteringVector = new ClusteringVector(2, 0);
+        clusteringVector.Vector[0] = 1.0f;
+        clusteringVector.Vector[1] = 0.5f;
+        index.addTerm("pro", vector, clusteringVector);
 
-        queryContext.QueryString.SetQueryString("aa");
-        suggestions = priorityTrieTraverser.addCharacter();
-        System.out.println(suggestions);
-        Assert.assertEquals(3, suggestions.size());
-        Assert.assertEquals("aa", suggestions.get(0).getSuggestion());
-        Assert.assertEquals("ab", suggestions.get(1).getSuggestion());
-        Assert.assertEquals("ba", suggestions.get(2).getSuggestion());
-    }*/
+        vector = new TermDocumentVector(1);
+        vector.setDocument(0, 1.0f, 0);
+        clusteringVector = new ClusteringVector(2, 1);
+        clusteringVector.Vector[0] = 0.5f;
+        clusteringVector.Vector[1] = 1.0f;
+        index.addTerm("protein", vector, clusteringVector);
+
+        SearchConfig searchConfig = SearchConfig.DummyConfig;
+        searchConfig = searchConfig.updateConfig(index);
+
+        priorityTrieTraverser = new PriorityTrieTraverser(searchConfig);
+
+        priorityTrieTraverser.updateQueryString("pro ");
+        priorityTrieTraverser.initiateFromExhaustedNodes();
+        ArrayList<ISuggestionWrapper> suggestionWrappers = getSuggestions();
+        //Assert.assertEquals(2, suggestionWrappers.size());
+        printResults(suggestionWrappers);
+
+        priorityTrieTraverser = new PriorityTrieTraverser(searchConfig);
+
+        priorityTrieTraverser.updateQueryString("protein ");
+        priorityTrieTraverser.initiateFromExhaustedNodes();
+        suggestionWrappers = getSuggestions();
+        //Assert.assertEquals(2, suggestionWrappers.size());
+        printResults(suggestionWrappers);
+    }
+
+    private ArrayList<ISuggestionWrapper> getSuggestions(){
+        ArrayList<ISuggestionWrapper> suggestionWrappers = new ArrayList<ISuggestionWrapper>(5);
+        while(!priorityTrieTraverser.isQueryExhausted() &&  suggestionWrappers.size() < 5){
+            priorityTrieTraverser.exploreNextNode();
+            while(priorityTrieTraverser.hasAvailableSuggestions()){
+                ISuggestionWrapper suggestionWrapper = priorityTrieTraverser.getNextAvailableSuggestion();
+                if(suggestionWrapper != null){
+                    suggestionWrappers.add(suggestionWrapper);
+                }
+            }
+        }
+
+        return suggestionWrappers;
+    }
+
+    private void printResults(ArrayList<ISuggestionWrapper> suggestionWrappers){
+        for(ISuggestionWrapper suggestionWrapper : suggestionWrappers){
+            System.out.println(suggestionWrapper);
+        }
+    }
 }

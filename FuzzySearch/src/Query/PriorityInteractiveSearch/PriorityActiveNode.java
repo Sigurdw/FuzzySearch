@@ -201,9 +201,9 @@ public class PriorityActiveNode {
     }
 
     private boolean canDelete(){
-        return EditOperation.isOperationAllowed(lastEditOperation, EditOperation.Delete)
-            && (!(matchIndex == queryPosition.getNumberOfChildren() && queryPosition.getNumberOfChildren() == 1)
-            || lastEditOperation == EditOperation.Insert);
+        return EditOperation.isOperationAllowed(lastEditOperation, EditOperation.Delete);
+           // && (!(matchIndex == queryPosition.getNumberOfChildren() && queryPosition.getNumberOfChildren() == 1)
+           // || lastEditOperation == EditOperation.Insert);
     }
 
     private void addNextEditsToList(PriorityQueue<Link> linkQueue) {

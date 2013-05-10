@@ -14,7 +14,7 @@ import java.util.Map;
 public class DummyIndex {
 
     public static void main(String[] args) throws Exception{
-        Index index  = new Index(2, 2);
+        Index index = new Index(2, 2);
         TermDocumentVector vector = new TermDocumentVector(2);
         vector.setDocument(0, 1.0f, 0);
         vector.setDocument(1, 0.5f, 0);
