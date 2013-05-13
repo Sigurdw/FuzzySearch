@@ -22,12 +22,16 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
     }
 
     @Override
-    public boolean isQueryExhausted() {
-        return getCurrentTraverser().isQueryExhausted();
-    }
+    public void updateQueryString(String queryString) {
+        if(queryString.charAt(queryString.length() - 1) == separator){
+            addNewTerm();
+            currentTermStart = queryString.length();
+        }
+        else{
+            String currentTerm = queryString.substring(currentTermStart);
+            getCurrentTraverser().updateQueryString(currentTerm);
+        }
 
-    @Override
-    public void initiateFromExhaustedNodes() {
         for(IndexTraverser indexTraverser : termTraversers){
             indexTraverser.initiateFromExhaustedNodes();
         }
@@ -41,6 +45,11 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
         System.arraycopy(termTraversers, 0, newTraversers, 0, termTraversers.length);
         newTraversers[termTraversers.length] = new PriorityTrieTraverser(searchConfig);
         termTraversers = newTraversers;
+    }
+
+    @Override
+    public float peekNextNodeRank(){
+        return lastProducedSuggestionSet.peekNextNodeRank(termTraversers);
     }
 
     @Override
@@ -62,7 +71,7 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
     }
 
     @Override
-    public boolean hasAvailableSuggestions() {
+    public float peekNextAvailableSuggestionRank() {
         if(lastProducedSuggestionSet == null){
             SuggestionSet firstSuggestionSet = new SuggestionSet(termTraversers.length);
             if(firstSuggestionSet.initializeAsFirstSuggestionSet(termTraversers)){
@@ -70,57 +79,48 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
                 suggestionSets.add(firstSuggestionSet);
             }
             else{
-                return false;
+                return -2;
             }
         }
 
-        float bestAvailableSuggestionRank = Math.max(
-                suggestionSets.peek().getRankEstimate(),
-                lastProducedSuggestionSet.peekNextSetRank(termTraversers));
+        while(peekNextAvailableSuggestionRank() > lastProducedSuggestionSet.getRankEstimate()){
+            produceNextSuggestionSet();
+        }
 
-        return bestAvailableSuggestionRank >= lastProducedSuggestionSet.peekNextSetRank(termTraversers);
+        float nextProducedSetRank = lastProducedSuggestionSet.peekNextSetRank(termTraversers);
+        float currentBestSetRank = peekNextSuggestionRankInSuggestionQueue();
+        return Math.max(nextProducedSetRank, currentBestSetRank);
+    }
+
+    private void produceNextSuggestionSet() {
+        lastProducedSuggestionSet = lastProducedSuggestionSet.getNextSuggestionSet(termTraversers);
+        lastProducedSuggestionSet.calculateRankEstimate();
+        suggestionSets.add(lastProducedSuggestionSet);
+    }
+
+    private float peekNextSuggestionRankInSuggestionQueue(){
+        float nextSuggestionRankInSuggestionQueue = -2;
+        SuggestionSet suggestionSet = suggestionSets.peek();
+        if(suggestionSet != null){
+            nextSuggestionRankInSuggestionQueue = suggestionSets.peek().getRankEstimate();
+        }
+
+        return nextSuggestionRankInSuggestionQueue;
     }
 
     @Override
     public ISuggestionWrapper getNextAvailableSuggestion() {
         ISuggestionWrapper suggestion = null;
-        while(peekNextAvailableSuggestionRank() > peekNextNodeRank()){
-            if(lastProducedSuggestionSet.peekNextSetRank(termTraversers) > suggestionSets.peek().getRankEstimate()){
-                lastProducedSuggestionSet = lastProducedSuggestionSet.getNextSuggestionSet(termTraversers);
-                lastProducedSuggestionSet.calculateRankEstimate();
-                suggestionSets.add(lastProducedSuggestionSet);
-            }
-            else{
-                SuggestionSet bestSuggestion = suggestionSets.poll();
-                suggestion = bestSuggestion.extractSuggestion();
-            }
+        if(lastProducedSuggestionSet.peekNextSetRank(termTraversers) > peekNextSuggestionRankInSuggestionQueue()){
+            produceNextSuggestionSet();
+        }
+        else{
+            SuggestionSet bestSuggestion = suggestionSets.poll();
+            suggestion = bestSuggestion.extractSuggestion();
+            break;
         }
 
         return suggestion;
-    }
-
-    @Override
-    public float peekNextAvailableSuggestionRank() {
-        float nextSetRank = lastProducedSuggestionSet.peekNextSetRank(termTraversers);
-        float currentBestSetRank = suggestionSets.peek().getRankEstimate();
-
-        return Math.max(nextSetRank, currentBestSetRank);
-    }
-    
-    public float peekNextNodeRank(){
-        return lastProducedSuggestionSet.peekNextNodeRank(termTraversers);
-    }
-
-    @Override
-    public void updateQueryString(String queryString) {
-        if(queryString.charAt(queryString.length() - 1) == separator){
-            addNewTerm();
-            currentTermStart = queryString.length();
-        }
-        else{
-            String currentTerm = queryString.substring(currentTermStart);
-            getCurrentTraverser().updateQueryString(currentTerm);
-        }
     }
 
     private IndexTraverser getCurrentTraverser(){

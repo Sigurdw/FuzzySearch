@@ -42,9 +42,12 @@ public final class SuggestionSet implements Comparable<SuggestionSet>
         SuggestionSet nextSuggestionSet = null;
         int minIndex = getMinDifferenceIndex(suggestionSources);
         if(suggestionSources[minIndex].hasAvailableSuggestions()){
-            nextSuggestionSet = new SuggestionSet(suggestionSet.length);
-            System.arraycopy(suggestionSet, 0, nextSuggestionSet.suggestionSet, 0, suggestionSet.length);
-            nextSuggestionSet.suggestionSet[minIndex] = suggestionSources[minIndex].getNextAvailableSuggestion();
+            ISuggestionWrapper newSuggestionInSet = suggestionSources[minIndex].getNextAvailableSuggestion();
+            if(newSuggestionInSet != null){
+                nextSuggestionSet = new SuggestionSet(suggestionSet.length);
+                System.arraycopy(suggestionSet, 0, nextSuggestionSet.suggestionSet, 0, suggestionSet.length);
+                nextSuggestionSet.suggestionSet[minIndex] = newSuggestionInSet;
+            }
         }
 
         return nextSuggestionSet;

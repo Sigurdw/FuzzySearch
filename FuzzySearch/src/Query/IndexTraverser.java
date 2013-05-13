@@ -6,19 +6,32 @@ package Query;
  * Time: 21:04
  */
 public interface IndexTraverser {
-    public boolean isQueryExhausted();
+    /**
+     * Initiates the next character iteration.
+     * @param queryString The updated query string.
+     */
+    public void updateQueryString(String queryString);
 
-    public void initiateFromExhaustedNodes();
-
-    public void exploreNextNode();
-
-    public boolean hasAvailableSuggestions();
-
-    public ISuggestionWrapper getNextAvailableSuggestion();
-
-    public float peekNextAvailableSuggestionRank();
-
+    /**
+     * Peeks the rank of the next node.
+     * @return The rank of the next node or -1 if no node is available.
+     */
     public float peekNextNodeRank();
 
-    public void updateQueryString(String queryString);
+    /**
+     * Explores the next active node.
+     */
+    public void exploreNextNode();
+
+    /**
+     * Peeks the rank of the next available suggestion.
+     * @return The rank of the next suggestion or -2 if no suggestion is available.
+     */
+    public float peekNextAvailableSuggestionRank();
+
+    /**
+     * Gets the next available suggestion.
+     * @return The next available suggestion.
+     */
+    public ISuggestionWrapper getNextAvailableSuggestion();
 }

@@ -74,17 +74,14 @@ public class SeparateTermTraverserTest {
     @Test
     public void getSuggestionsOnEmptyQueryStringTest(){
         query.updateQueryString("p");
-        query.initiateFromExhaustedNodes();
         ArrayList<ISuggestionWrapper> suggestionWrappers = getSuggestions();
         Assert.assertEquals(1, suggestionWrappers.size());
 
         query.updateQueryString("p ");
-        query.initiateFromExhaustedNodes();
         suggestionWrappers = getSuggestions();
         Assert.assertEquals(1, suggestionWrappers.size());
 
         query.updateQueryString("p r");
-        query.initiateFromExhaustedNodes();
         suggestionWrappers = getSuggestions();
         Assert.assertEquals(1, suggestionWrappers.size());
     }

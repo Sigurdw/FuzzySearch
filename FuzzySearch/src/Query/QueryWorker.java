@@ -20,6 +20,7 @@ package Query;
 import Config.SearchConfig;
 import Interface.IUpdateInterfaceControl;
 import Interface.WorkingStatus;
+import Query.PrefixBasedInteractiveSearch.PrefixActiveNodeTraverser;
 import Query.PriorityInteractiveSearch.PriorityTrieTraverser;
 
 public class QueryWorker implements Runnable{
@@ -64,16 +65,15 @@ public class QueryWorker implements Runnable{
     }
 
     private void initInteractiveSearch() {
-        query = new PriorityTrieTraverser(searchConfig);
+        query = new PrefixActiveNodeTraverser(searchConfig);
     }
 
     private void doWork(){
         boolean gotUpdate = checkForQueryStringUpdate();
         if(activeQueryString.length() > 0 && gotUpdate){
-            query.initiateFromExhaustedNodes();
-            while (!query.isQueryExhausted() && needMoreSuggestion()){
+            while (query.peekNextNodeRank() != -1){
                 query.exploreNextNode();
-                while(needMoreSuggestion() && query.hasAvailableSuggestions()){
+                while(needMoreSuggestion() && query.peekNextAvailableSuggestionRank() >= query.peekNextNodeRank()){
                     getNextAvailableSuggestion();
                 }
             }

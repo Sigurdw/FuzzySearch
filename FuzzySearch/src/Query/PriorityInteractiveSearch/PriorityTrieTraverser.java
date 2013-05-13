@@ -24,83 +24,12 @@ public final class PriorityTrieTraverser implements IndexTraverser {
     }
 
     @Override
-    public void exploreNextNode() {
-        Link nextLink = linkQueue.poll();
-        if(nextLink != null){
-            PriorityActiveNode currentNode = nextLink.useLink(linkQueue);
-            if(currentNode.isExhausted()){
-                SuggestionTraverser suggestionTraverser = currentNode.getSuggestionsTraverser();
-                suggestionQueue.add(suggestionTraverser);
-                exhaustedNodes.add(currentNode);
-            }
-            else{
-                currentNode.extractLinks(linkQueue);
-            }
-        }
-    }
-
-    @Override
-    public boolean hasAvailableSuggestions() {
-        SuggestionTraverser bestTraverser = suggestionQueue.peek();
-            if(bestTraverser != null){
-                return bestTraverser.getNextRank() >= peekNextNodeRank();
-            }
-
-        return false;
-    }
-
-    @Override
-    public ISuggestionWrapper getNextAvailableSuggestion() {
-        ISuggestionWrapper suggestionWrapper = null;
-
-        float thresholdRank = peekNextNodeRank();
-
-        if (getNextSuggestionRank() >= thresholdRank){
-            SuggestionTraverser suggestionTraverser = suggestionQueue.poll();
-            suggestionWrapper = suggestionTraverser.getNextSuggestion(thresholdRank);
-            suggestionQueue.add(suggestionTraverser);
-        }
-
-        return suggestionWrapper;
-    }
-
-    @Override
-    public float peekNextNodeRank() {
-        float thresholdRank = 0;
-        Link thresholdLink = linkQueue.peek();
-        if(thresholdLink != null){
-            thresholdRank = thresholdLink.getRank();
-        }
-
-        return thresholdRank;
-    }
-
-    @Override
     public void updateQueryString(String queryString) {
         queryContext.QueryString.SetQueryString(queryString);
+        initiateFromExhaustedNodes();
     }
 
-    @Override
-    public float peekNextAvailableSuggestionRank() {
-        float thresholdRank = peekNextNodeRank();
-        float nextSuggestionRank = getNextSuggestionRank();
-        if(nextSuggestionRank >= thresholdRank){
-            return nextSuggestionRank;
-        }
-
-        return -2;
-    }
-
-    private float getNextSuggestionRank() {
-        float nextSuggestionRank = -3;
-        SuggestionTraverser nextSuggestionTraverser = suggestionQueue.peek();
-        if(nextSuggestionTraverser != null){
-            nextSuggestionRank = nextSuggestionTraverser.getNextRank();
-        }
-        return nextSuggestionRank;
-    }
-
-    public void initiateFromExhaustedNodes() {
+    private void initiateFromExhaustedNodes() {
         for(PriorityActiveNode exhaustedNode : exhaustedNodes){
             exhaustedNode.extractLinks(linkQueue);
         }
@@ -110,7 +39,52 @@ public final class PriorityTrieTraverser implements IndexTraverser {
         queryContext.SuggestionNodeRegister.clearRegister();
     }
 
-    public boolean isQueryExhausted(){
-        return linkQueue.peek() == null;
+    @Override
+    public float peekNextNodeRank() {
+        Link thresholdLink = linkQueue.peek();
+        if(thresholdLink != null){
+            return thresholdLink.getRank();
+        }
+
+        return -2;
     }
+
+    @Override
+    public void exploreNextNode() {
+        Link nextLink = linkQueue.poll();
+        PriorityActiveNode currentNode = nextLink.useLink(linkQueue);
+        if(currentNode.isExhausted()){
+            SuggestionTraverser suggestionTraverser = currentNode.getSuggestionsTraverser();
+            suggestionQueue.add(suggestionTraverser);
+            exhaustedNodes.add(currentNode);
+        }
+        else{
+            currentNode.extractLinks(linkQueue);
+        }
+    }
+
+    @Override
+    public float peekNextAvailableSuggestionRank() {
+        SuggestionTraverser nextSuggestionTraverser = suggestionQueue.peek();
+        if(nextSuggestionTraverser != null){
+            return nextSuggestionTraverser.getNextRank();
+        }
+
+        return -2;
+    }
+
+    @Override
+    public ISuggestionWrapper getNextAvailableSuggestion() {
+        SuggestionTraverser suggestionTraverser = suggestionQueue.poll();
+        ISuggestionWrapper suggestion = suggestionTraverser.getNextSuggestion();
+        if (suggestionTraverser.getNextRank() >= 0){
+            suggestionQueue.add(suggestionTraverser);
+        }
+
+        return suggestion;
+    }
+
+
+
+
 }

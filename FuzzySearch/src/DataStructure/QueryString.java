@@ -40,4 +40,8 @@ public class QueryString {
 
         return lastCharacter;
     }
+
+    public String getString() {
+        return queryString;
+    }
 }
