@@ -15,10 +15,10 @@ import java.util.PriorityQueue;
  */
 public class PrefixActiveNodeTraverser implements IndexTraverser {
     private final QueryContext queryContext;
-    private final PriorityQueue<PrefixActiveNode> nodeQueue = new PriorityQueue<PrefixActiveNode>();
+    private final PriorityQueue<AbstractPrefixActiveNode> nodeQueue = new PriorityQueue<AbstractPrefixActiveNode>();
     private final PriorityQueue<PrefixSuggestionTraverser> suggestionQueue
             = new PriorityQueue<PrefixSuggestionTraverser>();
-    private final ArrayList<PrefixActiveNode> exhaustedNodes = new ArrayList<PrefixActiveNode>();
+    private final ArrayList<AbstractPrefixActiveNode> exhaustedNodes = new ArrayList<AbstractPrefixActiveNode>();
 
     public PrefixActiveNodeTraverser(SearchConfig searchConfig){
         queryContext = new QueryContext(searchConfig);
@@ -35,7 +35,7 @@ public class PrefixActiveNodeTraverser implements IndexTraverser {
     }
 
     private void initiateFromExhaustedNodes() {
-        for(PrefixActiveNode exhaustedNode : exhaustedNodes){
+        for(AbstractPrefixActiveNode exhaustedNode : exhaustedNodes){
             if(exhaustedNode.hasMoreChildren()){
                 nodeQueue.add(exhaustedNode);
             }
@@ -47,7 +47,7 @@ public class PrefixActiveNodeTraverser implements IndexTraverser {
 
     @Override
     public float peekNextNodeRank() {
-        PrefixActiveNode bestActiveNode = nodeQueue.peek();
+        AbstractPrefixActiveNode bestActiveNode = nodeQueue.peek();
         if(bestActiveNode != null){
             return bestActiveNode.getRank();
         }
@@ -57,7 +57,7 @@ public class PrefixActiveNodeTraverser implements IndexTraverser {
 
     @Override
     public void exploreNextNode() {
-        PrefixActiveNode currentNode = nodeQueue.poll();
+        AbstractPrefixActiveNode currentNode = nodeQueue.poll();
         if(currentNode.isExhausted()){
             PrefixSuggestionTraverser suggestionTraverser = currentNode.getSuggestionTraverser();
             suggestionQueue.add(suggestionTraverser);

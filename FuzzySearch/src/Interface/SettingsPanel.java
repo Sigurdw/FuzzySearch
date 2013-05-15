@@ -116,11 +116,11 @@ public class SettingsPanel extends JPanel {
 
     private void updateEditDiscount() {
         String allowedEditsString = editDiscountField.getText();
-        double editDiscount = -1;
+        float editDiscount = -1;
 
         boolean inputAccepted = true;
         try{
-            editDiscount = Double.parseDouble(allowedEditsString);
+            editDiscount = Float.parseFloat(allowedEditsString);
 
             if(editDiscount < 0 || editDiscount > 1.0){
                 inputAccepted = false;

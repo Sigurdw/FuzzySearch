@@ -6,14 +6,14 @@ public class SearchConfig {
     private final Index currentIndex;
     private final int neededSuggestion;
     private final int allowedEdits;
-    private final double editDiscount;
+    private final float editDiscount;
     private final boolean semanticEnabled;
 
     private final boolean separateTermEvaluation;
 
-    public static SearchConfig DummyConfig = new SearchConfig(null, 5, 1, 0.5, false, false);
+    public static SearchConfig DummyConfig = new SearchConfig(null, 5, 1, 0.5f, false, false);
 
-    private SearchConfig(Index currentIndex, int neededSuggestion, int allowedEdits, double editDiscount, boolean semanticEnabled, boolean separateTermEvaluation){
+    private SearchConfig(Index currentIndex, int neededSuggestion, int allowedEdits, float editDiscount, boolean semanticEnabled, boolean separateTermEvaluation){
         this.currentIndex = currentIndex;
         this.neededSuggestion = neededSuggestion;
         this.allowedEdits = allowedEdits;
@@ -30,7 +30,7 @@ public class SearchConfig {
         return allowedEdits;
     }
 
-    public double getEditDiscount() {
+    public float getEditDiscount() {
         return editDiscount;
     }
 
@@ -58,7 +58,7 @@ public class SearchConfig {
         return new SearchConfig(currentIndex, neededSuggestion, newAllowedEdits, editDiscount, semanticEnabled, separateTermEvaluation);
     }
 
-    public SearchConfig updateConfig(double newEditDiscount){
+    public SearchConfig updateConfig(float newEditDiscount){
         return new SearchConfig(currentIndex, neededSuggestion, allowedEdits, newEditDiscount, semanticEnabled, separateTermEvaluation);
     }
 

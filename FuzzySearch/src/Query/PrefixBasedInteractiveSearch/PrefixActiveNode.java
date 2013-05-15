@@ -12,7 +12,7 @@ import java.util.PriorityQueue;
  * Date: 11.05.13
  * Time: 14:48
  */
-public class PrefixActiveNode implements Comparable<PrefixActiveNode> {
+public class PrefixActiveNode extends AbstractPrefixActiveNode {
     private final QueryContext queryContext;
     private final TrieNode queryPosition;
     private final TrieNode[] previousTerms;
@@ -110,9 +110,11 @@ public class PrefixActiveNode implements Comparable<PrefixActiveNode> {
         }
     }
 
-    public void getNextChildNodes(final PriorityQueue<PrefixActiveNode> nodeQueue) {
+    @Override
+    public void getNextChildNodes(final PriorityQueue<AbstractPrefixActiveNode> nodeQueue) {
         TrieNode nextChildNode = queryPosition.getSortedChild(nextChild);
         if(nextChildNode instanceof LeafTrieNode){
+            addDeleteSpaceNode(nodeQueue, nextChildNode);
             for(int i = 0; i < queryContext.getNumberOfClusters(); i++){
                 TrieNode indexClusterRoot = queryContext.getIndexCluster(i);
                 PrefixActiveNode nextChildActiveNode = new PrefixActiveNode(
@@ -145,6 +147,16 @@ public class PrefixActiveNode implements Comparable<PrefixActiveNode> {
         nextChild++;
     }
 
+    private void addDeleteSpaceNode(final PriorityQueue<AbstractPrefixActiveNode> nodeQueue, TrieNode leafNode) {
+        DeleteSpaceActiveNode deleteSpaceNode = new DeleteSpaceActiveNode(
+                queryContext,
+                leafNode,
+                previousTerms,
+                queryStringPosition,
+                editDiscount * queryContext.EditDiscount);
+        nodeQueue.add(deleteSpaceNode);
+    }
+
     private TrieNode[] getNextTermStack(TrieNode termNode) {
         TrieNode[] termStack;
         termStack = new TrieNode[previousTerms.length + 1];
@@ -157,34 +169,24 @@ public class PrefixActiveNode implements Comparable<PrefixActiveNode> {
         return editDiscount * queryPosition.getRank() / queryContext.getMaxRank();
     }
 
+    @Override
     public boolean hasMoreChildren() {
         return nextChild < queryPosition.getNumberOfChildren();
     }
 
+    @Override
     public PrefixSuggestionTraverser getSuggestionTraverser(){
         return new PrefixSuggestionTraverser(queryPosition, previousTerms, editDiscount);
     }
 
+    @Override
     public float getRank(){
         return queryPosition.getSortedChild(nextChild).getRank() * editDiscount;
     }
 
+    @Override
     public boolean isExhausted(){
         return currentPrefix.length() == queryContext.QueryString.GetLength()
                 || queryPosition instanceof LeafTrieNode;
-    }
-
-    @Override
-    public int compareTo(PrefixActiveNode otherNode) {
-        float difference = otherNode.getRank() - this.getRank();
-        if(difference > 0){
-            return 1;
-        }
-        else if(difference < 0){
-            return -1;
-        }
-        else{
-            return 0;
-        }
     }
 }

@@ -19,7 +19,7 @@ public class RecursiveSuggestionWrapper extends ISuggestionWrapper {
             sb.append(" ");
         }
 
-        sb.append(suggestionSet[suggestionSet.length - 1]);
+        sb.append(suggestionSet[suggestionSet.length - 1].getSuggestion());
         return sb.toString();
     }
 

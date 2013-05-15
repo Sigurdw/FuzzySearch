@@ -17,12 +17,15 @@ public final class QueryContext {
 
     public final int NeededSuggestions;
 
+    public final float EditDiscount;
+
     public QueryContext(SearchConfig searchConfig) {
         Index = searchConfig.getCurrentIndex();
         QueryString = new QueryString();
         SuggestionNodeRegister = new SuggestionNodeRegister();
         MaxEdits = searchConfig.getAllowedEdits();
         NeededSuggestions = searchConfig.getNeededSuggestion();
+        EditDiscount = searchConfig.getEditDiscount();
     }
 
     public float getMaxRank(){

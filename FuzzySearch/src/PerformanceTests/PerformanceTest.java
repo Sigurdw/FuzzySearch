@@ -1,29 +1,27 @@
 package PerformanceTests;
 
+import DataStructure.IIndexProgressListener;
+import DataStructure.Index;
 import Interface.IUpdateInterfaceControl;
 import Interface.WorkingStatus;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 public class PerformanceTest {
-    /*private static final String directoryPath = "C:/TextCollection";
+    private static final String directoryPath = "C:/TextCollection";
     private static final int numberOfSuggestionsRequired = 20;
     private static final int allowedEditDistance = 2;
     private Index index;
-    private Index priorityIndex;
-    private InteractiveSearchHandler searchHandler;
     private static final String resultPath = "D:/Results/";
     private static final String fileEnding  = ".csv";
     private final IUpdateInterfaceControl interfaceControl = new DummyInterface();
 
     public PerformanceTest(int numberOfDicuments){
-        Indexer naiveIndexer = new Indexer(numberOfSuggestionsRequired, true);
         try {
-            index = naiveIndexer.indexDocumentBlob(new File(directoryPath + "/medline2004.txt"), numberOfDicuments);
+            index = Index.read(new DataInputStream(new FileInputStream(
+                    "C:/Index/clusteredIndex.dat")),
+                    new DummyProgressListener());
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -283,13 +281,26 @@ public class PerformanceTest {
     private final class DummyInterface implements IUpdateInterfaceControl{
 
         @Override
-        public void addSuggestion(ArrayList<String> suggestionList) {
-            //Empty
+        public void addSuggestion(String suggestion) {
+
+        }
+
+        @Override
+        public void clearSuggestions() {
+
         }
 
         @Override
         public void updateWorkingStatus(WorkingStatus workingStatus) {
-            //Empty
+
         }
-    }*/
+    }
+
+    private final class DummyProgressListener implements IIndexProgressListener{
+
+        @Override
+        public void setReadProgress(int percentage) {
+            System.out.println(percentage);
+        }
+    }
 }
