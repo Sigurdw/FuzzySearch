@@ -1,33 +1,11 @@
 package Query.PriorityInteractiveSearch.Tests;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import Clustering.ClusteringVector;
 import Clustering.TermDocumentVector;
 import Config.SearchConfig;
 import DataStructure.Index;
-import DataStructure.InternalTrieNode;
-import DataStructure.QueryString;
-import DataStructure.TrieNode;
 import Query.ISuggestionWrapper;
-import Query.PriorityInteractiveSearch.PriorityActiveNode;
 import Query.PriorityInteractiveSearch.PriorityTrieTraverser;
-import Query.QueryContext;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -97,17 +75,14 @@ public class PriorityTrieTraverserTest {
     @Test
     public void getSuggestionsOnEmptyQueryStringTest(){
         priorityTrieTraverser.updateQueryString("p");
-        priorityTrieTraverser.initiateFromExhaustedNodes();
         ArrayList<ISuggestionWrapper> suggestionWrappers = getSuggestions();
         Assert.assertEquals(1, suggestionWrappers.size());
 
         priorityTrieTraverser.updateQueryString("p ");
-        priorityTrieTraverser.initiateFromExhaustedNodes();
         suggestionWrappers = getSuggestions();
         Assert.assertEquals(1, suggestionWrappers.size());
 
         priorityTrieTraverser.updateQueryString("p r");
-        priorityTrieTraverser.initiateFromExhaustedNodes();
         suggestionWrappers = getSuggestions();
         Assert.assertEquals(1, suggestionWrappers.size());
     }
@@ -135,7 +110,6 @@ public class PriorityTrieTraverserTest {
         priorityTrieTraverser = new PriorityTrieTraverser(searchConfig);
 
         priorityTrieTraverser.updateQueryString("pro ");
-        priorityTrieTraverser.initiateFromExhaustedNodes();
         ArrayList<ISuggestionWrapper> suggestionWrappers = getSuggestions();
         //Assert.assertEquals(2, suggestionWrappers.size());
         printResults(suggestionWrappers);
@@ -143,7 +117,6 @@ public class PriorityTrieTraverserTest {
         priorityTrieTraverser = new PriorityTrieTraverser(searchConfig);
 
         priorityTrieTraverser.updateQueryString("protein ");
-        priorityTrieTraverser.initiateFromExhaustedNodes();
         suggestionWrappers = getSuggestions();
         //Assert.assertEquals(2, suggestionWrappers.size());
         printResults(suggestionWrappers);
@@ -151,9 +124,9 @@ public class PriorityTrieTraverserTest {
 
     private ArrayList<ISuggestionWrapper> getSuggestions(){
         ArrayList<ISuggestionWrapper> suggestionWrappers = new ArrayList<ISuggestionWrapper>(5);
-        while(!priorityTrieTraverser.isQueryExhausted() &&  suggestionWrappers.size() < 5){
+        while(priorityTrieTraverser.peekNextNodeRank() != -1 &&  suggestionWrappers.size() < 5){
             priorityTrieTraverser.exploreNextNode();
-            while(priorityTrieTraverser.hasAvailableSuggestions()){
+            while(priorityTrieTraverser.peekNextAvailableSuggestionRank() >= priorityTrieTraverser.peekNextNodeRank()){
                 ISuggestionWrapper suggestionWrapper = priorityTrieTraverser.getNextAvailableSuggestion();
                 if(suggestionWrapper != null){
                     suggestionWrappers.add(suggestionWrapper);

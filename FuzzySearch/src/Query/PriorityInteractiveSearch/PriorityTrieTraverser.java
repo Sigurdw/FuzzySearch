@@ -19,7 +19,9 @@ public final class PriorityTrieTraverser implements IndexTraverser {
     public PriorityTrieTraverser(SearchConfig searchConfig){
         this.queryContext = new QueryContext(searchConfig);
         for(int i = 0; i < queryContext.getNumberOfClusters(); i++){
-            exhaustedNodes.add(new PriorityActiveNode(queryContext, i));
+            PriorityActiveNode rootNode = new PriorityActiveNode(queryContext, i);
+            exhaustedNodes.add(rootNode);
+            suggestionQueue.add(rootNode.getSuggestionsTraverser());
         }
     }
 
@@ -46,7 +48,7 @@ public final class PriorityTrieTraverser implements IndexTraverser {
             return thresholdLink.getRank();
         }
 
-        return -2;
+        return -1;
     }
 
     @Override

@@ -53,7 +53,8 @@ public class PriorityActiveNode {
                 EditOperation.Match,
                 0,
                 1.0f / queryContext.getMaxRank(),
-                false, 0);
+                false,
+                0);
     }
 
     private PriorityActiveNode(

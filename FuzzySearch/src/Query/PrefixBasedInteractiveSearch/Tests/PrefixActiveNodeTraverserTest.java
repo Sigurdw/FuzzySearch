@@ -5,10 +5,8 @@ import Clustering.TermDocumentVector;
 import Config.SearchConfig;
 import DataStructure.Index;
 import Query.ISuggestionWrapper;
-import Query.PrefixBasedInteractiveSearch.PrefixActiveNode;
+import Query.IndexTraverser;
 import Query.PrefixBasedInteractiveSearch.PrefixActiveNodeTraverser;
-import Query.PrefixBasedInteractiveSearch.PrefixSuggestionTraverser;
-import Query.QueryContext;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,14 +33,13 @@ public class PrefixActiveNodeTraverserTest {
     public void getSuggestionsOnEmptyQueryStringTest(){
         addTerm("pro", 1.1f);
         PrefixActiveNodeTraverser prefixActiveNodeTraverser = new PrefixActiveNodeTraverser(searchConfig);
-        prefixActiveNodeTraverser.initiateFromExhaustedNodes();
         prefixActiveNodeTraverser.updateQueryString("v");
         prefixActiveNodeTraverser.exploreNextNode();
-        Assert.assertFalse(prefixActiveNodeTraverser.hasAvailableSuggestions());
+        Assert.assertFalse(hasAvailableSuggestions(prefixActiveNodeTraverser));
         prefixActiveNodeTraverser.exploreNextNode();
-        Assert.assertTrue(prefixActiveNodeTraverser.hasAvailableSuggestions());
+        Assert.assertTrue(hasAvailableSuggestions(prefixActiveNodeTraverser));
         ISuggestionWrapper suggestionWrapper = prefixActiveNodeTraverser.getNextAvailableSuggestion();
-        Assert.assertFalse(prefixActiveNodeTraverser.hasAvailableSuggestions());
+        Assert.assertFalse(hasAvailableSuggestions(prefixActiveNodeTraverser));
         System.out.println(suggestionWrapper);
     }
 
@@ -56,18 +53,21 @@ public class PrefixActiveNodeTraverserTest {
         addTerm("photo", 1.2f);
 
         PrefixActiveNodeTraverser prefixActiveNodeTraverser = new PrefixActiveNodeTraverser(searchConfig);
-        prefixActiveNodeTraverser.initiateFromExhaustedNodes();
         prefixActiveNodeTraverser.updateQueryString("vr");
 
         ArrayList<ISuggestionWrapper> suggestions = getSuggestions(prefixActiveNodeTraverser, 4);
         System.out.println(suggestions);
     }
 
+    private boolean hasAvailableSuggestions(IndexTraverser indexTraverser){
+        return indexTraverser.peekNextAvailableSuggestionRank() >= indexTraverser.peekNextNodeRank();
+    }
+
     private ArrayList<ISuggestionWrapper> getSuggestions(PrefixActiveNodeTraverser traverser, int numberOfSuggestions) {
         ArrayList<ISuggestionWrapper> suggestionWrappers = new ArrayList<ISuggestionWrapper>(numberOfSuggestions);
-        while (!traverser.isQueryExhausted() && numberOfSuggestions > suggestionWrappers.size()){
+        while (traverser.peekNextNodeRank() != -1 && numberOfSuggestions > suggestionWrappers.size()){
             traverser.exploreNextNode();
-            while(traverser.hasAvailableSuggestions() && numberOfSuggestions > suggestionWrappers.size()){
+            while(hasAvailableSuggestions(traverser) && numberOfSuggestions > suggestionWrappers.size()){
                 suggestionWrappers.add(traverser.getNextAvailableSuggestion());
             }
         }
