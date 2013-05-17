@@ -1,18 +1,23 @@
 package PerformanceTests;
 
+import Config.SearchConfig;
 import DataStructure.IIndexProgressListener;
 import DataStructure.Index;
 import Interface.IUpdateInterfaceControl;
 import Interface.WorkingStatus;
+import Query.ISuggestionWrapper;
+import Query.IndexTraverser;
+import Query.PrefixBasedInteractiveSearch.PrefixActiveNodeTraverser;
+import Query.PriorityInteractiveSearch.PriorityTrieTraverser;
 
 import java.io.*;
 import java.util.ArrayList;
 
 public class PerformanceTest {
     private static final String directoryPath = "C:/TextCollection";
-    private static final int numberOfSuggestionsRequired = 20;
-    private static final int allowedEditDistance = 2;
     private Index index;
+    private SearchConfig searchConfig = SearchConfig.DummyConfig;
+    private IndexTraverser query;
     private static final String resultPath = "D:/Results/";
     private static final String fileEnding  = ".csv";
     private final IUpdateInterfaceControl interfaceControl = new DummyInterface();
@@ -47,9 +52,9 @@ public class PerformanceTest {
         for(int j = 0; j < terms.size(); j++){
             String term = terms.get(j);
             String modifiedTerm = TermModifier.modifyTerm(editDistance, term);
-            searchHandler = new InteractiveSearchHandler(index, 10, false, editDistance, interfaceControl);
+            query = new PriorityTrieTraverser(searchConfig);
             long simpleTime = doInteractiveSearch(modifiedTerm);
-            searchHandler = new InteractiveSearchHandler(index, 10, true, editDistance, interfaceControl);
+            query = new PrefixActiveNodeTraverser(searchConfig);
             long priorityTime = doInteractiveSearch(modifiedTerm);
 
             String simpleRecord = "" + simpleTime;
@@ -82,7 +87,7 @@ public class PerformanceTest {
     }
 
     public void kScalingTest(){
-        int editDistance = 2;
+        /*int editDistance = 2;
         ArrayList<String> terms = index.getRandomIndexTerms(1000);
         try {
             //File simpleAverageResultFile = new File(resultPath + "simpleKScaling1" + fileEnding);
@@ -122,7 +127,7 @@ public class PerformanceTest {
             e.printStackTrace();
             System.exit(1);
         }
-
+        */
     }
 
     private void doEditDistanceScaleTest(int[] numberOfTerms, ArrayList<String> terms, String type) {
@@ -144,7 +149,7 @@ public class PerformanceTest {
     }
 
     private void doEditDistanceScalingSearch(int[] numberOfTerms, ArrayList<String> terms, BufferedWriter simpleWriter, BufferedWriter priorityWriter, int numberOfSuggestions) throws IOException {
-        for(int i = 0; i < numberOfTerms.length; i++){
+        /*for(int i = 0; i < numberOfTerms.length; i++){
             System.out.println("EditDistanceScaling: " + i);
             for(int j = 0; j < numberOfTerms[i]; j++){
                 String term = terms.get(j);
@@ -168,11 +173,11 @@ public class PerformanceTest {
                 simpleWriter.write(simpleRecord);
                 priorityWriter.write(priorityRecord);
             }
-        }
+        }*/
     }
 
     public void individualCharacterIterationTest(){
-        System.out.println("Individual character test");
+        /*System.out.println("Individual character test");
         File simpleAverageResultFile = new File(resultPath + "simpleAverageIndividualCharacterIterationTest" + System.currentTimeMillis() + fileEnding);
         File priorityAverageResultFile = new File(resultPath + "priorityAverageIndividualCharacterIterationTest" + System.currentTimeMillis() + fileEnding);
         int numberOfIterations = 7;
@@ -203,7 +208,7 @@ public class PerformanceTest {
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
-        }
+        }*/
     }
 
     private void performIterativeSearchWithBookkeping(
@@ -212,7 +217,7 @@ public class PerformanceTest {
             String testQuery,
             BufferedWriter resultWriter) throws IOException
     {
-        ArrayList<Long> results = new ArrayList<Long>();
+        /*ArrayList<Long> results = new ArrayList<Long>();
         for(int i = 0; i < largestTerm; i++){
             String queryString = testQuery.substring(0, i);
             long startTime = System.nanoTime();
@@ -232,15 +237,23 @@ public class PerformanceTest {
         }
 
         resultRecord.append("\n");
-        resultWriter.append(resultRecord.toString());
+        resultWriter.append(resultRecord.toString());*/
     }
 
     private long doInteractiveSearch(String term){
         long totalTime = 0;
         for(int i = 1; i <= term.length(); i++){
             String queryString = term.substring(0, i);
+            ArrayList<ISuggestionWrapper> suggestionWrappers = new ArrayList<ISuggestionWrapper>(searchConfig.getNeededSuggestion());
             long startTime = System.nanoTime();
-            searchHandler.handleUserInputAsync(queryString);
+            query.updateQueryString(queryString);
+            while(query.peekNextNodeRank() != -1 && suggestionWrappers.size() < searchConfig.getNeededSuggestion()){
+                query.exploreNextNode();
+                while(query.peekNextAvailableSuggestionRank() >= query.peekNextNodeRank() && suggestionWrappers.size() < searchConfig.getNeededSuggestion()){
+                    suggestionWrappers.add(query.getNextAvailableSuggestion());
+                }
+            }
+
             long endTime = System.nanoTime();
             totalTime += endTime - startTime;
         }
@@ -250,8 +263,9 @@ public class PerformanceTest {
 
     public static void main(String[] args){
         PerformanceTest performanceTest = new PerformanceTest(100000);
+        performanceTest.plainSearchTest();
         //performanceTest.individualCharacterIterationTest();
-        performanceTest.kScalingTest();
+        //performanceTest.kScalingTest();
         //indexSizeScalingTest();
     }
 
