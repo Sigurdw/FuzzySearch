@@ -122,10 +122,10 @@ public class ActiveQuery {
     private boolean isAllowToDelete() {
         return lastEditOperation == EditOperation.Insert || previousEdits < allowedEditDistance;
     }
-
+    /*
     public String toString(){
         return  queryPosition.getLabel() + "Rank: " + queryPosition.getRank() * EditOperation.getRankDiscount(previousEdits) +  ", Last operation: " + lastEditOperation + " edits done: " + previousEdits;
-    }
+    }*/
 
     public String getLabel() {
         return queryPosition.getLabel();

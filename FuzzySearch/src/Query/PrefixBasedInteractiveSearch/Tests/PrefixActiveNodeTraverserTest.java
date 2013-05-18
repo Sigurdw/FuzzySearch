@@ -55,7 +55,58 @@ public class PrefixActiveNodeTraverserTest {
         PrefixActiveNodeTraverser prefixActiveNodeTraverser = new PrefixActiveNodeTraverser(searchConfig);
         prefixActiveNodeTraverser.updateQueryString("vr");
 
-        ArrayList<ISuggestionWrapper> suggestions = getSuggestions(prefixActiveNodeTraverser, 4);
+        ArrayList<ISuggestionWrapper> suggestions = getSuggestions(prefixActiveNodeTraverser, 6);
+        System.out.println(suggestions);
+        Assert.assertEquals(3, suggestions.size());
+    }
+
+    @Test
+    public void longerQueryThanTermTest(){
+        addTerm("p", 1.1f);
+        PrefixActiveNodeTraverser prefixActiveNodeTraverser = new PrefixActiveNodeTraverser(searchConfig);
+        prefixActiveNodeTraverser.updateQueryString("pr");
+
+        ArrayList<ISuggestionWrapper> suggestions = getSuggestions(prefixActiveNodeTraverser, 3);
+        System.out.println(suggestions);
+    }
+
+    @Test
+    public void fuzzyHighestRankTest(){
+        addTerm("le", 1.1f);
+        PrefixActiveNodeTraverser prefixActiveNodeTraverser = new PrefixActiveNodeTraverser(searchConfig);
+        prefixActiveNodeTraverser.updateQueryString("c");
+
+        ArrayList<ISuggestionWrapper> suggestions = getSuggestions(prefixActiveNodeTraverser, 3);
+        System.out.println(suggestions);
+        Assert.assertEquals(1, suggestions.size());
+        Assert.assertEquals(0.5f, suggestions.get(0).getRank());
+    }
+
+    @Test
+    public void strangeBehaviourTest(){
+        addTerm("labialis", 1.0f);
+        PrefixActiveNodeTraverser prefixActiveNodeTraverser = new PrefixActiveNodeTraverser(searchConfig);
+        String queryString = "lbialis";
+        prefixActiveNodeTraverser.updateQueryString(queryString);
+        ArrayList<ISuggestionWrapper> suggestions = getSuggestions(prefixActiveNodeTraverser, 3);
+        System.out.println(suggestions);
+        /*for(int i = 1; i <= queryString.length(); i++){
+            String currentQuery = queryString.substring(0, i);
+            System.out.println(currentQuery);
+            prefixActiveNodeTraverser.updateQueryString(currentQuery);
+            ArrayList<ISuggestionWrapper> suggestions = getSuggestions(prefixActiveNodeTraverser, 3);
+            System.out.println(suggestions);
+            //Assert.assertEquals(1, suggestions.size());
+        }*/
+    }
+
+    @Test
+    public void theProblemTest(){
+        addTerm("pro", 1.0f);
+        PrefixActiveNodeTraverser prefixActiveNodeTraverser = new PrefixActiveNodeTraverser(searchConfig);
+        String queryString = "ro";
+        prefixActiveNodeTraverser.updateQueryString(queryString);
+        ArrayList<ISuggestionWrapper> suggestions = getSuggestions(prefixActiveNodeTraverser, 3);
         System.out.println(suggestions);
     }
 

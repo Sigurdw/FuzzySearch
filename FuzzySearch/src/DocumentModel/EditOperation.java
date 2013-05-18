@@ -73,33 +73,4 @@ public enum EditOperation {
 
         return movement;
     }
-
-    public static float getRankDiscount(int numberOfEdits){
-        float operationDiscount = 1;
-        for(int i = 1; i <= numberOfEdits; i++){
-            operationDiscount *= getOperationDiscount(EditOperation.Insert, i);
-        }
-
-        return operationDiscount;
-    }
-
-    public static float getOperationDiscount(EditOperation editOperation, int previousEdits) {
-        float discount = 1;
-        switch (editOperation){
-            case Insert:
-                discount = 0.25f;
-                break;
-            case Delete:
-                discount = 0.25f;
-                break;
-            case Match:
-                discount = 1;
-                break;
-            case Substitution:
-                discount = 0.25f;
-                break;
-        }
-
-        return discount;
-    }
 }

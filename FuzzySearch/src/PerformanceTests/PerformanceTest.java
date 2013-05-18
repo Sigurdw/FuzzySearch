@@ -18,11 +18,11 @@ public class PerformanceTest {
     private Index index;
     private SearchConfig searchConfig = SearchConfig.DummyConfig;
     private IndexTraverser query;
-    private static final String resultPath = "D:/Results/";
+    private static final String resultPath = "D:/MasterResults/";
     private static final String fileEnding  = ".csv";
     private final IUpdateInterfaceControl interfaceControl = new DummyInterface();
 
-    public PerformanceTest(int numberOfDicuments){
+    public PerformanceTest(){
         try {
             index = Index.read(new DataInputStream(new FileInputStream(
                     "C:/Index/clusteredIndex.dat")),
@@ -45,11 +45,16 @@ public class PerformanceTest {
         return index.getRandomIndexTerms(number);
     }
 
-    public void plainSearchTest(BufferedWriter simpleWriter, BufferedWriter priorityWriter) throws IOException{
+    public void plainSearchTest() throws IOException{
+        File simpleAverageResultFile = new File(resultPath + "plainPriority" + fileEnding);
+        File priorityAverageResultFile = new File(resultPath + "plainPrefix" + fileEnding);
+        BufferedWriter simpleWriter = new BufferedWriter(new FileWriter(simpleAverageResultFile));
+        BufferedWriter priorityWriter = new BufferedWriter(new FileWriter(priorityAverageResultFile));
         int editDistance = 2;
-        ArrayList<String> terms = getIndexTerms(1000);
+        ArrayList<String> terms = getIndexTerms(10);
 
         for(int j = 0; j < terms.size(); j++){
+            searchConfig = searchConfig.updateConfig(index);
             String term = terms.get(j);
             String modifiedTerm = TermModifier.modifyTerm(editDistance, term);
             query = new PriorityTrieTraverser(searchConfig);
@@ -242,6 +247,7 @@ public class PerformanceTest {
 
     private long doInteractiveSearch(String term){
         long totalTime = 0;
+        System.out.println("Query = " + term);
         for(int i = 1; i <= term.length(); i++){
             String queryString = term.substring(0, i);
             ArrayList<ISuggestionWrapper> suggestionWrappers = new ArrayList<ISuggestionWrapper>(searchConfig.getNeededSuggestion());
@@ -254,6 +260,9 @@ public class PerformanceTest {
                 }
             }
 
+            System.out.println(queryString);
+            System.out.println(suggestionWrappers);
+
             long endTime = System.nanoTime();
             totalTime += endTime - startTime;
         }
@@ -261,8 +270,8 @@ public class PerformanceTest {
         return totalTime;
     }
 
-    public static void main(String[] args){
-        PerformanceTest performanceTest = new PerformanceTest(100000);
+    public static void main(String[] args) throws Exception{
+        PerformanceTest performanceTest = new PerformanceTest();
         performanceTest.plainSearchTest();
         //performanceTest.individualCharacterIterationTest();
         //performanceTest.kScalingTest();
@@ -270,7 +279,7 @@ public class PerformanceTest {
     }
 
     public static void indexSizeScalingTest(){
-        int stepSize = 10000;
+        /*int stepSize = 10000;
         int maxSize = 100000;
 
         try {
@@ -289,7 +298,7 @@ public class PerformanceTest {
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
-        }
+        }*/
     }
 
     private final class DummyInterface implements IUpdateInterfaceControl{

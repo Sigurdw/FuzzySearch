@@ -106,8 +106,6 @@ public class PriorityActiveNode {
                 TrieNode[] termStack = getNextTermStack(matchNode);
                 ClusteringVector termClusterVector = ((LeafTrieNode)matchNode).getClusteringVector();
                 ClusteringVector queryClusterVector = termClusterVector.pairwiseMultiply(clusteringDiscount);
-                System.out.println(queryClusterVector);
-                System.out.println(termClusterVector);
                 for (int i = 0; i < queryContext.getNumberOfClusters(); i++){
                     TrieNode indexClusterRoot = queryContext.getIndexCluster(i);
                     float discount = matchDiscount * queryClusterVector.Vector[i];
@@ -144,16 +142,15 @@ public class PriorityActiveNode {
     }
 
     private void addDummyDeleteLink(PriorityQueue<Link> linkQueue, TrieNode leafNode) {
-        float modifier = EditOperation.getOperationDiscount(EditOperation.Delete, previousEdits + 1);
         PriorityActiveNode dummyDeleteNode = new PriorityActiveNode(
                 leafNode,
                 previousTerms,
                 queryContext,
                 clusteringDiscount,
-                previousEdits + 1,
+                previousEdits + 1,       //bug
                 EditOperation.Delete,
                 queryStringIndex + 1,
-                editDiscount * modifier,
+                editDiscount * queryContext.EditDiscount,
                 true,
                 depth + 1);
         linkQueue.add(new EditLink(this, dummyDeleteNode));
@@ -177,9 +174,7 @@ public class PriorityActiveNode {
             if(previousEdits + cost <= queryContext.MaxEdits){
                 float modifier = 1;
                 if(cost != 0){
-                    modifier = EditOperation.getOperationDiscount(
-                        EditOperation.Delete,
-                        previousEdits + cost);
+                    modifier = queryContext.EditDiscount;
                 }
 
                 int movement = EditOperation.getOperationMovement(EditOperation.Delete);
@@ -212,9 +207,7 @@ public class PriorityActiveNode {
             if(EditOperation.isOperationAllowed(lastEditOperation, EditOperation.Insert) || isSubstitution){
                 TrieNode bestEditNode = getNextEditNode();
                 if(bestEditNode != null){
-                    float editLinkDiscount = editDiscount * EditOperation.getOperationDiscount(
-                            EditOperation.Insert,
-                            previousEdits + 1);
+                    float editLinkDiscount = editDiscount * queryContext.EditDiscount;
 
                     if(bestEditNode instanceof LeafTrieNode){
                         addDummyDeleteLink(linkQueue, bestEditNode);
