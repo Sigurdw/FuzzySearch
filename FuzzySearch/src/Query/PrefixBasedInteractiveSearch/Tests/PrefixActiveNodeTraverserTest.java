@@ -7,6 +7,7 @@ import DataStructure.Index;
 import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
 import Query.PrefixBasedInteractiveSearch.PrefixActiveNodeTraverser;
+import Query.PriorityInteractiveSearch.PriorityTrieTraverser;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -84,9 +85,10 @@ public class PrefixActiveNodeTraverserTest {
 
     @Test
     public void strangeBehaviourTest(){
-        addTerm("labialis", 1.0f);
+        addTerm("roph", 1.0f);
+        String queryString = "oph";
+
         PrefixActiveNodeTraverser prefixActiveNodeTraverser = new PrefixActiveNodeTraverser(searchConfig);
-        String queryString = "lbialis";
         prefixActiveNodeTraverser.updateQueryString(queryString);
         ArrayList<ISuggestionWrapper> suggestions = getSuggestions(prefixActiveNodeTraverser, 3);
         System.out.println(suggestions);
@@ -98,6 +100,11 @@ public class PrefixActiveNodeTraverserTest {
             System.out.println(suggestions);
             //Assert.assertEquals(1, suggestions.size());
         }*/
+
+        PriorityTrieTraverser priorityTrieTraverser = new PriorityTrieTraverser(searchConfig);
+        priorityTrieTraverser.updateQueryString(queryString);
+        suggestions = getSuggestions(priorityTrieTraverser, 3);
+        System.out.println(suggestions);
     }
 
     @Test
@@ -110,11 +117,37 @@ public class PrefixActiveNodeTraverserTest {
         System.out.println(suggestions);
     }
 
+    @Test
+    public void tooEagerMultiTermBugTest(){
+        addTerm("alu", 1.0f);
+        addTerm("le", 1.0f);
+        String queryString = "nalu";
+
+        PrefixActiveNodeTraverser prefixActiveNodeTraverser = new PrefixActiveNodeTraverser(searchConfig);
+        prefixActiveNodeTraverser.updateQueryString(queryString);
+        ArrayList<ISuggestionWrapper> suggestions = getSuggestions(prefixActiveNodeTraverser, 5);
+        System.out.println(suggestions);
+        Assert.assertEquals(1, suggestions.size());
+    }
+
+    @Test
+    public void tooLittleEagerMultiTermBugTest(){
+        addTerm("mi", 1.0f);
+        addTerm("le", 1.0f);
+        String queryString = "m ";
+
+        PrefixActiveNodeTraverser prefixActiveNodeTraverser = new PrefixActiveNodeTraverser(searchConfig);
+        prefixActiveNodeTraverser.updateQueryString(queryString);
+        ArrayList<ISuggestionWrapper> suggestions = getSuggestions(prefixActiveNodeTraverser, 5);
+        System.out.println(suggestions);
+        Assert.assertEquals(3, suggestions.size());
+    }
+
     private boolean hasAvailableSuggestions(IndexTraverser indexTraverser){
         return indexTraverser.peekNextAvailableSuggestionRank() >= indexTraverser.peekNextNodeRank();
     }
 
-    private ArrayList<ISuggestionWrapper> getSuggestions(PrefixActiveNodeTraverser traverser, int numberOfSuggestions) {
+    private ArrayList<ISuggestionWrapper> getSuggestions(IndexTraverser traverser, int numberOfSuggestions) {
         ArrayList<ISuggestionWrapper> suggestionWrappers = new ArrayList<ISuggestionWrapper>(numberOfSuggestions);
         while (traverser.peekNextNodeRank() != -1 && numberOfSuggestions > suggestionWrappers.size()){
             traverser.exploreNextNode();

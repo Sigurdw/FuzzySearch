@@ -142,18 +142,21 @@ public class PriorityActiveNode {
     }
 
     private void addDummyDeleteLink(PriorityQueue<Link> linkQueue, TrieNode leafNode) {
-        PriorityActiveNode dummyDeleteNode = new PriorityActiveNode(
-                leafNode,
-                previousTerms,
-                queryContext,
-                clusteringDiscount,
-                previousEdits + 1,       //bug
-                EditOperation.Delete,
-                queryStringIndex + 1,
-                editDiscount * queryContext.EditDiscount,
-                true,
-                depth + 1);
-        linkQueue.add(new EditLink(this, dummyDeleteNode));
+        int deleteSpaceEditDistance = previousEdits + 1;
+        if(deleteSpaceEditDistance <= queryContext.MaxEdits){
+            PriorityActiveNode dummyDeleteNode = new PriorityActiveNode(
+                    leafNode,
+                    previousTerms,
+                    queryContext,
+                    clusteringDiscount,
+                    deleteSpaceEditDistance,
+                    EditOperation.Delete,
+                    queryStringIndex + 1,
+                    editDiscount * queryContext.EditDiscount,
+                    true,
+                    depth + 1);
+            linkQueue.add(new EditLink(this, dummyDeleteNode));
+        }
     }
 
     private TrieNode[] getNextTermStack(TrieNode termNode) {

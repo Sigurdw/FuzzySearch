@@ -23,8 +23,12 @@ public class PrefixActiveNode extends AbstractPrefixActiveNode {
     private final float editDiscount;
     private final int[] col;
     private final int[] row;
+    private final int neededExtraDepth;
+    private final int extraDepth;
 
     private int nextChild = 0;
+
+    private int matchIndex = 0;
 
     public PrefixActiveNode(QueryContext queryContext, int clusterId){
         this(
@@ -36,7 +40,9 @@ public class PrefixActiveNode extends AbstractPrefixActiveNode {
                 ClusteringVector.defaultValue(queryContext.Index.indexHeader.numberOfClusters),
                 1.0f / queryContext.getMaxRank(),
                 new int[]{0},
-                new int[]{0});
+                new int[]{0},
+                0,
+                0);
     }
 
     private PrefixActiveNode(
@@ -48,7 +54,9 @@ public class PrefixActiveNode extends AbstractPrefixActiveNode {
             ClusteringVector clusteringDiscount,
             float editDiscount,
             int[] col,
-            int[] row)
+            int[] row,
+            int neededExtraDepth,
+            int extraDepth)
     {
 
         this.queryContext = queryContext;
@@ -60,17 +68,63 @@ public class PrefixActiveNode extends AbstractPrefixActiveNode {
         this.editDiscount = editDiscount;
         this.col = col;
         this.row = row;
+        this.neededExtraDepth = neededExtraDepth;
+        this.extraDepth = extraDepth;
     }
 
     @Override
     public void getNextChildNodes(final PriorityQueue<AbstractPrefixActiveNode> nodeQueue) {
         TrieNode nextChildNode = queryPosition.getSortedChild(nextChild);
         nextChild++;
-        String nextPrefix = currentPrefix + nextChildNode.label;
+
+        int[] nextCol;
+        int[] nextRow;
         int nextQueryStringPosition = queryStringPosition + 1;
-        int[] nextCol = new int[nextQueryStringPosition + 1];
-        int[] nextRow = new int[nextPrefix.length() + 1];
-        int nextEditDistance = calculateMinEditDistance(nextPrefix, nextCol, nextRow);
+        int nextEditDistance;
+        int nextExtraDepth = extraDepth;
+        int nextNeededExtraDepth = neededExtraDepth;
+        String nextPrefix = currentPrefix + nextChildNode.label;
+        if(extraDepth < neededExtraDepth){
+            nextRow = new int[row.length + 1];
+            System.arraycopy(row, 0, nextRow, 0, row.length);
+
+            nextCol = new int[col.length];
+            nextCol[0] = col[0] + 1;
+            char colChar = nextChildNode.label;
+            for (int i = 1; i < col.length; i++){
+                if(colChar == queryContext.QueryString.GetCharacter(i - 1)){
+                    nextCol[i] = col[i - 1];
+                }
+                else{
+                    nextCol[i] = Math.min(Math.min(col[i - 1], col[i]), nextCol[i - 1]) + 1;
+                }
+            }
+
+            nextEditDistance = nextCol[nextCol.length - 1];
+            nextRow[nextRow.length - 1] = nextEditDistance;
+            nextExtraDepth++;
+
+        }
+        else{
+            nextCol = new int[col.length + 1];
+            nextRow = new int[row.length + 1];
+            nextEditDistance = calculateMinEditDistance(nextPrefix, nextCol, nextRow);
+        }
+
+        int minColEditDistance = nextCol[0];
+        for(int i = 0; i < nextCol.length - 1; i++){
+            int distance = nextCol[i];
+            if(distance < minColEditDistance){
+                minColEditDistance = distance;
+            }
+        }
+
+        if(minColEditDistance < nextEditDistance){
+            nextEditDistance = minColEditDistance;
+            nextNeededExtraDepth++;
+            nextQueryStringPosition = queryStringPosition;
+        }
+
         if(nextEditDistance > queryContext.MaxEdits){
             return;
         }
@@ -92,7 +146,9 @@ public class PrefixActiveNode extends AbstractPrefixActiveNode {
                         queryClusterVector,
                         discount,
                         nextCol,
-                        nextRow);
+                        nextRow,
+                        nextNeededExtraDepth,
+                        nextExtraDepth);
                 nodeQueue.add(nextChildActiveNode);
             }
         }
@@ -106,16 +162,18 @@ public class PrefixActiveNode extends AbstractPrefixActiveNode {
                     clusteringDiscount,
                     nextEditDiscount,
                     nextCol,
-                    nextRow);
+                    nextRow,
+                    nextNeededExtraDepth,
+                    nextExtraDepth);
             nodeQueue.add(nextChildActiveNode);
         }
     }
 
     private int calculateMinEditDistance(String nextPrefix, int[] nextCol, int[] nextRow) {
-        nextRow[0] = queryStringPosition + 1;
-        nextCol[0] = queryStringPosition + 1;
+        nextRow[0] = row[0] + 1;
+        nextCol[0] = col[0] + 1;
 
-        char rowChar = queryContext.QueryString.GetCharacter(nextPrefix.length() - 1);
+        char rowChar = queryContext.QueryString.GetCharacter(queryStringPosition);
         processDistanceArray(rowChar, nextPrefix, row, nextRow);
 
         char colChar = nextPrefix.charAt(nextPrefix.length() - 1);
@@ -210,7 +268,6 @@ public class PrefixActiveNode extends AbstractPrefixActiveNode {
 
     @Override
     public boolean isExhausted(){
-        return currentPrefix.length() == queryContext.QueryString.GetLength()
-                || queryPosition instanceof LeafTrieNode;
+        return currentPrefix.length() == neededExtraDepth + queryContext.QueryString.GetLength() && neededExtraDepth == extraDepth;
     }
 }
