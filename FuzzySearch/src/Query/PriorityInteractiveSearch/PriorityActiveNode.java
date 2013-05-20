@@ -201,8 +201,6 @@ public class PriorityActiveNode {
 
     private boolean canDelete(){
         return EditOperation.isOperationAllowed(lastEditOperation, EditOperation.Delete);
-           // && (!(matchIndex == queryPosition.getNumberOfChildren() && queryPosition.getNumberOfChildren() == 1)
-           // || lastEditOperation == EditOperation.Insert);
     }
 
     private void addNextEditsToList(PriorityQueue<Link> linkQueue) {
@@ -216,7 +214,6 @@ public class PriorityActiveNode {
                         addDummyDeleteLink(linkQueue, bestEditNode);
                         editLinkDiscount = getTermCorrelationNormalizedDiscount(editLinkDiscount);
                         TrieNode[] termStack = getNextTermStack(bestEditNode);
-
                         ClusteringVector termClusterVector = ((LeafTrieNode)bestEditNode).getClusteringVector();
                         ClusteringVector queryClusterVector = termClusterVector.pairwiseMultiply(clusteringDiscount);
                         for (int i = 0; i < queryContext.getNumberOfClusters(); i++){

@@ -50,8 +50,8 @@ public class PerformanceTest {
         File priorityAverageResultFile = new File(resultPath + "plainPrefix" + fileEnding);
         BufferedWriter simpleWriter = new BufferedWriter(new FileWriter(simpleAverageResultFile));
         BufferedWriter priorityWriter = new BufferedWriter(new FileWriter(priorityAverageResultFile));
-        int editDistance = 2;
-        ArrayList<String> terms = getIndexTerms(10);
+        int editDistance = 1;
+        ArrayList<String> terms = getIndexTerms(1000);
 
         for(int j = 0; j < terms.size(); j++){
             searchConfig = searchConfig.updateConfig(index);

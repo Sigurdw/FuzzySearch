@@ -28,7 +28,7 @@ public class PrefixActiveNode extends AbstractPrefixActiveNode {
 
     private int nextChild = 0;
 
-    private int matchIndex = 0;
+    private int matchIndex = -1;
 
     public PrefixActiveNode(QueryContext queryContext, int clusterId){
         this(
@@ -76,6 +76,24 @@ public class PrefixActiveNode extends AbstractPrefixActiveNode {
     public void getNextChildNodes(final PriorityQueue<AbstractPrefixActiveNode> nodeQueue) {
         TrieNode nextChildNode = queryPosition.getSortedChild(nextChild);
         nextChild++;
+        /*if(matchIndex == -1){
+            matchIndex = queryPosition.getMatchChildIndex(queryContext.QueryString.GetLastCharacter());
+            if(matchIndex != queryPosition.getNumberOfChildren()){
+                nextChildNode = queryPosition.getSortedChild(matchIndex);
+            }
+            else{
+                nextChildNode = queryPosition.getSortedChild(nextChild);
+                nextChild++;
+            }
+        }
+        else{
+            nextChildNode = queryPosition.getSortedChild(nextChild);
+            nextChild++;
+        }
+
+        if(nextChild == matchIndex){
+            nextChild++;
+        }*/
 
         int[] nextCol;
         int[] nextRow;

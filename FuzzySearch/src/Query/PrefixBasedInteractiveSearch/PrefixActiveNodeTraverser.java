@@ -23,7 +23,6 @@ public class PrefixActiveNodeTraverser implements IndexTraverser {
     public PrefixActiveNodeTraverser(SearchConfig searchConfig){
         queryContext = new QueryContext(searchConfig);
         for(int i = 0; i < queryContext.getNumberOfClusters(); i++){
-
             exhaustedNodes.add(new PrefixActiveNode(queryContext, i));
         }
     }
