@@ -3,55 +3,81 @@ package Query.SimpleInteractiveSearch;
 import Config.SearchConfig;
 import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
+import Query.PriorityInteractiveSearch.SuggestionTraverser;
 import Query.QueryContext;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class SimpleIndexTraverser implements IndexTraverser {
     private final QueryContext queryContext;
-    private ArrayList<ActiveNode> activeNodes = new ArrayList<ActiveNode>();
+    private final ArrayList<ISuggestionWrapper> suggestions = new ArrayList<ISuggestionWrapper>();
 
+    private ArrayList<ActiveNode> activeNodes = new ArrayList<ActiveNode>();
+    private int suggestionPointer = 0;
 
     public SimpleIndexTraverser(SearchConfig searchConfig){
         queryContext = new QueryContext(searchConfig);
         for(int i = 0; i < queryContext.getNumberOfClusters(); i++){
-            activeNodes.add(new ActiveNode());
+            activeNodes.add(new ActiveNode(queryContext, i));
         }
     }
 
     @Override
     public void updateQueryString(String queryString) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        queryContext.QueryString.SetQueryString(queryString);
+        suggestions.clear();
+        suggestionPointer = 0;
     }
 
     @Override
     public float peekNextNodeRank() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        if(activeNodes.size() > 0){
+            return 0;
+        }
+
+        return -1;
     }
 
     @Override
     public void exploreNextNode() {
+        exploreAllNodes();
+        extractSuggestions();
+    }
+
+    private void exploreAllNodes() {
         ArrayList<ActiveNode> nextActiveNodes = new ArrayList<ActiveNode>();
         for(ActiveNode activeNode : activeNodes){
             activeNode.addCharacter(nextActiveNodes);
         }
 
-        ArrayList<ISuggestionWrapper> suggestions = new ArrayList<ISuggestionWrapper>();
-        for(ActiveNode activeNode : nextActiveNodes){
-            activeNode.getSuggestions(suggestions);
+        activeNodes = nextActiveNodes;
+    }
+
+    private void extractSuggestions() {
+        for(ActiveNode activeNode : activeNodes){
+            SuggestionTraverser suggestionTraverser = activeNode.getSuggestionTraverser();
+            while (suggestionTraverser.getNextRank() != -1){
+                suggestions.add(suggestionTraverser.getNextSuggestion());
+            }
         }
 
-        activeNodes = nextActiveNodes;
-
+        Collections.sort(suggestions);
     }
 
     @Override
     public float peekNextAvailableSuggestionRank() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        if(suggestions.size() == suggestionPointer){
+            return -2;
+        }
+
+        return suggestions.get(suggestionPointer).getRank();
     }
 
     @Override
     public ISuggestionWrapper getNextAvailableSuggestion() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        ISuggestionWrapper suggestion =  suggestions.get(suggestionPointer);
+        suggestionPointer++;
+        return suggestion;
     }
 }

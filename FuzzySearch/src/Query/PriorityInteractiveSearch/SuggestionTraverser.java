@@ -2,7 +2,6 @@ package Query.PriorityInteractiveSearch;
 
 import DataStructure.TrieNode;
 import Query.ISuggestionWrapper;
-
 import java.util.PriorityQueue;
 
 public final class SuggestionTraverser implements Comparable<SuggestionTraverser>{
