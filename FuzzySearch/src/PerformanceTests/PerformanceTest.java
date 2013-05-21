@@ -9,6 +9,7 @@ import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
 import Query.PrefixBasedInteractiveSearch.PrefixActiveNodeTraverser;
 import Query.PriorityInteractiveSearch.PriorityTrieTraverser;
+import Query.SimpleInteractiveSearch.SimpleIndexTraverser;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class PerformanceTest {
         BufferedWriter simpleWriter = new BufferedWriter(new FileWriter(simpleAverageResultFile));
         BufferedWriter priorityWriter = new BufferedWriter(new FileWriter(priorityAverageResultFile));
         int editDistance = 1;
-        ArrayList<String> terms = getIndexTerms(1000);
+        ArrayList<String> terms = getIndexTerms(20);
 
         for(int j = 0; j < terms.size(); j++){
             searchConfig = searchConfig.updateConfig(index);
@@ -59,7 +60,7 @@ public class PerformanceTest {
             String modifiedTerm = TermModifier.modifyTerm(editDistance, term);
             query = new PriorityTrieTraverser(searchConfig);
             long simpleTime = doInteractiveSearch(modifiedTerm);
-            query = new PrefixActiveNodeTraverser(searchConfig);
+            query = new SimpleIndexTraverser(searchConfig);
             long priorityTime = doInteractiveSearch(modifiedTerm);
 
             String simpleRecord = "" + simpleTime;

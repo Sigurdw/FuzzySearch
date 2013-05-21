@@ -15,6 +15,8 @@ public class SimpleIndexTraverser implements IndexTraverser {
 
     private ArrayList<ActiveNode> activeNodes = new ArrayList<ActiveNode>();
     private int suggestionPointer = 0;
+    private boolean isExhausted = true;
+    private int requiredIterations = 1;
 
     public SimpleIndexTraverser(SearchConfig searchConfig){
         queryContext = new QueryContext(searchConfig);
@@ -25,14 +27,17 @@ public class SimpleIndexTraverser implements IndexTraverser {
 
     @Override
     public void updateQueryString(String queryString) {
+        requiredIterations = queryString.length() - queryContext.QueryString.GetLength();
         queryContext.QueryString.SetQueryString(queryString);
         suggestions.clear();
         suggestionPointer = 0;
+        isExhausted = false;
+        queryContext.SuggestionNodeRegister.clearRegister();
     }
 
     @Override
     public float peekNextNodeRank() {
-        if(activeNodes.size() > 0){
+        if(activeNodes.size() > 0 && !isExhausted){
             return 0;
         }
 
@@ -41,7 +46,10 @@ public class SimpleIndexTraverser implements IndexTraverser {
 
     @Override
     public void exploreNextNode() {
-        exploreAllNodes();
+        for(int i = 0; i < requiredIterations; i++){
+            exploreAllNodes();
+        }
+
         extractSuggestions();
     }
 
@@ -52,12 +60,13 @@ public class SimpleIndexTraverser implements IndexTraverser {
         }
 
         activeNodes = nextActiveNodes;
+        isExhausted = true;
     }
 
     private void extractSuggestions() {
         for(ActiveNode activeNode : activeNodes){
             SuggestionTraverser suggestionTraverser = activeNode.getSuggestionTraverser();
-            while (suggestionTraverser.getNextRank() != -1){
+            while (suggestionTraverser.getNextRank() != -2){
                 suggestions.add(suggestionTraverser.getNextSuggestion());
             }
         }

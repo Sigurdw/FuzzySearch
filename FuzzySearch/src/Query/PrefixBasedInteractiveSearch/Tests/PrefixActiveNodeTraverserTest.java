@@ -8,6 +8,7 @@ import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
 import Query.PrefixBasedInteractiveSearch.PrefixActiveNodeTraverser;
 import Query.PriorityInteractiveSearch.PriorityTrieTraverser;
+import Query.SimpleInteractiveSearch.SimpleIndexTraverser;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -92,18 +93,16 @@ public class PrefixActiveNodeTraverserTest {
         prefixActiveNodeTraverser.updateQueryString(queryString);
         ArrayList<ISuggestionWrapper> suggestions = getSuggestions(prefixActiveNodeTraverser, 3);
         System.out.println(suggestions);
-        /*for(int i = 1; i <= queryString.length(); i++){
-            String currentQuery = queryString.substring(0, i);
-            System.out.println(currentQuery);
-            prefixActiveNodeTraverser.updateQueryString(currentQuery);
-            ArrayList<ISuggestionWrapper> suggestions = getSuggestions(prefixActiveNodeTraverser, 3);
-            System.out.println(suggestions);
-            //Assert.assertEquals(1, suggestions.size());
-        }*/
+
 
         PriorityTrieTraverser priorityTrieTraverser = new PriorityTrieTraverser(searchConfig);
         priorityTrieTraverser.updateQueryString(queryString);
         suggestions = getSuggestions(priorityTrieTraverser, 3);
+        System.out.println(suggestions);
+
+        SimpleIndexTraverser simpleIndexTraverser = new SimpleIndexTraverser(searchConfig);
+        simpleIndexTraverser.updateQueryString(queryString);
+        suggestions = getSuggestions(simpleIndexTraverser, 3);
         System.out.println(suggestions);
     }
 
@@ -141,6 +140,22 @@ public class PrefixActiveNodeTraverserTest {
         ArrayList<ISuggestionWrapper> suggestions = getSuggestions(prefixActiveNodeTraverser, 5);
         System.out.println(suggestions);
         Assert.assertEquals(3, suggestions.size());
+    }
+
+    @Test
+    public void tooMuchEditDistanceOnSimpleMultiTerm(){
+        addTerm("mary", 1.0f);
+        addTerm("le", 1.0f);
+        SimpleIndexTraverser simpleIndexTraverser = new SimpleIndexTraverser(searchConfig);
+        String queryString = "mary'";
+        for(int i = 1; i <= queryString.length(); i++){
+            String currentQuery = queryString.substring(0, i);
+            System.out.println(currentQuery);
+            simpleIndexTraverser.updateQueryString(currentQuery);
+            ArrayList<ISuggestionWrapper> suggestions = getSuggestions(simpleIndexTraverser, 3);
+            System.out.println(suggestions);
+            //Assert.assertEquals(1, suggestions.size());
+        }
     }
 
     private boolean hasAvailableSuggestions(IndexTraverser indexTraverser){

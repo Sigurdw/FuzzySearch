@@ -123,9 +123,9 @@ public class ActiveNode implements Comparable<ActiveNode> {
                     ActiveNode indexClusterActiveNode = new ActiveNode(
                             queryContext,
                             indexClusterRoot,
-                            previousEdits,
-                            EditOperation.Match,
-                            queryStringIndex + 1,
+                            previousEdits + 1,
+                            EditOperation.Insert,
+                            queryStringIndex,
                             false,
                             termStack,
                             discount,
