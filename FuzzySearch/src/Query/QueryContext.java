@@ -19,6 +19,8 @@ public final class QueryContext {
 
     public final float EditDiscount;
 
+    public final boolean MultiTerm;
+
     public QueryContext(SearchConfig searchConfig) {
         Index = searchConfig.getCurrentIndex();
         QueryString = new QueryString();
@@ -26,6 +28,7 @@ public final class QueryContext {
         MaxEdits = searchConfig.getAllowedEdits();
         NeededSuggestions = searchConfig.getNeededSuggestion();
         EditDiscount = searchConfig.getEditDiscount();
+        MultiTerm = searchConfig.isMultiTerm();
     }
 
     public float getMaxRank(){

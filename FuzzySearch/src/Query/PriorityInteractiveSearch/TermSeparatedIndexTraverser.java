@@ -16,7 +16,7 @@ public class TermSeparatedIndexTraverser implements IndexTraverser {
     private int currentTermStart = 0;
 
     public TermSeparatedIndexTraverser(SearchConfig searchConfig){
-        this.searchConfig = searchConfig;
+        this.searchConfig = searchConfig.updateMultiTerm(false);
         termTraversers = new IndexTraverser[0];
         addNewTerm();
     }

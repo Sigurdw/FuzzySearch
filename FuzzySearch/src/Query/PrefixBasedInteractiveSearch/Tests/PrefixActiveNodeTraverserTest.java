@@ -8,6 +8,7 @@ import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
 import Query.PrefixBasedInteractiveSearch.PrefixActiveNodeTraverser;
 import Query.PriorityInteractiveSearch.PriorityTrieTraverser;
+import Query.PriorityInteractiveSearch.TermSeparatedIndexTraverser;
 import Query.SimpleInteractiveSearch.SimpleIndexTraverser;
 import junit.framework.Assert;
 import org.junit.Before;
@@ -147,12 +148,22 @@ public class PrefixActiveNodeTraverserTest {
         addTerm("mary", 1.0f);
         addTerm("le", 1.0f);
         SimpleIndexTraverser simpleIndexTraverser = new SimpleIndexTraverser(searchConfig);
-        String queryString = "mary'";
+        String queryString = "mary*";
         for(int i = 1; i <= queryString.length(); i++){
             String currentQuery = queryString.substring(0, i);
             System.out.println(currentQuery);
             simpleIndexTraverser.updateQueryString(currentQuery);
             ArrayList<ISuggestionWrapper> suggestions = getSuggestions(simpleIndexTraverser, 3);
+            System.out.println(suggestions);
+            //Assert.assertEquals(1, suggestions.size());
+        }
+
+        TermSeparatedIndexTraverser termSeparatedIndexTraverser = new TermSeparatedIndexTraverser(searchConfig);
+        for(int i = 1; i <= queryString.length(); i++){
+            String currentQuery = queryString.substring(0, i);
+            System.out.println(currentQuery);
+            termSeparatedIndexTraverser.updateQueryString(currentQuery);
+            ArrayList<ISuggestionWrapper> suggestions = getSuggestions(termSeparatedIndexTraverser, 3);
             System.out.println(suggestions);
             //Assert.assertEquals(1, suggestions.size());
         }

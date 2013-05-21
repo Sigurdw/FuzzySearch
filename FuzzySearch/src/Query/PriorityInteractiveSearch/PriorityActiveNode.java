@@ -211,26 +211,28 @@ public class PriorityActiveNode {
                     float editLinkDiscount = editDiscount * queryContext.EditDiscount;
 
                     if(bestEditNode instanceof LeafTrieNode){
-                        addDummyDeleteLink(linkQueue, bestEditNode);
-                        editLinkDiscount = getTermCorrelationNormalizedDiscount(editLinkDiscount);
-                        TrieNode[] termStack = getNextTermStack(bestEditNode);
-                        ClusteringVector termClusterVector = ((LeafTrieNode)bestEditNode).getClusteringVector();
-                        ClusteringVector queryClusterVector = termClusterVector.pairwiseMultiply(clusteringDiscount);
-                        for (int i = 0; i < queryContext.getNumberOfClusters(); i++){
-                            TrieNode indexClusterRoot = queryContext.getIndexCluster(i);
-                            float discount = editLinkDiscount * queryClusterVector.Vector[i];
-                            PriorityActiveNode indexClusterActiveNode = new PriorityActiveNode(
-                                    indexClusterRoot,
-                                    termStack,
-                                    queryContext,
-                                    queryClusterVector,
-                                    previousEdits + 1,
-                                    EditOperation.Insert,
-                                    queryStringIndex,
-                                    discount,
-                                    false,
-                                    depth + 1);
-                            linkQueue.add(new EditLink(this, indexClusterActiveNode));
+                        if(queryContext.MultiTerm){
+                            addDummyDeleteLink(linkQueue, bestEditNode);
+                            editLinkDiscount = getTermCorrelationNormalizedDiscount(editLinkDiscount);
+                            TrieNode[] termStack = getNextTermStack(bestEditNode);
+                            ClusteringVector termClusterVector = ((LeafTrieNode)bestEditNode).getClusteringVector();
+                            ClusteringVector queryClusterVector = termClusterVector.pairwiseMultiply(clusteringDiscount);
+                            for (int i = 0; i < queryContext.getNumberOfClusters(); i++){
+                                TrieNode indexClusterRoot = queryContext.getIndexCluster(i);
+                                float discount = editLinkDiscount * queryClusterVector.Vector[i];
+                                PriorityActiveNode indexClusterActiveNode = new PriorityActiveNode(
+                                        indexClusterRoot,
+                                        termStack,
+                                        queryContext,
+                                        queryClusterVector,
+                                        previousEdits + 1,
+                                        EditOperation.Insert,
+                                        queryStringIndex,
+                                        discount,
+                                        false,
+                                        depth + 1);
+                                linkQueue.add(new EditLink(this, indexClusterActiveNode));
+                            }
                         }
                     }
                     else{
