@@ -9,6 +9,7 @@ import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
 import Query.PrefixBasedInteractiveSearch.PrefixActiveNodeTraverser;
 import Query.PriorityInteractiveSearch.PriorityTrieTraverser;
+import Query.PriorityInteractiveSearch.TermSeparatedIndexTraverser;
 import Query.SimpleInteractiveSearch.SimpleIndexTraverser;
 
 import java.io.*;
@@ -32,8 +33,6 @@ public class PerformanceTest {
             e.printStackTrace();
             System.exit(1);
         }
-        //Indexer priorityIndexer = new Indexer(numberOfSuggestionsRequired, true);
-        //priorityIndex =
     }
 
     public void editDistanceScalingTest(){
@@ -60,7 +59,7 @@ public class PerformanceTest {
             String modifiedTerm = TermModifier.modifyTerm(editDistance, term);
             query = new PriorityTrieTraverser(searchConfig);
             long simpleTime = doInteractiveSearch(modifiedTerm);
-            query = new SimpleIndexTraverser(searchConfig);
+            query = new TermSeparatedIndexTraverser(searchConfig);
             long priorityTime = doInteractiveSearch(modifiedTerm);
 
             String simpleRecord = "" + simpleTime;

@@ -1,6 +1,7 @@
 package Query;
 
 import Clustering.TermDocumentVector;
+import DataStructure.LeafTrieNode;
 import DataStructure.TrieNode;
 
 /**
@@ -10,8 +11,8 @@ import DataStructure.TrieNode;
  */
 public final class TermCorrelation {
     public static float computeCorrelation(TrieNode[] termStack, TrieNode term){
-
         for(TrieNode previousTerm : termStack){
+            LeafTrieNode previousTermLeaf = (LeafTrieNode)previousTerm;
 
         }
 

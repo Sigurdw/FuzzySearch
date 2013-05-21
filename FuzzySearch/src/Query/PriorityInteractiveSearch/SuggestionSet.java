@@ -176,7 +176,6 @@ public final class SuggestionSet implements Comparable<SuggestionSet>
             float difference = Float.MAX_VALUE;
             if(nodeRank != -1){
                 difference = suggestionSet[i].getRank() - nodeRank;
-                rankEstimate += suggestionSet[i].getRank();
             }
 
             if(difference < minDifference){
