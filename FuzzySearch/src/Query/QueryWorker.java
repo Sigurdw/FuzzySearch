@@ -21,8 +21,6 @@ import Config.SearchConfig;
 import Interface.IUpdateInterfaceControl;
 import Interface.WorkingStatus;
 import Query.PrefixBasedInteractiveSearch.PrefixActiveNodeTraverser;
-import Query.PriorityInteractiveSearch.PriorityTrieTraverser;
-import Query.PriorityInteractiveSearch.TermSeparatedIndexTraverser;
 
 public class QueryWorker implements Runnable{
     private final Thread workerThread;

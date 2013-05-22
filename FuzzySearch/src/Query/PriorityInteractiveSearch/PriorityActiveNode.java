@@ -24,6 +24,8 @@ import DocumentModel.EditOperation;
 import Query.PriorityInteractiveSearch.Links.EditLink;
 import Query.PriorityInteractiveSearch.Links.Link;
 import Query.QueryContext;
+import Query.SuggestionTraversers.SuggestionTraverser;
+
 import java.util.PriorityQueue;
 
 public class PriorityActiveNode {

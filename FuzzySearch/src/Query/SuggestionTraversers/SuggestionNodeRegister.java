@@ -1,4 +1,4 @@
-package Query.PriorityInteractiveSearch;
+package Query.SuggestionTraversers;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -18,8 +18,6 @@ package Query.PriorityInteractiveSearch;
  */
 
 import DataStructure.TrieNode;
-import Query.PriorityInteractiveSearch.SuggestionNode;
-import Query.PriorityInteractiveSearch.TermStack;
 
 import java.util.HashMap;
 

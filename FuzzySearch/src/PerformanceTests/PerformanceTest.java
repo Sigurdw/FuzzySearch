@@ -7,10 +7,8 @@ import Interface.IUpdateInterfaceControl;
 import Interface.WorkingStatus;
 import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
-import Query.PrefixBasedInteractiveSearch.PrefixActiveNodeTraverser;
 import Query.PriorityInteractiveSearch.PriorityTrieTraverser;
-import Query.PriorityInteractiveSearch.TermSeparatedIndexTraverser;
-import Query.SimpleInteractiveSearch.SimpleIndexTraverser;
+import Query.TermSeparatedInteractiveSearch.TermSeparatedIndexTraverser;
 
 import java.io.*;
 import java.util.ArrayList;

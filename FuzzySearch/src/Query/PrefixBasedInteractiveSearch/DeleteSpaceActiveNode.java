@@ -2,6 +2,7 @@ package Query.PrefixBasedInteractiveSearch;
 
 import DataStructure.TrieNode;
 import Query.QueryContext;
+import Query.SuggestionTraversers.PrefixSuggestionTraverser;
 
 import java.util.PriorityQueue;
 

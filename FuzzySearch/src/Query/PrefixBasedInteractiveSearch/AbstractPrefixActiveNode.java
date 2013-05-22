@@ -1,5 +1,7 @@
 package Query.PrefixBasedInteractiveSearch;
 
+import Query.SuggestionTraversers.PrefixSuggestionTraverser;
+
 import java.util.PriorityQueue;
 
 /**

@@ -5,7 +5,7 @@ import Clustering.TermDocumentVector;
 import Config.SearchConfig;
 import DataStructure.Index;
 import Query.ISuggestionWrapper;
-import Query.PriorityInteractiveSearch.TermSeparatedIndexTraverser;
+import Query.TermSeparatedInteractiveSearch.TermSeparatedIndexTraverser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

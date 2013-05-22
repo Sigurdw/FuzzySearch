@@ -5,6 +5,7 @@ import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
 import Query.PriorityInteractiveSearch.Links.Link;
 import Query.QueryContext;
+import Query.SuggestionTraversers.SuggestionTraverser;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;

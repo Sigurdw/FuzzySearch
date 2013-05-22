@@ -1,6 +1,7 @@
-package Query.PriorityInteractiveSearch;
+package Query.SuggestionTraversers;
 
 import DataStructure.TrieNode;
+import Query.SuggestionTraversers.SuggestionNode;
 import Query.TermCorrelation;
 
 /**
@@ -8,7 +9,7 @@ import Query.TermCorrelation;
  * Date: 24.04.13
  * Time: 14:48
  */
-public class CorrelationAwareSuggestionNode extends SuggestionNode{
+public class CorrelationAwareSuggestionNode extends SuggestionNode {
     final float correlationDiscount;
 
     public CorrelationAwareSuggestionNode(TrieNode[] termStack, TrieNode suggestionPosition) {

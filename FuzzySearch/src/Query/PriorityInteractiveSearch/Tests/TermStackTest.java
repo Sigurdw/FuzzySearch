@@ -19,7 +19,7 @@ package Query.PriorityInteractiveSearch.Tests;
 
 import DataStructure.InternalTrieNode;
 import DataStructure.TrieNode;
-import Query.PriorityInteractiveSearch.TermStack;
+import Query.SuggestionTraversers.TermStack;
 import junit.framework.Assert;
 import org.junit.Test;
 

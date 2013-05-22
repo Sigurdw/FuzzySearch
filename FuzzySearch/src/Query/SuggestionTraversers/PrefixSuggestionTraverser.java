@@ -1,8 +1,7 @@
-package Query.PrefixBasedInteractiveSearch;
+package Query.SuggestionTraversers;
 
 import DataStructure.TrieNode;
 import Query.ISuggestionWrapper;
-import Query.PriorityInteractiveSearch.SuggestionNode;
 
 import java.util.PriorityQueue;
 

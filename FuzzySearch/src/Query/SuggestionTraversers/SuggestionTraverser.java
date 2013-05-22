@@ -1,4 +1,4 @@
-package Query.PriorityInteractiveSearch;
+package Query.SuggestionTraversers;
 
 import DataStructure.TrieNode;
 import Query.ISuggestionWrapper;

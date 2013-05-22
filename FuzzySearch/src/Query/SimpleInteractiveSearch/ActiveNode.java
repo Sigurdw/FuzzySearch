@@ -4,7 +4,7 @@ import Clustering.ClusteringVector;
 import DataStructure.LeafTrieNode;
 import DataStructure.TrieNode;
 import DocumentModel.EditOperation;
-import Query.PriorityInteractiveSearch.SuggestionTraverser;
+import Query.SuggestionTraversers.SuggestionTraverser;
 import Query.QueryContext;
 
 import java.util.*;

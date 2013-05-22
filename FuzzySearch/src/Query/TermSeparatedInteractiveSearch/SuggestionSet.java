@@ -1,4 +1,4 @@
-package Query.PriorityInteractiveSearch;
+package Query.TermSeparatedInteractiveSearch;
 
 import Query.ISuggestionWrapper;
 import Query.IndexTraverser;

@@ -3,7 +3,7 @@ package Query.SimpleInteractiveSearch;
 import Config.SearchConfig;
 import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
-import Query.PriorityInteractiveSearch.SuggestionTraverser;
+import Query.SuggestionTraversers.SuggestionTraverser;
 import Query.QueryContext;
 
 import java.util.ArrayList;

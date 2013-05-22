@@ -4,6 +4,7 @@ import Config.SearchConfig;
 import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
 import Query.QueryContext;
+import Query.SuggestionTraversers.PrefixSuggestionTraverser;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;

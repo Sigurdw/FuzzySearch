@@ -8,7 +8,7 @@ import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
 import Query.PrefixBasedInteractiveSearch.PrefixActiveNodeTraverser;
 import Query.PriorityInteractiveSearch.PriorityTrieTraverser;
-import Query.PriorityInteractiveSearch.TermSeparatedIndexTraverser;
+import Query.TermSeparatedInteractiveSearch.TermSeparatedIndexTraverser;
 import Query.SimpleInteractiveSearch.SimpleIndexTraverser;
 import junit.framework.Assert;
 import org.junit.Before;

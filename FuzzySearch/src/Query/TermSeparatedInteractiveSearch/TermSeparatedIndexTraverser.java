@@ -1,8 +1,9 @@
-package Query.PriorityInteractiveSearch;
+package Query.TermSeparatedInteractiveSearch;
 
 import Config.SearchConfig;
 import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
+import Query.PriorityInteractiveSearch.PriorityTrieTraverser;
 
 import java.util.PriorityQueue;
 

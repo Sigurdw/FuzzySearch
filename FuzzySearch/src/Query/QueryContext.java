@@ -3,7 +3,7 @@ package Query;
 import Config.SearchConfig;
 import DataStructure.QueryString;
 import DataStructure.TrieNode;
-import Query.PriorityInteractiveSearch.SuggestionNodeRegister;
+import Query.SuggestionTraversers.SuggestionNodeRegister;
 import DataStructure.Index;
 
 public final class QueryContext {
@@ -11,7 +11,7 @@ public final class QueryContext {
 
     public final QueryString QueryString;
 
-    public final Query.PriorityInteractiveSearch.SuggestionNodeRegister SuggestionNodeRegister;
+    public final Query.SuggestionTraversers.SuggestionNodeRegister SuggestionNodeRegister;
 
     public final int MaxEdits;
 
