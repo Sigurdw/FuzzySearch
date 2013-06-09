@@ -7,8 +7,9 @@ import Interface.IUpdateInterfaceControl;
 import Interface.WorkingStatus;
 import Query.ISuggestionWrapper;
 import Query.IndexTraverser;
+import Query.PrefixBasedInteractiveSearch.PrefixActiveNodeTraverser;
 import Query.PriorityInteractiveSearch.PriorityTrieTraverser;
-import Query.TermSeparatedInteractiveSearch.TermSeparatedIndexTraverser;
+import Query.SimpleInteractiveSearch.SimpleIndexTraverser;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class PerformanceTest {
     public PerformanceTest(){
         try {
             index = Index.read(new DataInputStream(new FileInputStream(
-                    "C:/Index/clusteredIndex.dat")),
+                    "D:/TermIndex/singleClusterIndex.dat")),
                     new DummyProgressListener());
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,39 +45,48 @@ public class PerformanceTest {
     }
 
     public void plainSearchTest() throws IOException{
-        File simpleAverageResultFile = new File(resultPath + "plainPriority" + fileEnding);
-        File priorityAverageResultFile = new File(resultPath + "plainPrefix" + fileEnding);
+        File simpleAverageResultFile = new File(resultPath + "plainSimple" + fileEnding);
+        File priorityAverageResultFile = new File(resultPath + "plainPriority" + fileEnding);
+        File prefixAverageResultFile = new File(resultPath + "plainPrefix" + fileEnding);
         BufferedWriter simpleWriter = new BufferedWriter(new FileWriter(simpleAverageResultFile));
         BufferedWriter priorityWriter = new BufferedWriter(new FileWriter(priorityAverageResultFile));
-        int editDistance = 1;
-        ArrayList<String> terms = getIndexTerms(20);
+        BufferedWriter prefixWriter = new BufferedWriter(new FileWriter(prefixAverageResultFile));
+        ArrayList<String> terms = getIndexTerms(10);
+        searchConfig = searchConfig.updateConfig(index);
+        searchConfig = searchConfig.updateNeededSuggestionConfig(20);
 
         for(int j = 0; j < terms.size(); j++){
-            searchConfig = searchConfig.updateConfig(index);
+            System.out.println("Term test " + j);
             String term = terms.get(j);
-            String modifiedTerm = TermModifier.modifyTerm(editDistance, term);
-            query = new PriorityTrieTraverser(searchConfig);
+            String modifiedTerm = TermModifier.modifyTerm(searchConfig.getAllowedEdits(), term);
+            query = new SimpleIndexTraverser(searchConfig);
             long simpleTime = doInteractiveSearch(modifiedTerm);
-            query = new TermSeparatedIndexTraverser(searchConfig);
+            query = new PriorityTrieTraverser(searchConfig);
             long priorityTime = doInteractiveSearch(modifiedTerm);
-
+            query = new PrefixActiveNodeTraverser(searchConfig);
+            long prefixTime = doInteractiveSearch(modifiedTerm);
             String simpleRecord = "" + simpleTime;
             String priorityRecord = "" + priorityTime;
+            String prefixRecord = "" + prefixTime;
             if(j == terms.size() - 1){
                 simpleRecord += "\n";
                 priorityRecord += "\n";
+                prefixRecord += "\n";
             }
             else{
                 simpleRecord += "; ";
                 priorityRecord += "; ";
+                prefixRecord += "; ";
             }
 
             simpleWriter.write(simpleRecord);
             priorityWriter.write(priorityRecord);
+            prefixWriter.write(prefixRecord);
         }
 
-        simpleWriter.flush();
-        priorityWriter.flush();
+        simpleWriter.close();
+        priorityWriter.close();
+        prefixWriter.close();
     }
 
     public void randomCharacterTest(){
@@ -89,48 +99,51 @@ public class PerformanceTest {
         doEditDistanceScaleTest(numberOfTerms, terms, "scramble");
     }
 
-    public void kScalingTest(){
-        /*int editDistance = 2;
-        ArrayList<String> terms = index.getRandomIndexTerms(1000);
-        try {
-            //File simpleAverageResultFile = new File(resultPath + "simpleKScaling1" + fileEnding);
-            File priorityAverageResultFile = new File(resultPath + "priorityKScaling2" + fileEnding);
-            //BufferedWriter simpleWriter = new BufferedWriter(new FileWriter(simpleAverageResultFile));
-            BufferedWriter priorityWriter = new BufferedWriter(new FileWriter(priorityAverageResultFile));
-            for(int k = 1; k <= numberOfSuggestionsRequired; k++){
-                System.out.println("kScaling: " + k);
-                for(int j = 0; j < terms.size(); j++){
-                    String term = terms.get(j);
-                    String modifiedTerm = TermModifier.modifyTerm(editDistance, term);
-                    //searchHandler = new InteractiveSearchHandler(index, k, false, editDistance);
-                    //long simpleTime = doInteractiveSearch(modifiedTerm);
-                    searchHandler = new InteractiveSearchHandler(index, k, true, editDistance, interfaceControl);
-                    long priorityTime = doInteractiveSearch(modifiedTerm);
+    public void kScalingTest() throws IOException{
+        ArrayList<String> terms = index.getRandomIndexTerms(10);
+        File simpleAverageResultFile = new File(resultPath + "simpleKScaling" + fileEnding);
+        File priorityAverageResultFile = new File(resultPath + "priorityKScaling" + fileEnding);
+        File prefixAverageResultFile = new File(resultPath + "prefixKScaling" + fileEnding);
+        BufferedWriter simpleWriter = new BufferedWriter(new FileWriter(simpleAverageResultFile));
+        BufferedWriter priorityWriter = new BufferedWriter(new FileWriter(priorityAverageResultFile));
+        BufferedWriter prefixWriter = new BufferedWriter(new FileWriter(prefixAverageResultFile));
+        searchConfig = searchConfig.updateConfig(index);
 
-                    //String simpleRecord = "" + simpleTime;
-                    String priorityRecord = "" + priorityTime;
-                    if(j == terms.size() - 1){
-                     //   simpleRecord += "\n";
-                        priorityRecord += "\n";
-                    }
-                    else{
-                    //    simpleRecord += "; ";
-                        priorityRecord += "; ";
-                    }
+        for(int k = 1; k <= 20; k++){
+            System.out.println("kScaling: " + k);
+            searchConfig = searchConfig.updateNeededSuggestionConfig(k);
+            for(int j = 0; j < terms.size(); j++){
+                String term = terms.get(j);
+                String modifiedTerm = TermModifier.modifyTerm(searchConfig.getAllowedEdits(), term);
+                //query = new SimpleIndexTraverser(searchConfig);
+                //long simpleTime = doInteractiveSearch(modifiedTerm);
+                query = new PriorityTrieTraverser(searchConfig);
+                long priorityTime = doInteractiveSearch(modifiedTerm);
+                query = new PrefixActiveNodeTraverser(searchConfig);
+                long prefixTime = doInteractiveSearch(modifiedTerm);
 
+                //String simpleRecord = "" + simpleTime;
+                String priorityRecord = "" + priorityTime;
+                String prefixRecord = "" + prefixTime;
+                if(j == terms.size() - 1){
+                    //simpleRecord += "\n";
+                    priorityRecord += "\n";
+                    prefixRecord += "\n";
+                }
+                else{
+                    //simpleRecord += "; ";
+                    priorityRecord += "; ";
+                    prefixRecord += "; ";
+                }
                     //simpleWriter.write(simpleRecord);
                     priorityWriter.write(priorityRecord);
+                    prefixWriter.write(prefixRecord);
                 }
             }
 
-            //simpleWriter.close();
+            simpleWriter.close();
             priorityWriter.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-        */
+            prefixWriter.close();
     }
 
     private void doEditDistanceScaleTest(int[] numberOfTerms, ArrayList<String> terms, String type) {
@@ -179,54 +192,61 @@ public class PerformanceTest {
         }*/
     }
 
-    public void individualCharacterIterationTest(){
-        /*System.out.println("Individual character test");
-        File simpleAverageResultFile = new File(resultPath + "simpleAverageIndividualCharacterIterationTest" + System.currentTimeMillis() + fileEnding);
-        File priorityAverageResultFile = new File(resultPath + "priorityAverageIndividualCharacterIterationTest" + System.currentTimeMillis() + fileEnding);
+    public void individualCharacterIterationTest() throws IOException{
+        System.out.println("Individual character test");
+        File simpleAverageResultFile = new File(resultPath + "simpleAverageIndividualCharacterIterationTest" + fileEnding);
+        File priorityAverageResultFile = new File(resultPath + "priorityAverageIndividualCharacterIterationTest" + fileEnding);
+        File prefixAverageResultFile = new File(resultPath + "prefixAverageIndividualCharacterIterationTest" + fileEnding);
+        BufferedWriter simpleWriter = new BufferedWriter(new FileWriter(simpleAverageResultFile));
+        BufferedWriter priorityWriter = new BufferedWriter(new FileWriter(priorityAverageResultFile));
+        BufferedWriter prefixWriter = new BufferedWriter(new FileWriter(prefixAverageResultFile));
         int numberOfIterations = 7;
         int numberOfQueries = 1000;
-        int numberOfEdits = 2;
 
-        try {
-            BufferedWriter simpleWriter = new BufferedWriter(new FileWriter(simpleAverageResultFile));
-            BufferedWriter priorityWriter = new BufferedWriter(new FileWriter(priorityAverageResultFile));
+        ArrayList<ISuggestionWrapper> terms = index.getAllTerms();
+        searchConfig = searchConfig.updateConfig(index);
+        searchConfig = searchConfig.updateNeededSuggestionConfig(10);
+        int numberOfReceivedIndexTerms = 0;
+        while(numberOfReceivedIndexTerms < numberOfQueries){
+            String candidateTerm = chooseRandomTerm(terms);
+            String modifiedTerm = TermModifier.modifyTerm(searchConfig.getAllowedEdits(), candidateTerm);
+            if(modifiedTerm.length() >= numberOfIterations){
+                numberOfReceivedIndexTerms++;
 
-            int numberOfRecivedIndexTerms = 0;
-            while(numberOfRecivedIndexTerms < numberOfQueries){
-                String candidateTerm = index.getRandomIndexTerm();
-                String modifiedTerm = TermModifier.modifyTerm(numberOfEdits, candidateTerm);
-                if(modifiedTerm.length() >= numberOfIterations){
-                    numberOfRecivedIndexTerms++;
-
-                    searchHandler = new InteractiveSearchHandler(index, 10, false, numberOfEdits, interfaceControl);
-                    performIterativeSearchWithBookkeping(numberOfIterations, simpleAverageResultFile, modifiedTerm, simpleWriter);
-                    searchHandler = new InteractiveSearchHandler(index, 10, true, numberOfEdits, interfaceControl);
-                    performIterativeSearchWithBookkeping(numberOfIterations, priorityAverageResultFile, modifiedTerm, priorityWriter);
-                }
+                //query = new SimpleIndexTraverser(searchConfig);
+                //performIterativeSearchWithBookkeeping(numberOfIterations, modifiedTerm, simpleWriter);
+                query = new PriorityTrieTraverser(searchConfig);
+                performIterativeSearchWithBookkeeping(numberOfIterations, modifiedTerm, priorityWriter);
+                query = new PrefixActiveNodeTraverser(searchConfig);
+                performIterativeSearchWithBookkeeping(numberOfIterations, modifiedTerm, prefixWriter);
             }
+        }
 
-            simpleWriter.close();
-            priorityWriter.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }*/
+        simpleWriter.close();
+        priorityWriter.close();
+        prefixWriter.close();
     }
 
-    private void performIterativeSearchWithBookkeping(
+    private String chooseRandomTerm(ArrayList<ISuggestionWrapper> terms){
+        int index = (int)(Math.random() * terms.size());
+        return terms.get(index).getSuggestion();
+    }
+
+    private void performIterativeSearchWithBookkeeping(
             int largestTerm,
-            File resultFile,
             String testQuery,
             BufferedWriter resultWriter) throws IOException
     {
-        /*ArrayList<Long> results = new ArrayList<Long>();
-        for(int i = 0; i < largestTerm; i++){
+        ArrayList<Long> results = new ArrayList<Long>();
+        for(int i = 1; i < largestTerm; i++){
             String queryString = testQuery.substring(0, i);
+            ArrayList<ISuggestionWrapper> suggestionWrappers = new ArrayList<ISuggestionWrapper>(searchConfig.getNeededSuggestion());
             long startTime = System.nanoTime();
-            searchHandler.handleUserInputAsync(queryString);
+            query.updateQueryString(queryString);
+            performQuery(suggestionWrappers);
             long endTime = System.nanoTime();
             long timeUsage = endTime - startTime;
+            suggestionWrappers.clear();
             results.add(timeUsage);
         }
 
@@ -240,26 +260,21 @@ public class PerformanceTest {
         }
 
         resultRecord.append("\n");
-        resultWriter.append(resultRecord.toString());*/
+        resultWriter.append(resultRecord.toString());
     }
 
     private long doInteractiveSearch(String term){
         long totalTime = 0;
-        System.out.println("Query = " + term);
-        for(int i = 1; i <= term.length(); i++){
+        //System.out.println("Query = " + term);
+        for(int i = 1; i <= term.length() - 1; i++){
             String queryString = term.substring(0, i);
             ArrayList<ISuggestionWrapper> suggestionWrappers = new ArrayList<ISuggestionWrapper>(searchConfig.getNeededSuggestion());
             long startTime = System.nanoTime();
             query.updateQueryString(queryString);
-            while(query.peekNextNodeRank() != -1 && suggestionWrappers.size() < searchConfig.getNeededSuggestion()){
-                query.exploreNextNode();
-                while(query.peekNextAvailableSuggestionRank() >= query.peekNextNodeRank() && suggestionWrappers.size() < searchConfig.getNeededSuggestion()){
-                    suggestionWrappers.add(query.getNextAvailableSuggestion());
-                }
-            }
-
-            System.out.println(queryString);
-            System.out.println(suggestionWrappers);
+            performQuery(suggestionWrappers);
+            suggestionWrappers.clear();
+            //System.out.println(queryString);
+            //System.out.println(suggestionWrappers);
 
             long endTime = System.nanoTime();
             totalTime += endTime - startTime;
@@ -268,10 +283,19 @@ public class PerformanceTest {
         return totalTime;
     }
 
+    private void performQuery(ArrayList<ISuggestionWrapper> suggestionWrappers) {
+        while(query.peekNextNodeRank() != -1 && suggestionWrappers.size() < searchConfig.getNeededSuggestion()){
+            query.exploreNextNode();
+            while(query.peekNextAvailableSuggestionRank() >= query.peekNextNodeRank() && suggestionWrappers.size() < searchConfig.getNeededSuggestion()){
+                suggestionWrappers.add(query.getNextAvailableSuggestion());
+            }
+        }
+    }
+
     public static void main(String[] args) throws Exception{
         PerformanceTest performanceTest = new PerformanceTest();
-        performanceTest.plainSearchTest();
-        //performanceTest.individualCharacterIterationTest();
+        //performanceTest.plainSearchTest();
+        performanceTest.individualCharacterIterationTest();
         //performanceTest.kScalingTest();
         //indexSizeScalingTest();
     }

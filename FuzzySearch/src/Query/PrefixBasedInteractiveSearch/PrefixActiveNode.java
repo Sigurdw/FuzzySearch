@@ -75,9 +75,9 @@ public class PrefixActiveNode extends AbstractPrefixActiveNode {
 
     @Override
     public void getNextChildNodes(final PriorityQueue<AbstractPrefixActiveNode> nodeQueue) {
-        TrieNode nextChildNode = queryPosition.getSortedChild(nextChild);
-        nextChild++;
-        /*if(matchIndex == -1){
+        TrieNode nextChildNode;// = queryPosition.getSortedChild(nextChild);
+        //nextChild++;
+        if(matchIndex == -1){
             matchIndex = queryPosition.getMatchChildIndex(queryContext.QueryString.GetLastCharacter());
             if(matchIndex != queryPosition.getNumberOfChildren()){
                 nextChildNode = queryPosition.getSortedChild(matchIndex);
@@ -94,7 +94,7 @@ public class PrefixActiveNode extends AbstractPrefixActiveNode {
 
         if(nextChild == matchIndex){
             nextChild++;
-        }*/
+        }
 
         int[] nextCol;
         int[] nextRow;

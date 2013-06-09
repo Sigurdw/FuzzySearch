@@ -84,6 +84,8 @@ public final class Index {
             trieNode.getAllTerms(suggestionWrappers);
         }
 
+        System.out.println("The number of terms: " + suggestionWrappers.size());
+
         int actualNumberOfTerms = Math.min(maxNumberOfTerms, suggestionWrappers.size());
         ArrayList<String> randomTerms = new ArrayList<String>(actualNumberOfTerms);
         for(int i = 0; i < actualNumberOfTerms; i++){

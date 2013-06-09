@@ -1,42 +1,64 @@
 package MedlineParser;
 
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
+
 import java.io.*;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class MedlineParser {
 
-    private static final String Path = "C:/TextCollection/medline2004.txt";
-
-    private static final String Dochead = "#NEW RECORDPMID";
+    private static final String Path = "D:/medline2004.txt";
 
     private static final String DocPrefix = "Medline";
 
+    private static final String TargetPath = "D:/Index/";
+
     public static void main(String[] args) {
         try {
+            Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
+            IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_36, analyzer);
+            config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+            Directory indexDirectory = FSDirectory.open(new File("D:/Index/"));
+            IndexWriter indexWriter = new IndexWriter(indexDirectory, config);
+
             File file = new File(Path);
             Scanner scanner = new Scanner(file);
-            scanner.useDelimiter("#NEW RECORD\n");
+            scanner.useDelimiter("TITLE = ");
             int counter = 0;
             while (scanner.hasNext()){
+                scanner.nextLine();
+                scanner.nextLine();
+                scanner.nextLine();
+                scanner.nextLine();
+                scanner.skip("TITLE = ");
+                String title = scanner.nextLine();
+                scanner.skip("ABSTRACT = ");
+                String content = scanner.nextLine();
+                Document doc = new Document();
+                Field titleField = new Field("title", title, Field.Store.NO, Field.Index.ANALYZED);
+                Field contentField = new Field("content", content, Field.Store.NO, Field.Index.ANALYZED);
+                doc.add(titleField);
+                doc.add(contentField);
+                indexWriter.addDocument(doc);
+                counter++;
 
-                String document = scanner.next();
-
-                if(!document.equals("\n")){
-                    StringTokenizer st = new StringTokenizer(document, "\n");
-                    assert st.countTokens() == 5;
-
-                    String pmid = st.nextToken();
-                    String pubdate = st.nextToken();
-                    String title = st.nextToken();
-                    String text = st.nextToken().substring(11);
-
-                    BufferedWriter bf = null;
-                    if(!text.startsWith("[EMPTY ABSTRACT]")){
-                        counter = WriteDoc(counter, text, bf);
-                    }
+                if(counter % 50000 == 0){
+                    System.out.println(counter);
+                    //System.out.println(title);
+                    //System.out.println(content);
                 }
             }
+
+            indexWriter.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
